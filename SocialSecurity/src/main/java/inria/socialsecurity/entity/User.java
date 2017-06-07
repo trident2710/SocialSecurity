@@ -20,5 +20,19 @@ public class User {
     
     @Relationship(type = "HAS_FB_ACCOUNT",direction = "OUTGOING")
     FacebookAccount facebookAccount;
+
+    public FacebookAccount getFacebookAccount() {
+        return facebookAccount;
+    }
+
+    public void setFacebookAccount(FacebookAccount facebookAccount) {
+        this.facebookAccount = facebookAccount;
+    }
+
+    public Long getId() {
+        return id;
+    }
+    
+    
     
 }
