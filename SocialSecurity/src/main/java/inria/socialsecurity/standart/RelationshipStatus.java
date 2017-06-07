@@ -10,5 +10,9 @@ package inria.socialsecurity.standart;
  * @author adychka
  */
 public enum RelationshipStatus {
-    
+    MARRIED,
+    SINGLE,
+    DIVORCED,
+    IN_COUPLE,
+    COMPLEX;
 }

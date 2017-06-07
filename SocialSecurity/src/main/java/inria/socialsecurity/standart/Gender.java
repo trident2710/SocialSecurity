@@ -9,6 +9,10 @@ package inria.socialsecurity.standart;
  *
  * @author adychka
  */
-public class Gender {
-    
+public enum Gender {
+    MALE, 
+    FEMALE,
+    TRANSGENDER,
+    UNCERTAIN,
+    OTHER;
 }

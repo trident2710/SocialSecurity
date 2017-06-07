@@ -10,5 +10,9 @@ package inria.socialsecurity.standart;
  * @author adychka
  */
 public enum EducationLevel {
-    
+    PRIMARY_SCHOOL,
+    SECONDARY_SCHOOL,
+    COLLEGE,
+    UNIVERSITY,
+    OTHER;
 }
