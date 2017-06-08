@@ -3,14 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package inria.socialsecurity.config.test;
+package inria.socialsecurity.test;
 
 import inria.socialsecurity.AppConfiguration;
+import inria.socialsecurity.test.config.Config;
 import inria.socialsecurity.entity.FacebookAccount;
 import inria.socialsecurity.entity.User;
 import inria.socialsecurity.repository.FacebookAccountRepository;
 import inria.socialsecurity.repository.UserRepository;
-import inria.socialsecurity.standart.UserInformationProvider;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,10 +23,10 @@ import org.springframework.test.context.web.WebAppConfiguration;
  *
  * @author adychka
  */
-@ContextConfiguration(classes = {AppConfiguration.class})
+@ContextConfiguration(classes = {Config.class})
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
-public class BasicFunctioningTest {
+public class UserTestCase {
     
     
     @Autowired 
