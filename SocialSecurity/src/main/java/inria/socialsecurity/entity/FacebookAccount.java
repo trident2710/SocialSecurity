@@ -6,103 +6,45 @@
 package inria.socialsecurity.entity;
 
 
-import com.google.gson.JsonObject;
-import inria.socialsecurity.standart.EducationLevel;
-import inria.socialsecurity.standart.Gender;
-import inria.socialsecurity.standart.RelationshipStatus;
-import inria.socialsecurity.standart.UserInformationProvider;
-import java.util.Date;
+
+import inria.socialsecurity.attribute.ComplexAttribute;
+import inria.socialsecurity.attribute.PrimitiveAttribute;
+import inria.socialsecurity.attributeprovider.UserAttributeProvider;
+import inria.socialsecurity.constants.PrimitiveAttributeName;
+import inria.socialsecurity.entity.attribute.AttributeDefinition;
+import inria.socialsecurity.entity.attribute.ComplexAttributeDefinition;
 import java.util.List;
-import java.util.Map;
 import org.neo4j.ogm.annotation.NodeEntity;
-import org.neo4j.ogm.annotation.Property;
 import org.neo4j.ogm.annotation.Relationship;
-import org.neo4j.ogm.annotation.Transient;
 
 /**
  *
  * @author adychka
  */
 @NodeEntity
-public class FacebookAccount extends JsonStoringEntity implements UserInformationProvider{
+public class FacebookAccount extends JsonStoringEntity implements UserAttributeProvider{
    
     
     @Relationship(type  = "FRIEND", direction = "BOTH")
     List<FacebookAccount> friends;
     
     public FacebookAccount(String jsonInfo){
-        super(jsonInfo);
+        super(jsonInfo);   
     }
 
     @Override
-    public String getFirstName() {
+    public PrimitiveAttribute getPrimitiveAttribute(AttributeDefinition attributeDefinition) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public String getLastName() {
+    public ComplexAttribute getComplexAttribute(ComplexAttributeDefinition cad) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public Date getDateOfBirth() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    
 
-    @Override
-    public Gender getGender() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public List<String> getPhoneNumbers() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public List<Gender> getGenderInterests() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public List<String> getAddresses() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Map<String, String> getWorkplaces() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Map<EducationLevel, String> getEducation() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public List<String> getLanguages() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public String getPoliticalView() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public String getReligion() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public RelationshipStatus geRelationshipStatus() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public List<String> getInterests() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+   
     
    
 }

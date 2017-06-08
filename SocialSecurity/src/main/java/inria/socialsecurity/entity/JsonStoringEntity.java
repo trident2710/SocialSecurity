@@ -8,6 +8,7 @@ package inria.socialsecurity.entity;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import org.neo4j.ogm.annotation.GraphId;
+import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Property;
 import org.neo4j.ogm.annotation.Transient;
 
@@ -15,6 +16,7 @@ import org.neo4j.ogm.annotation.Transient;
  *
  * @author adychka
  */
+@NodeEntity
 public class JsonStoringEntity {
     
     @GraphId
