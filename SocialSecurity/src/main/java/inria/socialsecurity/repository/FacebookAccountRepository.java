@@ -6,7 +6,6 @@
 package inria.socialsecurity.repository;
 
 import inria.socialsecurity.entity.FacebookAccount;
-import inria.socialsecurity.entity.User;
 import org.springframework.data.neo4j.repository.GraphRepository;
 
 /**
