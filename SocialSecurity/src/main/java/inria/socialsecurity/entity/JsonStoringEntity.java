@@ -7,6 +7,8 @@ package inria.socialsecurity.entity;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Property;
@@ -60,5 +62,15 @@ public class JsonStoringEntity {
     public void setJsonString(String jsonString) {
         this.jsonString = jsonString;
     }
+    
+    @Override
+    public boolean equals(Object other){
+        return EqualsBuilder.reflectionEquals(this, other);
+    }
+
+    @Override
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this);
+    }    
     
 }

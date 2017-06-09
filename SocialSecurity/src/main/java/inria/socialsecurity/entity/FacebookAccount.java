@@ -14,6 +14,8 @@ import inria.socialsecurity.constants.PrimitiveAttributeName;
 import inria.socialsecurity.entity.attribute.AttributeDefinition;
 import inria.socialsecurity.entity.attribute.ComplexAttributeDefinition;
 import java.util.List;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
@@ -43,7 +45,15 @@ public class FacebookAccount extends JsonStoringEntity implements UserAttributeP
     }
 
     
+    @Override
+    public boolean equals(Object other){
+        return EqualsBuilder.reflectionEquals(this, other);
+    }
 
+    @Override
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this);
+    }
    
     
    

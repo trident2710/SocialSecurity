@@ -18,9 +18,10 @@ import org.junit.runner.RunWith;
  *
  * @author adychka
  */
-@RunWith(JUnit4ClassRunner.class)
+//@RunWith(JUnit4ClassRunner.class)
 public class AddressProviderTestCase{
-    //@Test
+
+    
     private void testAddressProviderParsing(String address,
             AddressField field,
             String expectedValue,boolean  isMalformed){
@@ -40,7 +41,7 @@ public class AddressProviderTestCase{
          
     }
     
-    @Test
+    //@Test
     public void testAddressProvider(){
         Random random = new Random(System.currentTimeMillis());
         for(int i=0;i<100;i++){

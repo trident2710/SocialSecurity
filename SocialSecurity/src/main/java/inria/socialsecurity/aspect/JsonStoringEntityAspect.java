@@ -5,13 +5,10 @@
  */
 package inria.socialsecurity.aspect;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import inria.socialsecurity.aspect.exception.JsonPropertyCheckException;
-import inria.socialsecurity.entity.FacebookAccount;
 import inria.socialsecurity.entity.JsonStoringEntity;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;

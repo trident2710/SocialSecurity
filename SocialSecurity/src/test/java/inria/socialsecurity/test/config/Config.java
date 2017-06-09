@@ -5,11 +5,7 @@
  */
 package inria.socialsecurity.test.config;
 
-import inria.socialsecurity.AppConfiguration;
-import inria.socialsecurity.test.helper.CRUDAttributeDefinitionTest;
-import inria.socialsecurity.test.helper.CRUDAttributeTest;
-import inria.socialsecurity.test.helper.CRUDUserTest;
-import org.springframework.context.annotation.Bean;
+import inria.socialsecurity.config.AppConfiguration;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -20,16 +16,5 @@ import org.springframework.context.annotation.Import;
 @Configuration
 @Import({AppConfiguration.class})
 public class Config {
-    @Bean
-    public CRUDAttributeDefinitionTest crudadt(){
-        return new  CRUDAttributeDefinitionTest();
-    }
-    @Bean
-    public CRUDUserTest crudut(){
-        return new  CRUDUserTest();
-    }  
-    @Bean
-    public CRUDAttributeTest crudat(){
-        return new CRUDAttributeTest();
-    }
+   
 }

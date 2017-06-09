@@ -13,5 +13,5 @@ import org.springframework.data.neo4j.repository.GraphRepository;
  * @author adychka
  */
 public interface AttributeDefinitionRepository  extends GraphRepository<AttributeDefinition>{
-    
+    AttributeDefinition findByName(String name);
 }

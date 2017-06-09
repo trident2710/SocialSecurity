@@ -6,8 +6,11 @@
 package inria.socialsecurity.entity.attribute;
 
 import java.util.List;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Property;
+import org.neo4j.ogm.annotation.Relationship;
 
 /**
  *
@@ -16,18 +19,26 @@ import org.neo4j.ogm.annotation.Property;
 @NodeEntity
 public class ComplexAttributeDefinition extends AttributeDefinition{
 
-    @Property
-    private List<String> primitiveAttributes;
+    @Relationship(type = "CONTAINS",direction = Relationship.OUTGOING)
+    private List<AttributeDefinition> primitiveAttributes;
 
 
-    public List<String> getPrimitiveAttributes() {
+    public List<AttributeDefinition> getPrimitiveAttributes() {
         return primitiveAttributes;
     }
 
-    public void setPrimitiveAttributes(List<String> primitiveAttributes) {
+    public void setPrimitiveAttributes(List<AttributeDefinition> primitiveAttributes) {
         this.primitiveAttributes = primitiveAttributes;
     }
     
-    
+    @Override
+    public boolean equals(Object other){
+        return EqualsBuilder.reflectionEquals(this, other);
+    }
+
+    @Override
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this);
+    }    
     
 }

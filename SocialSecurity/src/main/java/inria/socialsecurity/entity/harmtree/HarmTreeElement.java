@@ -3,34 +3,22 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package inria.socialsecurity.entity;
+package inria.socialsecurity.entity.harmtree;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.NodeEntity;
-import org.neo4j.ogm.annotation.Relationship;
 
 /**
  *
  * @author adychka
  */
 @NodeEntity
-public class User {
+public class HarmTreeElement {
     @GraphId
-    Long id;
+    private Long id;
     
-    @Relationship(type = "HAS_FB_ACCOUNT",direction = "OUTGOING")
-    FacebookAccount facebookAccount;
-
-    public FacebookAccount getFacebookAccount() {
-        return facebookAccount;
-    }
-
-    public void setFacebookAccount(FacebookAccount facebookAccount) {
-        this.facebookAccount = facebookAccount;
-    }
-
     public Long getId() {
         return id;
     }
@@ -43,6 +31,5 @@ public class User {
     @Override
     public int hashCode() {
         return HashCodeBuilder.reflectionHashCode(this);
-    }    
-    
+    }
 }

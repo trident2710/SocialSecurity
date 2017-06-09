@@ -21,9 +21,9 @@ public enum PrimitiveAttributeName {
     HOME_FLAT("h_flat"),
     HOME_INDEX("h_index"),
     
-    DAY_OF_BIRTH("b_day"),
-    MONTH_OF_BIRTH("b_month"),
-    YEAR_OF_BIRTH("b_year"),
+    BIRTH_DAY("b_day"),
+    BIRTH_MONTH("b_month"),
+    BIRTH_YEAR("b_year"),
     
     EDUCATION_LEVEL("education_level"),
     GENDER("gender"),

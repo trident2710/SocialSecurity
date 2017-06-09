@@ -5,10 +5,12 @@
  */
 package inria.socialsecurity.test;
 
-import inria.socialsecurity.AppConfiguration;
+import inria.socialsecurity.config.AppConfiguration;
+import inria.socialsecurity.createdb.CreateDB;
 import inria.socialsecurity.test.config.Config;
 import inria.socialsecurity.entity.FacebookAccount;
 import inria.socialsecurity.entity.User;
+import inria.socialsecurity.repository.AttributeDefinitionRepository;
 import inria.socialsecurity.repository.FacebookAccountRepository;
 import inria.socialsecurity.repository.UserRepository;
 import org.junit.Assert;
@@ -35,6 +37,9 @@ public class UserTestCase {
     @Autowired
     FacebookAccountRepository facebookAccountRepository;
     
+    @Autowired
+    AttributeDefinitionRepository adr;
+    
     @Test
     public void CRUDFacebookAccount(){
         Long fbId = facebookAccountRepository.save(getFbAcc()).getId();
@@ -44,6 +49,10 @@ public class UserTestCase {
         Assert.assertEquals(fbId, account.getId());
         facebookAccountRepository.delete(account);
         Assert.assertNull(facebookAccountRepository.findOne(fbId));
+        
+        CreateDB cdb = new CreateDB(adr);
+        cdb.createBasicComplexAttributes();
+        cdb.createPrimitiveAttributes();
     }
     
     @Test
