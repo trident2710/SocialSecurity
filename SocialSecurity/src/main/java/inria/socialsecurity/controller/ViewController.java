@@ -14,15 +14,25 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * @author adychka
  */
 @Controller
-@RequestMapping({"/","/homepage","/about"})
-public class BaseController {
+@RequestMapping({"/","/view/*"})
+public class ViewController {
     @RequestMapping(value = {"/","/homepage"})
     public String home(){
         return "welcomepage";
     }
     
-    @RequestMapping(value = {"/about"},method = RequestMethod.GET)
+    @RequestMapping(value = {"view/about"})
     public String about(){
         return "about";
+    }
+    
+    @RequestMapping(value = {"view/attr_bld"})
+    public String attrBuilder(){
+        return "attribute_builder";
+    }
+    
+    @RequestMapping(value = {"view/ht_bld"})
+    public String harmtreeBuilder(){
+         return "harm_tree_builder";
     }
 }

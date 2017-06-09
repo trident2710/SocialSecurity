@@ -19,7 +19,14 @@
   <body>
      
     <%@include file="header.jsp" %>
-    
+    <div class="container">
+      <div class="jumbotron">
+        <h1>Social Security application</h1>
+        <a class="btn btn-lg btn-primary" href="/" role="button">Go to attribute builder</a>
+
+        <a class="btn btn-lg btn-primary" href="/" role="button">Go to harm tree builder</a>
+      </div>
+    </div>
     <%@include file="footer.jsp" %>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>

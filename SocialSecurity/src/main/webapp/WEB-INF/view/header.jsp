@@ -13,22 +13,13 @@
     <body>
        
      <nav class="navbar navbar-expand-md navbar-inverse fixed-top bg-inverse">
-      <a class="navbar-brand" href="#">Social Security App</a>
+      <a class="navbar-brand" href="${pageContext.request.contextPath}/">Social Security App</a>
        <ul class="nav navbar-nav">
-            <li class="active"><a href="">Home</a></li>
-            <li><a href="/">Attribute builder</a></li>
-            <li><a href="/">Harm tree builder</a></li>
-            <li><a href="/">About</a></li>
+            <li class="active"><a href="${pageContext.request.contextPath}/homepage">Home</a></li>
+            <li><a href="${pageContext.request.contextPath}/view/attr_bld">Attribute builder</a></li>
+            <li><a href="${pageContext.request.contextPath}/view/ht_bld">Harm tree builder</a></li>
+            <li><a href="${pageContext.request.contextPath}/view/about">About</a></li>
        </ul>
     </nav>
-
-    <div class="container">
-      <div class="jumbotron">
-        <h1>Social Security application</h1>
-        <a class="btn btn-lg btn-primary" href="/" role="button">Go to attribute builder</a>
-
-        <a class="btn btn-lg btn-primary" href="/" role="button">Go to harm tree builder</a>
-      </div>
-    </div>
     </body>
 </html>
