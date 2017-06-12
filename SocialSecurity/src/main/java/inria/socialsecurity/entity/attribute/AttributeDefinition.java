@@ -22,6 +22,8 @@ public class AttributeDefinition {
     
     @Property
     private String name;
+    
+    @Property String displayName;
 
     public Long getId() {
         return id;
@@ -34,6 +36,16 @@ public class AttributeDefinition {
     public void setName(String name) {
         this.name = name;
     }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+    
+    
     
     @Override
     public boolean equals(Object other){

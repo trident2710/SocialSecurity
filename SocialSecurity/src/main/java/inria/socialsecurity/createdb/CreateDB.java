@@ -35,6 +35,7 @@ public class CreateDB {
         for(PrimitiveAttributeName name:PrimitiveAttributeName.values()){
             AttributeDefinition ad = new AttributeDefinition();
             ad.setName(name.getValue());
+            ad.setDisplayName(name.getDisplayName());
             adr.save(ad);
         }
     }
@@ -49,6 +50,7 @@ public class CreateDB {
             }
             ComplexAttributeDefinition cad = new ComplexAttributeDefinition();
             cad.setName(name.getName());
+            cad.setDisplayName(name.getDisplayName());
             cad.setPrimitiveAttributes(l);
             adr.save(cad);
         }
