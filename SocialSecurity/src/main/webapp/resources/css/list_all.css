@@ -1,0 +1,35 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 12 juin 2017, 11:21:54
+    Author     : adychka
+*/
+#container{
+    margin-left:10px;
+    display:block;
+    width:100%;
+}
+#primitive_attr{
+    vertical-align: top;
+    width:45%;
+    display:inline-block;
+}
+
+#complex_attr{
+    vertical-align: top;
+    width:45%;
+    margin-right:10px;
+    display:inline-block;
+}
+
+#chng_btn{
+    margin-left:10px;
+    display: none;
+}
+#complex_box:hover  #chng_btn, #chng_btn:hover{
+    display: inline-block;
+}
+

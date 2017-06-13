@@ -19,7 +19,9 @@
   <body>
      
     <%@include file="header.jsp" %>
-    About
+    <div class="jumbotron">
+        <h1>About this app</h1>
+    </div>
     <%@include file="footer.jsp" %>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
