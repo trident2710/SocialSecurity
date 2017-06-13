@@ -6,6 +6,8 @@
 package inria.socialsecurity.repository;
 
 import inria.socialsecurity.entity.attribute.AttributeDefinition;
+import java.util.List;
+import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.GraphRepository;
 
 /**
@@ -14,4 +16,12 @@ import org.springframework.data.neo4j.repository.GraphRepository;
  */
 public interface AttributeDefinitionRepository  extends GraphRepository<AttributeDefinition>{
     AttributeDefinition findByName(String name);
+    
+    @Query("match (n) where not n:ComplexAttributeDefinition and n:AttributeDefinition return n")
+    List<AttributeDefinition> findPrimitiveAttributes();
+    
+    @Query("match (n) where n:ComplexAttributeDefinition return n")
+    List<AttributeDefinition> findComplexAttributes();
+    
+    
 }

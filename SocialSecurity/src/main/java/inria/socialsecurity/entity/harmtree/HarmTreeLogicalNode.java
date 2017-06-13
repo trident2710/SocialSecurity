@@ -29,6 +29,12 @@ public class HarmTreeLogicalNode extends HarmTreeElement{
     public static final Integer AND = -1;
     
     @Property
+    private String name;
+    
+    @Property 
+    private String description; 
+    
+    @Property
     private Integer logicalRequirement;
     
     @Relationship(type = "HAS_DESCENDANTS",direction = Relationship.INCOMING)
@@ -73,6 +79,23 @@ public class HarmTreeLogicalNode extends HarmTreeElement{
     public void setParent(HarmTreeLogicalNode parent) {
         this.parent = parent;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+    
     
     
     @Override

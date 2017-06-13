@@ -5,6 +5,7 @@
  */
 package inria.socialsecurity.entity.attribute;
 
+import java.io.Serializable;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.neo4j.ogm.annotation.GraphId;
@@ -16,14 +17,15 @@ import org.neo4j.ogm.annotation.Property;
  * @author adychka
  */
 @NodeEntity
-public class AttributeDefinition {
+public class AttributeDefinition implements Serializable{
     @GraphId
     private Long id;
     
     @Property
     private String name;
     
-    @Property String displayName;
+    @Property 
+    private String displayName;
 
     public Long getId() {
         return id;
@@ -44,8 +46,6 @@ public class AttributeDefinition {
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
     }
-    
-    
     
     @Override
     public boolean equals(Object other){

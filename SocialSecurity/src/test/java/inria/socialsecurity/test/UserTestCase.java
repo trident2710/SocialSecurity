@@ -49,11 +49,9 @@ public class UserTestCase {
         Assert.assertEquals(fbId, account.getId());
         facebookAccountRepository.delete(account);
         Assert.assertNull(facebookAccountRepository.findOne(fbId));
-        
-        CreateDB cdb = new CreateDB(adr);
-        cdb.createBasicComplexAttributes();
-        cdb.createPrimitiveAttributes();
+       
     }
+    
     
     @Test
     public void CRUDUser(){

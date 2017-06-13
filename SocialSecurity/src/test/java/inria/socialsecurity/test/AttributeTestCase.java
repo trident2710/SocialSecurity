@@ -11,6 +11,7 @@ import inria.socialsecurity.attribute.ComplexAttribute;
 import inria.socialsecurity.attribute.PrimitiveAttribute;
 import inria.socialsecurity.test.config.Config;
 import inria.socialsecurity.constants.PrimitiveAttributeName;
+import inria.socialsecurity.createdb.CreateDB;
 import inria.socialsecurity.entity.attribute.AttributeDefinition;
 import inria.socialsecurity.entity.attribute.ComplexAttributeDefinition;
 import inria.socialsecurity.repository.AttributeDefinitionRepository;
@@ -35,6 +36,13 @@ public class AttributeTestCase {
     
     @Autowired
     AttributeDefinitionRepository adr;
+    
+    //@Test
+    public void createBasicInstances(){
+        CreateDB cdb = new CreateDB(adr);
+        cdb.createBasicComplexAttributes();
+        cdb.createPrimitiveAttributes();
+    }
         
     @Test
     public void crudBasicTest(){
