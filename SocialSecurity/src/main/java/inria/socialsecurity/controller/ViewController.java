@@ -5,7 +5,10 @@
  */
 package inria.socialsecurity.controller;
 
+import inria.socialsecurity.repository.AttributeDefinitionRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -14,25 +17,22 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * @author adychka
  */
 @Controller
-@RequestMapping({"/","/view/*"})
+@RequestMapping({"/","/homepage","/about","/error"})
 public class ViewController {
+
     @RequestMapping(value = {"/","/homepage"})
     public String home(){
         return "welcomepage";
     }
     
-    @RequestMapping(value = {"view/about"})
+    @RequestMapping(value = {"/about"})
     public String about(){
         return "about";
     }
     
-    @RequestMapping(value = {"view/attr_bld"})
-    public String attrBuilder(){
-        return "attribute_builder";
+    @RequestMapping(value = {"/error"})
+    public String error(){
+        return "error";
     }
     
-    @RequestMapping(value = {"view/ht_bld"})
-    public String harmtreeBuilder(){
-         return "harm_tree_builder";
-    }
 }
