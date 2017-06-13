@@ -5,14 +5,12 @@
  */
 package inria.socialsecurity.test;
 
-import inria.socialsecurity.config.AppConfiguration;
-import inria.socialsecurity.createdb.CreateDB;
-import inria.socialsecurity.test.config.Config;
 import inria.socialsecurity.entity.FacebookAccount;
 import inria.socialsecurity.entity.User;
 import inria.socialsecurity.repository.AttributeDefinitionRepository;
 import inria.socialsecurity.repository.FacebookAccountRepository;
 import inria.socialsecurity.repository.UserRepository;
+import inria.socialsecurity.test.config.Config;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

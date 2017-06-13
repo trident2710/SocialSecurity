@@ -10,7 +10,6 @@ package inria.socialsecurity.entity;
 import inria.socialsecurity.attribute.ComplexAttribute;
 import inria.socialsecurity.attribute.PrimitiveAttribute;
 import inria.socialsecurity.attributeprovider.UserAttributeProvider;
-import inria.socialsecurity.constants.PrimitiveAttributeName;
 import inria.socialsecurity.entity.attribute.AttributeDefinition;
 import inria.socialsecurity.entity.attribute.ComplexAttributeDefinition;
 import java.util.List;

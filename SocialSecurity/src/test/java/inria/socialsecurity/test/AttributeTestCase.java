@@ -5,16 +5,15 @@
  */
 package inria.socialsecurity.test;
 
-import inria.socialsecurity.config.AppConfiguration;
 import inria.socialsecurity.attribute.AttributeValue;
 import inria.socialsecurity.attribute.ComplexAttribute;
 import inria.socialsecurity.attribute.PrimitiveAttribute;
-import inria.socialsecurity.test.config.Config;
 import inria.socialsecurity.constants.PrimitiveAttributeName;
 import inria.socialsecurity.createdb.CreateDB;
 import inria.socialsecurity.entity.attribute.AttributeDefinition;
 import inria.socialsecurity.entity.attribute.ComplexAttributeDefinition;
 import inria.socialsecurity.repository.AttributeDefinitionRepository;
+import inria.socialsecurity.test.config.Config;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Assert;

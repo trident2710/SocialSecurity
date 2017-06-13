@@ -10,9 +10,6 @@ import inria.socialsecurity.attributeprovider.address.AddressProvider;
 import inria.socialsecurity.attributeprovider.address.AddressProviderImpl;
 import java.util.Random;
 import org.junit.Assert;
-import org.junit.Test;
-import org.junit.internal.runners.JUnit4ClassRunner;
-import org.junit.runner.RunWith;
 
 /**
  *

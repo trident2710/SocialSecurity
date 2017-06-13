@@ -5,7 +5,6 @@
  */
 package inria.socialsecurity.controller;
 
-import inria.socialsecurity.entity.attribute.ComplexAttributeDefinition;
 import inria.socialsecurity.entity.harmtree.HarmTreeLogicalNode;
 import inria.socialsecurity.repository.HarmTreeRepository;
 import org.springframework.beans.factory.annotation.Autowired;

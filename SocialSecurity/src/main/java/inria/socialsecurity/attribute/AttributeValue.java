@@ -5,8 +5,6 @@
  */
 package inria.socialsecurity.attribute;
 
-import java.util.List;
-
 /**
  *
  * @author adychka

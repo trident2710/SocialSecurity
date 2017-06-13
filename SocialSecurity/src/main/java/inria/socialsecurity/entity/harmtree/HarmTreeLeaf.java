@@ -8,7 +8,6 @@ package inria.socialsecurity.entity.harmtree;
 import inria.socialsecurity.entity.attribute.AttributeDefinition;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Property;
 import org.neo4j.ogm.annotation.Relationship;

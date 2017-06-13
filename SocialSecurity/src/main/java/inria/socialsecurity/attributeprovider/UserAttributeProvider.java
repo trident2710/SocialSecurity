@@ -7,7 +7,6 @@ package inria.socialsecurity.attributeprovider;
 
 import inria.socialsecurity.attribute.ComplexAttribute;
 import inria.socialsecurity.attribute.PrimitiveAttribute;
-import inria.socialsecurity.constants.PrimitiveAttributeName;
 import inria.socialsecurity.entity.attribute.AttributeDefinition;
 import inria.socialsecurity.entity.attribute.ComplexAttributeDefinition;
 

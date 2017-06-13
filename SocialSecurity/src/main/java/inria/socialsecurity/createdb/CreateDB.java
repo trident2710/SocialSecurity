@@ -9,12 +9,9 @@ import inria.socialsecurity.constants.BasicComplexAttributeName;
 import inria.socialsecurity.constants.PrimitiveAttributeName;
 import inria.socialsecurity.entity.attribute.AttributeDefinition;
 import inria.socialsecurity.entity.attribute.ComplexAttributeDefinition;
-import inria.socialsecurity.entity.harmtree.HarmTreeLogicalNode;
 import inria.socialsecurity.repository.AttributeDefinitionRepository;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  *
