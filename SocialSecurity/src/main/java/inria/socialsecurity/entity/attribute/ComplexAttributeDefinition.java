@@ -5,6 +5,7 @@
  */
 package inria.socialsecurity.entity.attribute;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.List;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -18,6 +19,8 @@ import org.neo4j.ogm.annotation.Relationship;
 @NodeEntity
 public class ComplexAttributeDefinition extends AttributeDefinition{
 
+    
+    @JsonIgnore
     @Relationship(type = "CONTAINS",direction = Relationship.OUTGOING)
     private List<AttributeDefinition> primitiveAttributes;
 

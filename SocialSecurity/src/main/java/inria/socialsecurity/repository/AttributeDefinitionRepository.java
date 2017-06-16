@@ -23,5 +23,6 @@ public interface AttributeDefinitionRepository  extends GraphRepository<Attribut
     @Query("match (n) where n:ComplexAttributeDefinition return n")
     List<AttributeDefinition> findComplexAttributes();
     
-    
+    @Query("match (n) where id(n)={0} detach delete n")
+    void detachDelete(Long id);
 }

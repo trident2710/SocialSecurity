@@ -5,6 +5,7 @@
  */
 package inria.socialsecurity.entity.harmtree;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -19,7 +20,7 @@ import org.neo4j.ogm.annotation.Transient;
  * @author adychka
  */
 @NodeEntity
-public class HarmTreeLogicalNode extends HarmTreeElement{
+public class HarmTreeLogicalNode extends HarmTreeNode{
     
     @Transient
     public static final Integer OR = 1;
@@ -27,20 +28,9 @@ public class HarmTreeLogicalNode extends HarmTreeElement{
     public static final Integer AND = -1;
     
     @Property
-    private String name;
-    
-    @Property 
-    private String description; 
-    
-    @Property
     private Integer logicalRequirement;
     
-    @Relationship(type = "HAS_DESCENDANTS",direction = Relationship.INCOMING)
-    private HarmTreeLogicalNode parent;
-    
-    @Relationship(type = "HAS_DESCENDANTS",direction = Relationship.OUTGOING)
-    private List<HarmTreeLogicalNode> descendants;
-    
+    @JsonIgnore
     @Relationship(type = "HAS_LEAFS",direction = Relationship.OUTGOING)
     private List<HarmTreeLeaf> leafs;
 
@@ -52,60 +42,29 @@ public class HarmTreeLogicalNode extends HarmTreeElement{
         this.logicalRequirement = logicalRequirement;
     }
 
-    public List<HarmTreeLogicalNode> getDescendants() {
-        if(descendants==null) descendants = new ArrayList<>();
-        return descendants;
-    }
-
-    public void setDescendants(List<HarmTreeLogicalNode> descendants) {
-        this.descendants = descendants;
-    }
-
     public List<HarmTreeLeaf> getLeafs() {
-        if(leafs==null) leafs = new ArrayList<>();
+        if(leafs==null) 
+            leafs = new ArrayList<>();
         return leafs;
     }
 
     public void setLeafs(List<HarmTreeLeaf> leafs) {
+        if(leafs==null)
+            return;
         this.leafs = leafs;
-    }
-
-    public HarmTreeLogicalNode getParent() {
-        return parent;
-    }
-
-    public void setParent(HarmTreeLogicalNode parent) {
-        this.parent = parent;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
+    }  
+    
+    public void addLeaf(HarmTreeLeaf leaf){
+        if(leafs==null) 
+            leafs = new ArrayList<>();
+        leafs.add(leaf);
     }
     
-    
-    
-    @Override
-    public boolean equals(Object other){
-        return EqualsBuilder.reflectionEquals(this, other);
+    public void removeLeaf(HarmTreeLeaf leaf){
+        if(leafs==null){
+            leafs = new ArrayList<>();
+            return;
+        } 
+        leafs.remove(leaf);
     }
-
-    @Override
-    public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
-    }
-    
-    
-    
 }

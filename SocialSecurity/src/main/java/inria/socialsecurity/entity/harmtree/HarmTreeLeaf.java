@@ -28,9 +28,9 @@ public class HarmTreeLeaf extends HarmTreeElement{
     @Relationship(type = "ATTRIBUTE",direction = Relationship.OUTGOING)
     private AttributeDefinition attributeDefinition;
     
-    @Relationship(type = "HAS_LEAFS", direction = Relationship.INCOMING)
+    @Relationship(type = "HAS_DESCENDANT",direction = Relationship.INCOMING)
     private HarmTreeLogicalNode harmTreeLogicalNode;
-
+   
     public String getThreatType() {
         return threatType;
     }
@@ -64,15 +64,5 @@ public class HarmTreeLeaf extends HarmTreeElement{
     }
     
     
-    @Override
-    public boolean equals(Object other){
-        return EqualsBuilder.reflectionEquals(this, other);
-    }
 
-    @Override
-    public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
-    }
-    
-    
 }
