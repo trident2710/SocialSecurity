@@ -5,6 +5,8 @@
  */
 package inria.socialsecurity.controller;
 
+import inria.socialsecurity.attributeprovider.exception.ObjectNotFoundException;
+import inria.socialsecurity.attributeprovider.exception.WrongArgumentException;
 import inria.socialsecurity.entity.attribute.AttributeDefinition;
 import inria.socialsecurity.entity.attribute.ComplexAttributeDefinition;
 import inria.socialsecurity.repository.AttributeDefinitionRepository;
@@ -45,28 +47,31 @@ public class AttributeController {
         return "attribute_all";
     }
     
-    @RequestMapping(value = "/attributes_update",method = RequestMethod.GET)
-    public String showUpdatePage(@RequestParam String id,Model model){
+    @RequestMapping(value = "/attributes-update",method = RequestMethod.GET)
+    public String showUpdatePage(@RequestParam String id,Model model) throws WrongArgumentException, ObjectNotFoundException{
         Long idValue;
         try {
             idValue = Long.parseLong(id);
             ComplexAttributeDefinition cad = (ComplexAttributeDefinition)adr.findOne(idValue);
+            if(cad==null)
+                throw new ObjectNotFoundException();
+            
             model.addAttribute(ATR_ATTRIBUTE,cad);
             model.addAttribute(ATR_PRIM_ATTRS, adr.findPrimitiveAttributes());
             return "attribute_update";
         } catch (NumberFormatException e) {
-            return "error";
+            throw new WrongArgumentException();
         } catch(ClassCastException ce){
-            return "error";
+            throw new ObjectNotFoundException();
         } 
     }
     
     @RequestMapping(value = "/attributes-update",method = RequestMethod.POST)
-    public String updateAttribute(HttpServletRequest request){
+    public String updateAttribute(HttpServletRequest request) throws WrongArgumentException, ObjectNotFoundException{
         if(request.getParameter(ATR_PRIM_NAME)==null||
         request.getParameter(ATR_PRIM_NAME).isEmpty()||
         request.getParameter(ATR_PRIM_ID)==null)
-            return "error";
+            throw new WrongArgumentException();
         
         try {
             long id = Long.parseLong(request.getParameter(ATR_PRIM_ID));
@@ -83,7 +88,7 @@ public class AttributeController {
                     try {
                         pad.add(adr.findOne(Long.parseLong(request.getParameter("primitiveAttribut"+i))));
                     } catch (NumberFormatException e) {
-                        return "error";
+                        throw new WrongArgumentException();
                     }
                 } 
             }
@@ -91,7 +96,9 @@ public class AttributeController {
             adr.save(cad);
             return "redirect:attributes-all";
         } catch (NumberFormatException e) {
-            return "error";
+            throw new WrongArgumentException();
+        } catch(ClassCastException ex){
+            throw new ObjectNotFoundException();
         }
         
     }
@@ -103,11 +110,10 @@ public class AttributeController {
     }
     
     @RequestMapping(value = "/attributes-add",method = RequestMethod.POST)
-    public String createComplexAttribute(HttpServletRequest request){
-        if(request.getParameter(ATR_PRIM_NAME)==null)
-            return "error";
-        if(request.getParameter(ATR_PRIM_NAME).isEmpty())
-            return "error";
+    public String createComplexAttribute(HttpServletRequest request) throws WrongArgumentException{
+        if(request.getParameter(ATR_PRIM_NAME)==null||
+                request.getParameter(ATR_PRIM_NAME).isEmpty())
+            throw new WrongArgumentException();
         ComplexAttributeDefinition cad = new ComplexAttributeDefinition();
         String dispName = request.getParameter(ATR_PRIM_NAME);
         String name = dispName.toLowerCase().replace(" ", "_");
@@ -120,7 +126,7 @@ public class AttributeController {
                 try {
                     pad.add(adr.findOne(Long.parseLong(request.getParameter("primitiveAttribut"+i))));
                 } catch (NumberFormatException e) {
-                    return "error";
+                    throw new WrongArgumentException();
                 }
             } else break;
             i++;
@@ -133,7 +139,7 @@ public class AttributeController {
    
     
     @RequestMapping(value = "/attributes-specific",method = RequestMethod.DELETE)
-    public ResponseEntity deleteAttribute(@RequestParam String id,Model model){
+    public ResponseEntity deleteAttribute(@RequestParam String id,Model model) throws WrongArgumentException, ObjectNotFoundException{
         Long idValue;
         try {
             idValue = Long.parseLong(id);
@@ -141,9 +147,9 @@ public class AttributeController {
             adr.delete(cad);
             return new ResponseEntity(HttpStatus.OK);
         } catch (NumberFormatException e) {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            throw new WrongArgumentException();
         } catch(ClassCastException ce){
-            return new ResponseEntity(HttpStatus.FORBIDDEN);
+            throw new ObjectNotFoundException();
         }
     }
 }

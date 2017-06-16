@@ -5,16 +5,20 @@
  */
 package inria.socialsecurity.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  *
  * @author adychka
  */
 @Controller
-@RequestMapping({"/","/homepage","/about","/error"})
+@RequestMapping({"/","/homepage","/about"})
 public class ViewController {
+    
 
     @RequestMapping(value = {"/","/homepage"})
     public String home(){
@@ -26,9 +30,6 @@ public class ViewController {
         return "about";
     }
     
-    @RequestMapping(value = {"/error"})
-    public String error(){
-        return "error";
-    }
+    
     
 }
