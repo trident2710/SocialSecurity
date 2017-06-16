@@ -41,7 +41,7 @@
                                     <div class="panel-body">
                                       <c:out value="${attr.displayName}"/> 
                                       <button id=chng_btn type="button" class="btn btn-danger" onclick="deleteEntity(${attr.id})">Remove</button>
-                                      <a id=chng_btn type="button" class="btn btn-primary" href="${pageContext.request.contextPath}/attributes_update?id=${attr.id}">View/Update</a>
+                                      <a id=chng_btn type="button" class="btn btn-primary" href="${pageContext.request.contextPath}/attributes-update?id=${attr.id}">View/Update</a>
                                     </div>
                                 </div>
                     </c:forEach>

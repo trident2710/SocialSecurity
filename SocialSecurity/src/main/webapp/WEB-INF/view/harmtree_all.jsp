@@ -32,7 +32,7 @@
                                     <div class="panel-body">
                                       <c:out value="${ht.name}"/> 
                                       <button id=chng_btn type="button" class="btn btn-danger" onclick="deleteEntity(${ht.id})">Remove</button>
-                                      <a id=chng_btn type="button" class="btn btn-primary" href="${pageContext.request.contextPath}/harmtrees_update?id=${ht.id}">View/Update</a>
+                                      <a id=chng_btn type="button" class="btn btn-primary" href="${pageContext.request.contextPath}/harmtrees-update?id=${ht.id}">View/Update</a>
                                     </div>
                                 </div>
                     </c:forEach>

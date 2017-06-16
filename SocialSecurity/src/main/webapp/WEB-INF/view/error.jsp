@@ -27,6 +27,9 @@
                         <div class="error-details">
                             Sorry, an error has occured, Requested page not found!
                         </div>
+                        <div class="error-details">
+                            ${error}
+                        </div>
                         <div class="error-actions">
                             <a href="${pageContext.request.contextPath}/homepage" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-home"></span>
                                 Take Me Home </a>
