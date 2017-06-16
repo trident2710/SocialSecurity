@@ -10,6 +10,7 @@ import inria.socialsecurity.constants.RiskSource;
 import inria.socialsecurity.constants.ThreatType;
 import inria.socialsecurity.entity.harmtree.HarmTreeLeaf;
 import inria.socialsecurity.entity.harmtree.HarmTreeLogicalNode;
+import inria.socialsecurity.entity.harmtree.HarmTreeVertex;
 import inria.socialsecurity.repository.AttributeDefinitionRepository;
 import inria.socialsecurity.repository.HarmTreeRepository;
 import inria.socialsecurity.test.config.Config;
@@ -78,15 +79,18 @@ public class HarmTreeTestCase {
     }
     
     
-    //@Test
+    @Test
     public void testHarmTreeCrud(){
-        HarmTreeLogicalNode node = generateRandomTree(1, 5, new Random(), 5);
+        HarmTreeVertex node = new HarmTreeVertex();
+        node.setName("some test name");
+        node.setDescription("some test description");
+        node.addDescendant(generateRandomTree(0, 2, new Random(), 4));
         Long id = htr.save(node).getId();
-        node = (HarmTreeLogicalNode)htr.findOne(id);
-        List<HarmTreeLogicalNode> roots = htr.getTreeHeads();
+        node = (HarmTreeVertex)htr.findOne(id);
+        List<HarmTreeVertex> roots = htr.getTreeVertices();
         Assert.assertTrue(roots.contains(node));
         htr.delete(node);
-        Assert.assertFalse(htr.getTreeHeads().contains(node));
+        Assert.assertFalse(htr.getTreeVertices().contains(node));
 
 
     }
@@ -94,12 +98,16 @@ public class HarmTreeTestCase {
      public HarmTreeLogicalNode generateRandomTree(int depthActual,int depthMax,Random random,int edgesMax){
         HarmTreeLogicalNode htln = new HarmTreeLogicalNode();
         int c = 1+random.nextInt(edgesMax);
-        htln.setLogicalRequirement(
+        
+        if(depthActual!=0)
+            htln.setLogicalRequirement(
+                random.nextBoolean()?
+                    HarmTreeLogicalNode.OR:
                     random.nextBoolean()?
-                        HarmTreeLogicalNode.OR:
-                        random.nextBoolean()?
-                            HarmTreeLogicalNode.AND:
-                            c>1?1+random.nextInt(c-1):1);
+                        HarmTreeLogicalNode.AND:
+                        c>1?1+random.nextInt(c-1):1);
+        else htln.setLogicalRequirement(HarmTreeLogicalNode.AND);
+        
         if(depthActual == depthMax){
             for(int i=0;i<c;i++){
                 HarmTreeLeaf hl = new HarmTreeLeaf();
