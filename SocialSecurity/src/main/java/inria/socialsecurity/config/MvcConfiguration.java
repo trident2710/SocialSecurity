@@ -5,20 +5,21 @@
  */
 package inria.socialsecurity.config;
 
+import inria.socialsecurity.model.HarmTreeModel;
+import inria.socialsecurity.model.HarmTreeModelImpl;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 /**
  *
  * @author adychka
  */
 @Configuration
-@Import({
-    WebConfig.class,
-    PersistenceContext.class,
-    ConverterConfiguration.class,
-    MvcConfiguration.class,
-    RootConfig.class})
-public class AppConfiguration {
+public class MvcConfiguration {
     
+    
+    @Bean
+    public HarmTreeModel getHarmTreeModel(){
+        return new HarmTreeModelImpl();
+    }
 }
