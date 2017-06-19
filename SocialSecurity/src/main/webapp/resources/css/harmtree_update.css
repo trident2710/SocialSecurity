@@ -4,27 +4,84 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 */
 /* 
-    Created on : 13 juin 2017, 15:00:16
+    Created on : 14 juin 2017, 16:11:04
     Author     : adychka
 */
-#workspace{
-    width: 100%;
+
+#menu{
+    width: 30%;
     height: 100%;
+    float:left;
+    background-color: #F8F8F8;
 }
 #cy {
-    margin-top: 100px;
-    width: 100%;
-    height: 90%;
-    position: absolute;
-    top: 0px;
-    left: 0px;
+    width: 70%;
+    height: 100%;
+    display:block;
     border-style: groove;
-    border-width: 2px;
+    border-width: 3px;
+    float: left;
 }
-#menu{
-    width: 100%;
-    height: 100px;
+#workspace{
+    width: 100vw;
+    height: 100%;
 }
-#logic_input_type{
+html, body {
+    overflow: auto;
+    height: 100vh;
+}
+#logic_input_type,#b_create,#b_update,#b_add,#node_delete{
     margin: 10px;
 }
+#update_container,#create_container{
+    text-align: center;
+     margin: 10px;
+     width: 100%;
+    
+}
+#update_container{
+    width: 90%;
+    margin-left:auto;
+    margin-right:auto;
+    padding: 10px;
+}
+#create_container{
+    width: 90%;
+    margin-left:auto;
+    margin-right:auto;
+    padding: 10px;
+}
+select{
+    width: 70%;
+    margin: 10px;
+    margin-left:auto;
+    margin-right:auto;
+}
+.form-control{
+    width: 80%;
+    margin: 10px;
+    margin-left:auto;
+    margin-right:auto;
+}
+.label {
+    display: inline-block;
+}
+.logic{
+      width: 40%;
+    margin: 10px;
+    margin-top: 0px;
+    margin-left:auto;
+    margin-right:auto;
+}
+.title{
+    margin-left: 50px;
+}
+#harm_tree_description{
+    height:100px;
+}
+#hint{
+    position: absolute;
+    bottom: 100px;
+    right: 30px;
+}
+

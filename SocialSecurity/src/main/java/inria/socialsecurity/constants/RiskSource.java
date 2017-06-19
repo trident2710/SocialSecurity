@@ -6,7 +6,8 @@
 package inria.socialsecurity.constants;
 
 /**
- *Represents the risk source.
+ * Represents the risk source.
+ *
  * @see Documentation page 18
  * @author adychka
  */
@@ -15,14 +16,14 @@ public enum RiskSource {
     A2("A2"), //friends of friends
     A3("A3"), // friends of friends of friends
     A4("A4"); // strangers
-    
+
     private String value;
-    
-    private RiskSource(String value){
+
+    private RiskSource(String value) {
         this.value = value;
     }
-    
-    public String getValue(){
+
+    public String getValue() {
         return value;
     }
 }

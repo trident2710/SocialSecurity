@@ -5,21 +5,24 @@
  */
 package inria.socialsecurity.constants;
 
-
 /**
+ * enum containig the relationship types used to unificate the data obtained
+ * from the social networks
  *
+ * @see FacebookAccount
+ * @see User
  * @author adychka
  */
-public enum RelationshipStatus{
+public enum RelationshipStatus {
     MARRIED("married"),
     SINGLE("single"),
     DIVORCED("divorced"),
     IN_COUPLE("in_couple"),
     COMPLEX("complex");
-    
+
     private final String value;
-    
-    private RelationshipStatus(String value){
+
+    private RelationshipStatus(String value) {
         this.value = value;
     }
 

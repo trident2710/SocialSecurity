@@ -13,17 +13,21 @@ import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
 /**
+ * class representation of the complex attribute collected from social network
+ * account ex. name -> first name + last name can contain also other complex
+ * attributes
  *
+ * @see Documentation
  * @author adychka
  */
 @NodeEntity
-public class ComplexAttributeDefinition extends AttributeDefinition{
+public class ComplexAttributeDefinition extends AttributeDefinition {
 
-    
+    //list of the attributes which this attribute consists of
+    //which can be either primitive or complex 
     @JsonIgnore
-    @Relationship(type = "CONTAINS",direction = Relationship.OUTGOING)
+    @Relationship(type = "CONTAINS", direction = Relationship.OUTGOING)
     private List<AttributeDefinition> primitiveAttributes;
-
 
     public List<AttributeDefinition> getPrimitiveAttributes() {
         return primitiveAttributes;
@@ -32,15 +36,15 @@ public class ComplexAttributeDefinition extends AttributeDefinition{
     public void setPrimitiveAttributes(List<AttributeDefinition> primitiveAttributes) {
         this.primitiveAttributes = primitiveAttributes;
     }
-    
+
     @Override
-    public boolean equals(Object other){
+    public boolean equals(Object other) {
         return EqualsBuilder.reflectionEquals(this, other);
     }
 
     @Override
     public int hashCode() {
         return HashCodeBuilder.reflectionHashCode(this);
-    }    
-    
+    }
+
 }

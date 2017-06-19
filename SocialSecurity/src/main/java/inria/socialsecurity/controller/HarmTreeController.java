@@ -5,11 +5,7 @@
  */
 package inria.socialsecurity.controller;
 
-import inria.socialsecurity.attributeprovider.exception.ObjectNotFoundException;
-import inria.socialsecurity.attributeprovider.exception.WrongArgumentException;
-import static inria.socialsecurity.controller.AttributeController.ATR_ATTRIBUTE;
-import inria.socialsecurity.entity.attribute.ComplexAttributeDefinition;
-import inria.socialsecurity.entity.harmtree.HarmTreeLogicalNode;
+import inria.socialsecurity.entity.harmtree.HarmTreeVertex;
 import inria.socialsecurity.repository.HarmTreeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,41 +17,76 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
+ * view controller for displaing the pages for manipulations with the harm trees
  *
+ * @see HarmTreeElement
  * @author adychka
  */
 @Controller
 @RequestMapping("/harmtrees*")
 public class HarmTreeController {
-    
+
     static final String ATR_HARMT = "harm_trees";
     static final String ATR_HRMT_ID = "id";
-    
+
+    /**
+     * autowired repository for crud the harm tree elements
+     */
     @Autowired
     HarmTreeRepository htr;
-    
-    @RequestMapping(value = "/harmtrees-all",method = RequestMethod.GET)
-    public String showAll(Model model){
-        model.addAttribute(ATR_HARMT,htr.getTreeVertices());
+
+    /**
+     * get the page displaying the list of harm trees in db
+     *
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/harmtrees-all", method = RequestMethod.GET)
+    public String showAll(Model model) {
+        model.addAttribute(ATR_HARMT, htr.getTreeVertices());
         return "harmtree_all";
     }
-    @RequestMapping(value = "/harmtrees-update",method = RequestMethod.GET)
-    public String showUpdatePage(@RequestParam String id,Model model) throws WrongArgumentException, ObjectNotFoundException{
-        model.addAttribute(ATR_HRMT_ID,id);
+
+    /**
+     * add new harm tree and redirect to the page for updating this harm tree
+     *
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/harmtrees-add", method = RequestMethod.GET)
+    public String addHarmTree(Model model) {
+        model.addAttribute(ATR_HARMT, htr.getTreeVertices());
+        HarmTreeVertex t = new HarmTreeVertex();
+        t.setName("new harm tree");
+        t.setDescription("description");
+        return "redirect:harmtrees-update?id=" + htr.save(t).getId();
+    }
+
+    /**
+     * get the page for updating the harm tree with the specified id
+     *
+     * @see HarmTreeVertex
+     * @param id id of hte harm tree vertex
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/harmtrees-update", method = RequestMethod.GET)
+    public String showUpdatePage(@RequestParam String id, Model model) {
+        model.addAttribute(ATR_HRMT_ID, id);
         return "harmtree_update";
     }
-    
-    @RequestMapping(value = "/harmtrees-specific",method = RequestMethod.DELETE)
-    public ResponseEntity deleteAttribute(@RequestParam String id,Model model){
+
+    @RequestMapping(value = "/harmtrees-specific", method = RequestMethod.DELETE)
+    public ResponseEntity deleteAttribute(@RequestParam String id, Model model) {
         Long idValue;
         try {
             idValue = Long.parseLong(id);
-            HarmTreeLogicalNode htln =  (HarmTreeLogicalNode)htr.findOne(idValue);
+            HarmTreeVertex htln = (HarmTreeVertex) htr.findOne(idValue);
             htr.delete(htln);
             return new ResponseEntity(HttpStatus.OK);
         } catch (NumberFormatException e) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        } catch(ClassCastException ce){
+        } catch (ClassCastException ce) {
             return new ResponseEntity(HttpStatus.FORBIDDEN);
         }
     }

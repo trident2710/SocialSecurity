@@ -15,6 +15,6 @@ import org.springframework.context.annotation.Import;
  */
 @Configuration
 @Import({AppConfiguration.class})
-public class Config {
+public class TestConfig {
    
 }

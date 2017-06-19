@@ -6,31 +6,46 @@
 package inria.socialsecurity.entity.harmtree;
 
 import inria.socialsecurity.entity.attribute.AttributeDefinition;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Property;
 import org.neo4j.ogm.annotation.Relationship;
 
 /**
+ * represents the leaf of the harm tree i.e. the element which contains
+ * riskSource, threatType and AttributeDefinition for this node
  *
+ * @see RiskSource
+ * @see ThreatType
+ * @see AttributeDefinition
  * @author adychka
  */
 @NodeEntity
-public class HarmTreeLeaf extends HarmTreeElement{
-    
+public class HarmTreeLeaf extends HarmTreeElement {
+
+    /**
+     * one of ThreatType enum values
+     */
     @Property
     private String threatType;
-    
+
+    /**
+     * one of RiskSource enum values
+     */
     @Property
     private String riskSource;
-    
-    @Relationship(type = "ATTRIBUTE",direction = Relationship.OUTGOING)
+
+    /**
+     * relation with the attribute definition
+     */
+    @Relationship(type = "ATTRIBUTE", direction = Relationship.OUTGOING)
     private AttributeDefinition attributeDefinition;
-    
-    @Relationship(type = "HAS_DESCENDANT",direction = Relationship.INCOMING)
+
+    /**
+     * incoming relation defining the parent of this leaf
+     */
+    @Relationship(type = "HAS_DESCENDANT", direction = Relationship.INCOMING)
     private HarmTreeLogicalNode harmTreeLogicalNode;
-   
+
     public String getThreatType() {
         return threatType;
     }
@@ -62,7 +77,5 @@ public class HarmTreeLeaf extends HarmTreeElement{
     public void setHarmTreeLogicalNode(HarmTreeLogicalNode harmTreeLogicalNode) {
         this.harmTreeLogicalNode = harmTreeLogicalNode;
     }
-    
-    
 
 }

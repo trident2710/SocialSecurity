@@ -5,24 +5,30 @@
  */
 package inria.socialsecurity.entity.harmtree;
 
-import java.util.List;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Property;
-import org.neo4j.ogm.annotation.Relationship;
 
 /**
+ * represents the vertex of the harm tree i.e. the head node which contains the
+ * information such as name of this harm tree and it's description
  *
  * @author adychka
  */
 @NodeEntity
-public class HarmTreeVertex extends HarmTreeNode{
-    
+public class HarmTreeVertex extends HarmTreeNode {
+
+    /**
+     * name of the harm tree
+     */
     @Property
     private String name;
-    
-    @Property 
-    private String description; 
-        
+
+    /**
+     * harm tree description
+     */
+    @Property
+    private String description;
+
     public String getName() {
         return name;
     }
@@ -39,5 +45,4 @@ public class HarmTreeVertex extends HarmTreeNode{
         this.description = description;
     }
 
-    
 }

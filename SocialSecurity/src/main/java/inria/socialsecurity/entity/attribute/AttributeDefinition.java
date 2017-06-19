@@ -13,19 +13,24 @@ import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Property;
 
 /**
+ * class representation of the attribute collected from social network account
+ * can be either primitive i.e. consists of one field or complex for ex. name ->
+ * first name + last name
  *
+ * @see Documentation
  * @author adychka
  */
 @NodeEntity
-public class AttributeDefinition implements Serializable{
+public class AttributeDefinition implements Serializable {
+
     @GraphId
     private Long id;
-    
+
     @Property
-    private String name;
-    
-    @Property 
-    private String displayName;
+    private String name; //inner field name 
+
+    @Property
+    private String displayName; //display name
 
     public Long getId() {
         return id;
@@ -46,15 +51,15 @@ public class AttributeDefinition implements Serializable{
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
     }
-    
+
     @Override
-    public boolean equals(Object other){
+    public boolean equals(Object other) {
         return EqualsBuilder.reflectionEquals(this, other);
     }
 
     @Override
     public int hashCode() {
         return HashCodeBuilder.reflectionHashCode(this);
-    }    
-    
+    }
+
 }

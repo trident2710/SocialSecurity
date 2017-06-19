@@ -10,15 +10,16 @@ import org.springframework.context.annotation.Import;
 
 /**
  *
- * @author adychka
+ * @author adychka the main configuration of the project
+ * @see springframework
  */
 @Configuration
 @Import({
-    WebConfig.class,
-    PersistenceContext.class,
-    ConverterConfiguration.class,
-    MvcConfiguration.class,
+    WebConfig.class, //configuration of the web app
+    PersistenceContext.class, //configuration of the db connection
+    ConverterConfiguration.class, //custom configuration declaring the converters @see converter.Converter.java
+    MvcConfiguration.class, //custom configuration for the declaration of model layer beans 
     RootConfig.class})
 public class AppConfiguration {
-    
+    //assembles all declared configuraions in one
 }

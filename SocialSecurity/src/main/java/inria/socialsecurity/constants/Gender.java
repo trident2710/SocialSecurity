@@ -5,21 +5,24 @@
  */
 package inria.socialsecurity.constants;
 
-
 /**
+ * enum containig the human gender types used to unificate the data obtained
+ * from the social networks
  *
+ * @see FacebookAccount
+ * @see User
  * @author adychka
  */
-public enum Gender{
-    MALE("male"), 
+public enum Gender {
+    MALE("male"),
     FEMALE("female"),
     TRANSGENDER("transgender"),
     UNCERTAIN("uncertain"),
     OTHER("other");
-    
+
     private final String value;
-    
-    private Gender(String value){
+
+    private Gender(String value) {
         this.value = value;
     }
 

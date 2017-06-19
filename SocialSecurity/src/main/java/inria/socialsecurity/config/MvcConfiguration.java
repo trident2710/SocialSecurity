@@ -11,15 +11,21 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
+ * declaration of the beans representing the model level of web application i.e.
+ * data processing and providing
  *
  * @author adychka
  */
 @Configuration
 public class MvcConfiguration {
-    
-    
+
+    /**
+     * model level of harm tree interaction contains CRUD methods etc.
+     *
+     * @return
+     */
     @Bean
-    public HarmTreeModel getHarmTreeModel(){
+    public HarmTreeModel getHarmTreeModel() {
         return new HarmTreeModelImpl();
     }
 }

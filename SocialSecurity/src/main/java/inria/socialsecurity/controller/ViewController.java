@@ -5,31 +5,26 @@
  */
 package inria.socialsecurity.controller;
 
-import javax.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 /**
+ * controller for resolving the basic application pages
  *
  * @author adychka
  */
 @Controller
-@RequestMapping({"/","/homepage","/about"})
+@RequestMapping({"/", "/homepage", "/about"})
 public class ViewController {
-    
 
-    @RequestMapping(value = {"/","/homepage"})
-    public String home(){
+    @RequestMapping(value = {"/", "/homepage"})
+    public String home() {
         return "welcomepage";
     }
-    
+
     @RequestMapping(value = {"/about"})
-    public String about(){
+    public String about() {
         return "about";
     }
-    
-    
-    
+
 }

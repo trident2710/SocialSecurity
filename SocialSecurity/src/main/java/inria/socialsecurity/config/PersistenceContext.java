@@ -19,35 +19,43 @@ import org.springframework.data.neo4j.server.RemoteServer;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
+ * configuration of data source
  *
+ * @see Spring Data Neo4j
  * @author adychka
  */
 @Configuration
 @EnableTransactionManagement
-@ComponentScan("inria.socialsecurity")
-@EnableNeo4jRepositories("inria.socialsecurity.repository")
+@ComponentScan("inria.socialsecurity") //the root package of the project
+@EnableNeo4jRepositories("inria.socialsecurity.repository") //the package which contains the repository interfaces for accessing data
 public class PersistenceContext extends Neo4jConfiguration {
-    
-    public static final int NEO4J_PORT = 7474;
-    
-  
+
+    private static final int NEO4J_PORT = 7474; // db connection port
+    private static final String SERVER = "localhost"; //db connection ip address
+
+    private static final String LOGIN = "neo4j"; //db connection login
+    private static final String PASSWORD = "gtheyjdfhfnm"; //db connection password
+    private static final String ENTITY_PACKAGE = "inria.socialsecurity.entity"; //the package containing db entinty classes
+
+    public PersistenceContext() {
+    }
+
     @Override
     public SessionFactory getSessionFactory() {
-        return new SessionFactory("inria.socialsecurity.entity");
+        return new SessionFactory(ENTITY_PACKAGE);
     }
-    
+
     @Bean
     @Override
     public Neo4jServer neo4jServer() {
-        return new RemoteServer("http://localhost:" + NEO4J_PORT,"neo4j","gtheyjdfhfnm");
+        return new RemoteServer("http://" + SERVER + ":" + NEO4J_PORT, LOGIN, PASSWORD);
     }
-    
+
     @Override
     @Bean
     @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
     public Session getSession() throws Exception {
         return super.getSession();
     }
-    
-   
+
 }

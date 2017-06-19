@@ -48,6 +48,5 @@
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="resources/js/bootstrap.min.js"></script>
     <script src="resources/js/harmtree.js"></script>
-    <script src="jquery-2.2.2.min.js"/>
   </body>
 </html>

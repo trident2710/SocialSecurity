@@ -40,8 +40,6 @@
        
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <script src="resources/js/bootstrap.min.js"></script>
-        <script src="resources/js/attribute.js"></script>
-        <script src="jquery-2.2.2.min.js"/>
-        
+        <script src="resources/js/attribute.js"></script>    
     </body>
 </html>

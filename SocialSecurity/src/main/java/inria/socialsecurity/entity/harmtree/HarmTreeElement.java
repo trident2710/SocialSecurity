@@ -13,43 +13,62 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Property;
-import org.neo4j.ogm.annotation.Relationship;
 
 /**
+ * class represents the element of the harm tree can be either vertex, leaf or
+ * logic
+ *
+ * @see HarmTreeLogicalNode
+ * @see HarmTreeLeaf
+ * @see HarmTreeVertex
+ * @see Documentation
  *
  * @author adychka
  */
 @NodeEntity
-public abstract class HarmTreeElement implements Serializable{
-    
+public abstract class HarmTreeElement implements Serializable {
+
     @GraphId
     private Long id;
-    
+
+    /**
+     * field which contains the data how to display this element i.e. position x
+     * and y of this element on canvas
+     */
     @JsonIgnore
     @Property
     private String displayNotation;
-    
+
+    /**
+     * class of this element can be either
+     *
+     * @see HarmTreeLogicalNode
+     * @see HarmTreeLeaf
+     * @see HarmTreeVertex
+     * @return
+     */
     @JsonProperty("class")
-    public String getClassName(){
+    public String getClassName() {
         return this.getClass().getSimpleName();
     }
-     
+
     public Long getId() {
         return id;
     }
-    
+
     public String getDisplayNotation() {
-        if(displayNotation==null)
+        if (displayNotation == null) {
             displayNotation = "";
+        }
         return displayNotation;
     }
 
     public void setDisplayNotation(String displayNotation) {
         this.displayNotation = displayNotation;
     }
-       
+
     @Override
-    public boolean equals(Object other){
+    public boolean equals(Object other) {
         return EqualsBuilder.reflectionEquals(this, other);
     }
 
@@ -58,7 +77,4 @@ public abstract class HarmTreeElement implements Serializable{
         return HashCodeBuilder.reflectionHashCode(this);
     }
 
-    
-    
-    
 }

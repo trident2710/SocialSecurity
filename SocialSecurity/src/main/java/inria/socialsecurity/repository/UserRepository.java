@@ -5,13 +5,16 @@
  */
 package inria.socialsecurity.repository;
 
-import inria.socialsecurity.entity.User;
+import inria.socialsecurity.entity.user.User;
 import org.springframework.data.neo4j.repository.GraphRepository;
 
 /**
+ * interface defining the data accessing repository for the objects of type User
+ * and it's subclasses
  *
+ * @see User
  * @author adychka
  */
-public interface UserRepository extends GraphRepository<User>{
-    
+public interface UserRepository extends GraphRepository<User> {
+    //no custom methods needed yet
 }

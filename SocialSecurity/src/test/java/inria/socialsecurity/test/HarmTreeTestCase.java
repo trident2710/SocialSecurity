@@ -13,7 +13,7 @@ import inria.socialsecurity.entity.harmtree.HarmTreeLogicalNode;
 import inria.socialsecurity.entity.harmtree.HarmTreeVertex;
 import inria.socialsecurity.repository.AttributeDefinitionRepository;
 import inria.socialsecurity.repository.HarmTreeRepository;
-import inria.socialsecurity.test.config.Config;
+import inria.socialsecurity.test.config.TestConfig;
 import java.util.List;
 import java.util.Random;
 import org.junit.Assert;
@@ -28,7 +28,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
  *
  * @author adychka
  */
-@ContextConfiguration(classes = {Config.class})
+@ContextConfiguration(classes = {TestConfig.class})
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
 public class HarmTreeTestCase {

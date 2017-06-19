@@ -5,12 +5,26 @@
  */
 package inria.socialsecurity.converter;
 
-
 /**
- * interface for parsing the java object to json
- * @author adychka
+ * interface for converting data from one format to another
+ *
+ * @author adychka T- input data class K -output data class
  */
-public interface Converter<T,K> {
+public interface Converter<T, K> {
+
+    /**
+     * convert from
+     *
+     * @param object - data
+     * @return converted data
+     */
     K convertFrom(T object);
+
+    /**
+     * convert to
+     *
+     * @param object -data
+     * @return converted data
+     */
     T convertTo(K object);
 }

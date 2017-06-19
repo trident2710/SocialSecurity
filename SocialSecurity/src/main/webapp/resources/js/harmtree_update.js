@@ -82,11 +82,18 @@ function init(id){
                 $cy.json(harmTree);
                 $cy.on('click', 'node', function(evt){
                     addController.setNodeId(this.id());
-                    if(getNodeData(this.id())['classes'].split(" ")[0]=='HarmTreeVertex'||getNodeData(this.id())['classes'].split(" ")[0]=='HarmTreeLeaf'){
+                    if(getNodeData(this.id())['classes'].split(" ")[0]=='HarmTreeVertex'){
+                        updateController.init(this.id());
+                        addController.setState('parentClass','HarmTreeVertex');
+                        addController.setState('stage','CLICKED');    
+                    }
+                    if(getNodeData(this.id())['classes'].split(" ")[0]=='HarmTreeLeaf'){
+                        updateController.init(this.id());
                         addController.clear();
+                    }
+                    if(getNodeData(this.id())['classes'].split(" ")[0]=='HarmTreeLogicalNode'){
                         updateController.init(this.id());
-                    } else{
-                        updateController.init(this.id());
+                        addController.setState('parentClass','HarmTreeLogicalNode');
                         addController.setState('stage','CLICKED');
                     }
                 });
@@ -174,6 +181,16 @@ function sendUpdateHarmTreeRequest(id){
 }
 
 
+function insertText(el,name){
+    let cont = document.createElement('div');
+    cont.appendChild(document.createElement('br'));
+    let elem = document.createElement('label');
+    elem.innerHTML=name;
+    cont.appendChild(elem);
+    el.appendChild(cont);
+    return elem;
+}
+
 /**
  * @see HarmTreeElement
  * Creates the select to choose the harm tree type 
@@ -195,7 +212,7 @@ class NodeTypeInput {
    */
   render() {
     let container = document.createElement('select');
-    
+    container.setAttribute('class','form-control');
     container.innerHTML = this.options.reduce((result, elem) => {
       result += 
         `<option value="${elem['value']}">${elem['name']}</option>`;
@@ -242,7 +259,8 @@ class LogicNodeInput{
     if(document.getElementById('logic_input_type')==null){
         let button = document.createElement('button');
         button.setAttribute('id','logic_input_type');
-        button.innerHTML = 'switch input mode';
+        button.setAttribute('class','btn btn-default')
+        button.innerHTML = 'Switch input mode';
         button.addEventListener('click',()=>{
             if(this.state=='custom')
                 this.setState('default');
@@ -251,6 +269,7 @@ class LogicNodeInput{
 
         let create = document.createElement('button');
         create.setAttribute('id','create');
+        create.setAttribute('class','btn btn-primary')
         create.innerHTML = this.defaultValue!=null?'Update':'Create';
         create.addEventListener('click',()=>{
             if(this.state=='custom'){
@@ -262,6 +281,7 @@ class LogicNodeInput{
 
         let container = document.createElement('div');
         container.setAttribute('id','logic_container');
+        insertText(container,"Logical requirement:");
         container.appendChild(button);
         container.appendChild(create);
         document.getElementById('menu').appendChild(container);
@@ -272,11 +292,13 @@ class LogicNodeInput{
         removeElementById('logic_input');
 
         let input  = document.createElement('input');
+        input.innerHTML='sdfsdf';
         input.setAttribute('type','number');
         input.setAttribute('min',1);
         input.setAttribute('max',10);
         input.setAttribute('id','logic_input');
         input.setAttribute('value','1');
+        input.setAttribute('class','form-control logic');
         input.onkeypress=function(evt){
             evt.preventDefault();
         };
@@ -292,7 +314,9 @@ class LogicNodeInput{
         removeElementById('logic_input');
 
         let select = document.createElement('select');
+        select.setAttribute('class','form-control');
         select.setAttribute('id','logic_select');
+        select.setAttribute('class','form-control logic');
         select.innerHTML = this.options.reduce((result, elem) => {
           result += 
             `<option value="${elem['value']}">${elem['name']}</option>`;
@@ -303,7 +327,8 @@ class LogicNodeInput{
         }
         document.getElementById('logic_container').appendChild(select);
     }
-    
+
+
     let container  = document.getElementById('logic_container');
     return container;
     }
@@ -330,7 +355,7 @@ class LeafNodeInput {
         let container = document.createElement('div');
         container.setAttribute('id','logic_container');
         let containerThreatType = document.createElement('select');
-        containerThreatType.setAttribute('label','sdfsdfsdf');
+        containerThreatType.setAttribute('class','form-control');
         containerThreatType.innerHTML = this.options['threatType'].reduce((result, elem) => {
           result += 
             `<option value="${elem}">${elem}</option>`;
@@ -342,6 +367,7 @@ class LeafNodeInput {
         }
         
         let containerRiskSource = document.createElement('select');
+        containerRiskSource.setAttribute('class','form-control');
         containerRiskSource.innerHTML = this.options['riskSource'].reduce((result, elem) => {
           result += 
             `<option value="${elem}">${elem}</option>`;
@@ -352,6 +378,7 @@ class LeafNodeInput {
         }
         
         let containerAttributeDefinition = document.createElement('select');
+        containerAttributeDefinition.setAttribute('class','form-control');
         containerAttributeDefinition.innerHTML = this.options['attributeDefinition'].reduce((result, elem) => {
           result += 
             `<option value="${elem['value']}">${elem['name']}</option>`;
@@ -363,6 +390,7 @@ class LeafNodeInput {
 
         let buttonCreate = document.createElement('button');
         buttonCreate.setAttribute('id',"b_create");
+        buttonCreate.setAttribute('class','btn btn-primary')
         buttonCreate.innerHTML = this.defaultValue!=null?'Update':'Create';
         buttonCreate.addEventListener('click',()=>{
            let values = {};
@@ -372,8 +400,11 @@ class LeafNodeInput {
            this.onChange(values);
         });
         
+        insertText(container,"Threat type:");
         container.appendChild(containerThreatType);
+        insertText(container,"Risk source:");
         container.appendChild(containerRiskSource);
+        insertText(container,"Attribute definition:");
         container.appendChild(containerAttributeDefinition);
         container.appendChild(buttonCreate);
 
@@ -390,9 +421,10 @@ class HarmTreeHeadInput{
     render(){
         let container = document.createElement('div');
         container.setAttribute('id','harm_tree_head_info');
-        
         let name = document.createElement('input');
         name.setAttribute('id','harm_tree_name');
+        name.setAttribute('class','form-control');
+        
         if(this.defaultData!=null){
             name.setAttribute('value',this.defaultData['name']);
         }
@@ -400,6 +432,8 @@ class HarmTreeHeadInput{
         
         let description = document.createElement('input');
         description.setAttribute('id','harm_tree_description');
+        description.setAttribute('class','form-control');
+        
         if(this.defaultData!=null){
             description.setAttribute('value',this.defaultData['description']);
         }
@@ -407,6 +441,7 @@ class HarmTreeHeadInput{
         let update = document.createElement('button');
         update.innerHTML = 'Update';
         update.setAttribute('id','b_update');
+        update.setAttribute('class','btn btn-primary')
         update.addEventListener('click',()=>{
             let res = {};
             res['name'] = name.value;
@@ -414,7 +449,9 @@ class HarmTreeHeadInput{
             this.onChange(res);
         });
         
+        insertText(container,"Tree name:")
         container.appendChild(name);
+        insertText(container,"Tree description:");
         container.appendChild(description);
         container.appendChild(update);
         
@@ -433,9 +470,10 @@ class NodeCreateController {
      */
     constructor(onSubmit,harmTreeLeafCreateData,harmTreeLogicCreateData) {
         this.stageTypes = ['INACTIVE','CLICKED','SELECT_NODE_TYPE','ADD_LEAF_CHOSEN','ADD_LOGIC_CHOSEN'];
-        this.state = {'stage':'INACTIVE'};
+        this.state = {'stage':'INACTIVE','parentClass':''};
         this.onSubmit = onSubmit;
         this.harmTreeLeafCreateData = harmTreeLeafCreateData;
+        this.harmTreeElementTypesVertex = [{'name':'Harm tree logical node','value':2}];
         this.harmTreeElementTypes = [{'name':'Harm tree leaf','value':1}, {'name':'Harm tree logical node','value':2}];
         this.harmTreeLogicCreateData = harmTreeLogicCreateData;
     }
@@ -463,8 +501,10 @@ class NodeCreateController {
     
     createForm(){
         const formContainer = document.createElement('div');
+        
         formContainer.setAttribute('id','create_container');
-        formContainer.innerHTML = '<p class=s_title>Add descendant</p>';
+        formContainer.setAttribute('class','panel panel-default');
+        formContainer.innerHTML = '<p class=s_title>Create options</p>';;
         document.getElementById('menu').appendChild(formContainer);
     }
     clear(){
@@ -483,6 +523,7 @@ class NodeCreateController {
            
             const addChildButton = document.createElement('button');
             addChildButton.setAttribute('id','b_add');
+            addChildButton.setAttribute('class','btn btn-success')
             addChildButton.innerHTML = 'Add child';
             addChildButton.setAttribute('id','node_add_child');
             addChildButton.addEventListener('click',()=>{
@@ -501,9 +542,11 @@ class NodeCreateController {
                    this.setState('stage','ADD_LOGIC_CHOSEN');
                }
             }
-
-            const elem = new NodeTypeInput(this.harmTreeElementTypes, changeCallback);
+            const elem = new NodeTypeInput(this.state['parentClass']=='HarmTreeVertex'?this.harmTreeElementTypesVertex:this.harmTreeElementTypes, changeCallback);
             document.getElementById('create_container').appendChild(elem.render());
+
+
+            
         }
         if(this.state['stage']=='ADD_LEAF_CHOSEN'){
             
@@ -573,6 +616,7 @@ class NodeUpdateController{
             } else{
                 const deleteButton = document.createElement('button');
                 deleteButton.innerHTML = 'Delete node';
+                deleteButton.setAttribute('class','btn btn-danger')
                 deleteButton.setAttribute('id','node_delete');
                 deleteButton.addEventListener('click',()=>{
                     let res = {"action":"delete"};
@@ -607,7 +651,7 @@ class NodeUpdateController{
 
                 const logicInput = new LogicNodeInput(this.harmTreeLogicCreateData,callback,{'value':node['logicalRequirement']});
                 logicInput.setState((node['logicalRequirement']==1||node['logicalRequirement']==-1)?'default':'custom');
-                document.getElementById('create_container').appendChild(logicInput.render());
+                document.getElementById('update_container').appendChild(logicInput.render());
             }
         });
         
@@ -624,7 +668,9 @@ class NodeUpdateController{
     createContainer(){
         const formContainer = document.createElement('div');
         formContainer.setAttribute('id','update_container');
+        formContainer.setAttribute('class','panel panel-default');
         formContainer.innerHTML = '<p class=s_title>Update options</p>';
+                
         document.getElementById('menu').appendChild(formContainer);
     }
     
