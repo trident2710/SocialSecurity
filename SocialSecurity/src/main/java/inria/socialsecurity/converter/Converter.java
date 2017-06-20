@@ -8,7 +8,9 @@ package inria.socialsecurity.converter;
 /**
  * interface for converting data from one format to another
  *
- * @author adychka T- input data class K -output data class
+ * @author adychka
+ * @param <T>  input data class
+ * @param <K> output data class
  */
 public interface Converter<T, K> {
 

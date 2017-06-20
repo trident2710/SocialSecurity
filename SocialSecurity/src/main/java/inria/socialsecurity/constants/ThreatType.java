@@ -16,7 +16,7 @@ public enum ThreatType {
     FE2("FE.2"),
     FE3("FE.3");
 
-    private String value;
+    private final String value;
 
     public String getValue() {
         return value;

@@ -81,7 +81,8 @@ public class HarmTreeController {
         Long idValue;
         try {
             idValue = Long.parseLong(id);
-            HarmTreeVertex htln = (HarmTreeVertex) htr.findOne(idValue);
+            HarmTreeVertex htln;
+            htln = (HarmTreeVertex) htr.findOne(idValue);
             htr.delete(htln);
             return new ResponseEntity(HttpStatus.OK);
         } catch (NumberFormatException e) {
