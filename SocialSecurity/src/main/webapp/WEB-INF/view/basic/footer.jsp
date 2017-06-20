@@ -8,7 +8,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link href="resources/css/sticky-footer.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/resources/css/sticky-footer.css" rel="stylesheet">
     </head>
     <body>
          <footer class="footer">

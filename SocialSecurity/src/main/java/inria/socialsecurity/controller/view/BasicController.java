@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package inria.socialsecurity.controller;
+package inria.socialsecurity.controller.view;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,16 +15,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 @RequestMapping({"/", "/homepage", "/about"})
-public class ViewController {
+public class BasicController {
 
     @RequestMapping(value = {"/", "/homepage"})
     public String home() {
-        return "welcomepage";
+        return "basic/welcomepage";
     }
 
     @RequestMapping(value = {"/about"})
     public String about() {
-        return "about";
+        return "basic/about";
     }
 
 }

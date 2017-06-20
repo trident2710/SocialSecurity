@@ -6,6 +6,7 @@
 package inria.socialsecurity.repository;
 
 import inria.socialsecurity.entity.attribute.AttributeDefinition;
+import inria.socialsecurity.entity.attribute.ComplexAttributeDefinition;
 import java.util.List;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.GraphRepository;
@@ -41,7 +42,7 @@ public interface AttributeDefinitionRepository extends GraphRepository<Attribute
      * @return
      */
     @Query("match (n) where n:ComplexAttributeDefinition return n")
-    List<AttributeDefinition> findComplexAttributes();
+    List<ComplexAttributeDefinition> findComplexAttributes();
 
     /**
      * delete and detach the attribute definition i.e. delete also all it's

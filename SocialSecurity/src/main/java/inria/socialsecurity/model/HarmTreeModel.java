@@ -6,6 +6,8 @@
 package inria.socialsecurity.model;
 
 import com.google.gson.JsonElement;
+import inria.socialsecurity.entity.harmtree.HarmTreeVertex;
+import java.util.List;
 
 /**
  * defines the model layer for the harm tree elements request logic contains the
@@ -24,7 +26,7 @@ public interface HarmTreeModel {
      * @see http://js.cytoscape.org/
      * @param cytoscapeDisplayNotation - the display notation
      */
-    public void updateHarmTreeNotationFromCytoscape(Long id, JsonElement cytoscapeDisplayNotation);
+    void updateHarmTreeNotationFromCytoscape(Long id, JsonElement cytoscapeDisplayNotation);
 
     /**
      * get the cytoscape display notation for the harm tree defined by the id of
@@ -34,7 +36,7 @@ public interface HarmTreeModel {
      * @see http://js.cytoscape.org/
      * @return
      */
-    public JsonElement getCytoscapeDisplayNotationForHarmTree(Long id);
+    JsonElement getCytoscapeDisplayNotationForHarmTree(Long id);
 
     /**
      * update the harm tree element by id
@@ -43,7 +45,7 @@ public interface HarmTreeModel {
      * @param data in json format which contains the fields named after the
      * fields of the harm tree element
      */
-    public void updateHarmTreeElement(Long id, JsonElement data);
+    void updateHarmTreeElement(Long id, JsonElement data);
 
     /**
      * create and add the descendant to the specific parent
@@ -52,12 +54,32 @@ public interface HarmTreeModel {
      * @param properties in json format which contains the fields named after
      * the fields of the harm tree element
      */
-    public void createHarmTreeDescendant(Long parentId, JsonElement properties);
+    void createHarmTreeDescendant(Long parentId, JsonElement properties);
 
     /**
      * delete the specific harm tree element
      *
      * @param id - id of the harm tree element
      */
-    public void deleteHarmTreeElement(Long id);
+    void deleteHarmTreeElement(Long id);
+    
+    /**
+     * delete harm tree by id of it's vertex
+     * @param id 
+     */
+    void deleteHarmTree(Long id);
+    
+    /**
+     * get the list of the harm tree vertices
+     * @return 
+     */
+    List<HarmTreeVertex> getHarmTrees();
+    
+    /**
+     * create new harm tree with specified name and description
+     * @param name
+     * @param description
+     * @return 
+     */
+    HarmTreeVertex createHarmTree(String name,String description);
 }

@@ -15,6 +15,7 @@ import inria.socialsecurity.entity.harmtree.HarmTreeNode;
 import inria.socialsecurity.entity.harmtree.HarmTreeVertex;
 import inria.socialsecurity.repository.AttributeDefinitionRepository;
 import inria.socialsecurity.repository.HarmTreeRepository;
+import java.util.List;
 import org.neo4j.ogm.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -91,7 +92,7 @@ public class HarmTreeModelImpl implements HarmTreeModel {
         System.out.println("create node");
         System.out.println(properties.toString());
         HarmTreeElement parent = htr.findOne(parentId);
-        //if(parent instanceof HarmTreeLogicalNode){
+        
         switch (properties.getAsJsonObject().get("type").getAsInt()) {
             case 1:
                 HarmTreeLeaf htl = new HarmTreeLeaf();
@@ -112,21 +113,10 @@ public class HarmTreeModelImpl implements HarmTreeModel {
                 break;
         }
         htr.save(parent);
-        //}
-//        if(parent instanceof HarmTreeVertex){
-//            HarmTreeLogicalNode htln = new HarmTreeLogicalNode();
-//            htln.setDisplayNotation(parent.getDisplayNotation());
-//            htln.setLogicalRequirement(Integer.parseInt(properties.getAsJsonObject().get("data").getAsJsonObject().get("value").getAsString()));
-//            ((HarmTreeVertex) parent).addDescendant(htln);
-//            htr.save(htln);
-//            htr.save(parent);
-//        }
-
     }
 
     @Override
     public void deleteHarmTreeElement(Long id) {
-
         HarmTreeElement element = htr.findOne(id);
         if (element instanceof HarmTreeLogicalNode) {
             System.out.println("delete logic");
@@ -135,10 +125,18 @@ public class HarmTreeModelImpl implements HarmTreeModel {
         if (element instanceof HarmTreeLeaf) {
             System.out.println("delete leaf");
             htr.detachDelete(element.getId());
-
         }
     }
 
+    @Override
+    public void deleteHarmTree(Long id) {
+        HarmTreeVertex htln;
+        htln = (HarmTreeVertex) htr.findOne(id);
+        if(!htln.getDescendants().isEmpty())
+            deleteWithDescendants(htln.getDescendants().get(0));
+        htr.detachDelete(htln.getId());
+    }
+    
     private void deleteWithDescendants(HarmTreeLogicalNode node) {
         node.getLeafs().forEach((elem) -> {
             htr.detachDelete(elem.getId());
@@ -147,6 +145,19 @@ public class HarmTreeModelImpl implements HarmTreeModel {
             deleteWithDescendants((HarmTreeLogicalNode) htr.findOne(elem.getId()));
         });
         htr.detachDelete(node.getId());
+    }
+
+    @Override
+    public List<HarmTreeVertex> getHarmTrees() {
+        return htr.getTreeVertices();
+    }
+
+    @Override
+    public HarmTreeVertex createHarmTree(String name, String description) {
+        HarmTreeVertex vertex = new HarmTreeVertex();
+        vertex.setName(name);
+        vertex.setDescription(description);
+        return htr.save(vertex);
     }
 
 }

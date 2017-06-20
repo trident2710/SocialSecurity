@@ -44,9 +44,9 @@ var $harmTreeId;
 
 function init(id){
     $harmTreeId = id;
-    getData('rest/harmtrees/cytoscape/'+id,(harmTree)=>{
-        getData('rest/attributes/all',(attributes)=>{
-            getData('rest/harmtrees/leaf/settings',(settings)=>{
+    getData('/rest/harmtrees/cytoscape/'+id,(harmTree)=>{
+        getData('/rest/attributes/all',(attributes)=>{
+            getData('/rest/harmtrees/leaf/settings',(settings)=>{
                 
                 harmTree = JSON.parse(harmTree);
                 $harmTree = harmTree;
@@ -112,13 +112,13 @@ function processChangeRequest(data){
     };
     switch(data['action']){
         case 'create':
-            sendData('rest/harmtrees/descendant/'+data['nodeId'],data,'POST',callback);
+            sendData('/rest/harmtrees/descendant/'+data['nodeId'],data,'POST',callback);
             break;
         case 'update':
-            sendData('rest/harmtrees/node/'+data['nodeId'],data,'PUT',callback);
+            sendData('/rest/harmtrees/node/'+data['nodeId'],data,'PUT',callback);
             break;
         case 'delete':
-            deleteData('rest/harmtrees/node/'+data['nodeId'],callback)
+            deleteData('/rest/harmtrees/node/'+data['nodeId'],callback)
             break;
     }
 }
@@ -176,7 +176,7 @@ function sendUpdateHarmTreeRequest(id){
         },
         processData: false,
         type: 'POST',
-        url: 'rest/harmtrees/cytoscape/'+id
+        url: '/rest/harmtrees/cytoscape/'+id
     });
 }
 
@@ -602,7 +602,7 @@ class NodeUpdateController{
         
         
         
-        getData('rest/harmtrees/node/'+id,(node)=>{
+        getData('/rest/harmtrees/node/'+id,(node)=>{
             if(node['class']=='HarmTreeVertex'){ 
                 const updateHead = new HarmTreeHeadInput((object)=>{
                     let res = {};

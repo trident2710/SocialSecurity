@@ -17,7 +17,7 @@ public enum RiskSource {
     A3("A3"), // friends of friends of friends
     A4("A4"); // strangers
 
-    private String value;
+    private final String value;
 
     private RiskSource(String value) {
         this.value = value;

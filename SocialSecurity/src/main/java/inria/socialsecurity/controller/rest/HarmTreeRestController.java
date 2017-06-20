@@ -3,29 +3,29 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package inria.socialsecurity.controller;
+package inria.socialsecurity.controller.rest;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import inria.socialsecurity.constants.RiskSource;
 import inria.socialsecurity.constants.ThreatType;
-import inria.socialsecurity.entity.attribute.AttributeDefinition;
 import inria.socialsecurity.entity.harmtree.HarmTreeElement;
 import inria.socialsecurity.entity.harmtree.HarmTreeVertex;
 import inria.socialsecurity.exception.ObjectNotFoundException;
 import inria.socialsecurity.exception.WrongArgumentException;
 import inria.socialsecurity.model.HarmTreeModel;
-import inria.socialsecurity.repository.AttributeDefinitionRepository;
 import inria.socialsecurity.repository.HarmTreeRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -35,14 +35,10 @@ import org.springframework.web.bind.annotation.RestController;
  * @author adychka
  */
 @RestController
-@RequestMapping("/rest/**")
-public class RESTController {
+@RequestMapping("/rest/harmtrees/**")
+public class HarmTreeRestController {
 
-    final static String PARAM_DISPLAY_DATA = "display_data";
-    final static String PARAM_ID = "id";
 
-    @Autowired
-    AttributeDefinitionRepository adr; //repository for the attribute definitions
 
     @Autowired
     HarmTreeRepository htr; //hepository for the harm tree elements 
@@ -51,25 +47,13 @@ public class RESTController {
     HarmTreeModel harmTreeModel; //bean - model layer for harm tree elements crud operations etc.
 
     /**
-     * get all attributes i.e primitive and complex
-     *
-     * @return the list of attributes
-     */
-    @RequestMapping(value = "/rest/attributes/all", method = RequestMethod.GET)
-    public List<AttributeDefinition> getAttributes() {
-        List<AttributeDefinition> lst = adr.findPrimitiveAttributes();
-        lst.addAll(adr.findComplexAttributes());
-        return lst;
-    }
-
-    /**
      * get the possible values for the risk source and threat type
      *
      * @see RiskSource
      * @see ThreatType
      * @return json string in format {"riskSources":[],"threatTypes":[]}
      */
-    @RequestMapping(value = "/rest/harmtrees/leaf/settings", method = RequestMethod.GET)
+    @RequestMapping(value = "leaf/settings", method = RequestMethod.GET)
     public String getHarmTreeLeafSettings() {
         JsonObject object = new JsonObject();
         JsonArray threatTypes = new JsonArray();
@@ -93,7 +77,7 @@ public class RESTController {
      * @see HarmTreeVertex
      * @return
      */
-    @RequestMapping(value = "/rest/harmtrees/all", method = RequestMethod.GET)
+    @RequestMapping(value = "all", method = RequestMethod.GET)
     public List<HarmTreeVertex> getHarmTrees() {
         return htr.getTreeVertices();
     }
@@ -106,7 +90,7 @@ public class RESTController {
      * @see HarmTreeElement
      * @throws WrongArgumentException if id is malformed
      */
-    @RequestMapping(value = "/rest/harmtrees/node/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "node/{id}", method = RequestMethod.GET)
     public HarmTreeElement getHarmTreeElement(@PathVariable String id) throws WrongArgumentException {
         try {
             return htr.findOne(Long.parseLong(id));
@@ -124,7 +108,7 @@ public class RESTController {
      * @return
      * @throws WrongArgumentException
      */
-    @RequestMapping(value = "/rest/harmtrees/node/{id}", method = RequestMethod.PUT)
+    @RequestMapping(value = "node/{id}", method = RequestMethod.PUT)
     public ResponseEntity updateHarmTreeElement(@PathVariable String id, @RequestBody String body) throws WrongArgumentException {
         harmTreeModel.updateHarmTreeElement(Long.parseLong(id), new JsonParser().parse(body));
         return new ResponseEntity(HttpStatus.OK);
@@ -138,7 +122,7 @@ public class RESTController {
      * @return
      * @throws WrongArgumentException
      */
-    @RequestMapping(value = "/rest/harmtrees/node/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "node/{id}", method = RequestMethod.DELETE)
     public ResponseEntity deleteHarmTreeElement(@PathVariable String id) throws WrongArgumentException {
         harmTreeModel.deleteHarmTreeElement(Long.parseLong(id));
         return new ResponseEntity(HttpStatus.OK);
@@ -152,7 +136,7 @@ public class RESTController {
      * @return
      * @throws WrongArgumentException
      */
-    @RequestMapping(value = "/rest/harmtrees/descendant/{parentId}", method = RequestMethod.POST)
+    @RequestMapping(value = "descendant/{parentId}", method = RequestMethod.POST)
     public ResponseEntity createHarmTreeElementDescendant(@PathVariable String parentId, @RequestBody String body) throws WrongArgumentException {
         harmTreeModel.createHarmTreeDescendant(Long.parseLong(parentId), new JsonParser().parse(body));
         return new ResponseEntity(HttpStatus.OK);
@@ -168,7 +152,7 @@ public class RESTController {
      * @throws ObjectNotFoundException if such harm tree vertex not found or
      * found object is of wrong type
      */
-    @RequestMapping(value = "/rest/harmtrees/cytoscape/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "cytoscape/{id}", method = RequestMethod.GET)
     public String getHarmTreeCytoscapeNotation(@PathVariable String id) throws WrongArgumentException, ObjectNotFoundException {
         try {
             return harmTreeModel.getCytoscapeDisplayNotationForHarmTree(Long.parseLong(id)).toString();
@@ -188,10 +172,26 @@ public class RESTController {
      * @return
      * @throws WrongArgumentException
      */
-    @RequestMapping(value = "/rest/harmtrees/cytoscape/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "cytoscape/{id}", method = RequestMethod.POST)
     public ResponseEntity updateHarmTree(@PathVariable String id, @RequestBody String body) throws WrongArgumentException {
         harmTreeModel.updateHarmTreeNotationFromCytoscape(Long.parseLong(id), new JsonParser().parse(body));
         return new ResponseEntity(HttpStatus.OK);
+    }
+    
+    /**
+     * delete harm tree
+     * @param id
+     * @param model
+     */
+    @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
+    public void deleteHarmTree(@PathVariable String id, Model model) throws WrongArgumentException {
+        Long idValue;
+        try {
+            idValue = Long.parseLong(id);
+        } catch (NumberFormatException e) {
+            throw new WrongArgumentException();
+        }
+        harmTreeModel.deleteHarmTree(idValue);
     }
 
 }

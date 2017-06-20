@@ -13,13 +13,10 @@ function deleteEntity(id) {
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
-        window.location.replace("attributes-all");
-    }
-    if (this.status == 400){
-        window.location.replace("error");
+        window.location.replace("attributes/all");
     }
   };
-  xhttp.open("DELETE", "attributes-specific?id="+id, true);
+  xhttp.open("DELETE", "/rest/attributes/"+id, true);
   xhttp.send();
 }
 
@@ -34,10 +31,9 @@ $(document).ready(function() {
     $(add_button).click(function(e){ //on add input button click
         e.preventDefault();
         if($x < max_fields){ //max input box allowed
-            $x++; //text box increment
             var $div  = $("<div class='removable_attr'></div>");
             var $sel = ($("#selectPrimitive").clone());
-            $sel.attr("name","primitiveAttribut"+$x);
+            $sel.attr("name","primitiveAttribut"+$x++);
             $div.append($sel);
             $div.append($("<a href='#' class='remove_field'>Remove</a>"));
             wrapper.append($div);
@@ -48,4 +44,5 @@ $(document).ready(function() {
         e.preventDefault(); $(this).parent('div').remove(); $x--;
     })
 });
+
 

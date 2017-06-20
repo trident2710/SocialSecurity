@@ -23,6 +23,7 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 @ComponentScan("inria.socialsecurity.controller")
 public class WebConfig extends WebMvcConfigurerAdapter {
 
+
     @Bean
     public ViewResolver viewResolver() {
         InternalResourceViewResolver resolver = new InternalResourceViewResolver();
