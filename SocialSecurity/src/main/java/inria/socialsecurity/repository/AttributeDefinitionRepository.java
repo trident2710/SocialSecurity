@@ -29,11 +29,11 @@ public interface AttributeDefinitionRepository extends GraphRepository<Attribute
     AttributeDefinition findByName(String name);
 
     /**
-     * find all primitive attributes i.e. which consist only of one value
+     * find all primitive attributes i.e. which consist only  one value
      *
      * @return
      */
-    @Query("match (n) where not n:ComplexAttributeDefinition and n:AttributeDefinition return n")
+    @Query("match (n) where  n:PrimitiveAttributeDefinition return n")
     List<AttributeDefinition> findPrimitiveAttributes();
 
     /**

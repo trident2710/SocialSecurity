@@ -25,5 +25,10 @@ public class BasicViewController {
     public String about() {
         return "basic/about";
     }
+    
+    @RequestMapping(value = {"/settings"})
+    public String setings() {
+        return "basic/settings";
+    }
 
 }

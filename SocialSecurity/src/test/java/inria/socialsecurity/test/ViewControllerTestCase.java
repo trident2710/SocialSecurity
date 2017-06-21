@@ -5,6 +5,9 @@
  */
 package inria.socialsecurity.test;
 
+
+import inria.socialsecurity.constants.DataType;
+import inria.socialsecurity.constants.DefaultDataSourceName;
 import inria.socialsecurity.controller.view.AttributeDefinitionViewController;
 import inria.socialsecurity.controller.view.BasicViewController;
 import inria.socialsecurity.entity.attribute.AttributeDefinition;
@@ -18,8 +21,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import static inria.socialsecurity.constants.param.AttributeDefinition.*;
-import static inria.socialsecurity.constants.param.HarmTree.*;
 import inria.socialsecurity.controller.view.HarmTreeViewController;
 import inria.socialsecurity.entity.harmtree.HarmTreeVertex;
 import inria.socialsecurity.model.HarmTreeModel;
@@ -27,12 +28,15 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import org.mockito.MockitoAnnotations;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.*;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import static inria.socialsecurity.constants.param.AttributeDefinition.*;
+import static inria.socialsecurity.constants.param.HarmTree.*;
 import static org.mockito.Mockito.*;
-import org.mockito.MockitoAnnotations;
 /**
  *
  * @author adychka
@@ -75,6 +79,7 @@ public class ViewControllerTestCase {
         mockMvc.perform(get("/")).andExpect(view().name("basic/welcomepage"));
         mockMvc.perform(get("/homepage")).andExpect(view().name("basic/welcomepage"));
         mockMvc.perform(get("/about")).andExpect(view().name("basic/about"));
+        mockMvc.perform(get("/settings")).andExpect(view().name("basic/settings"));
     }
     
     @Test
@@ -104,7 +109,9 @@ public class ViewControllerTestCase {
                 .andExpect(model().attribute(PRIMITIVE_ATTRIBUTES, p));
         
         mockMvc.perform(get("/attributes/add?type=primitive"))
-                .andExpect(view().name("attribute/primitive_attribute_add"));
+                .andExpect(view().name("attribute/primitive_attribute_add")).
+                andExpect(model().attribute(DATA_TYPES, DataType.values())).
+                andExpect(model().attribute(DEFAULT_DATA_SOURCES,DefaultDataSourceName.values()));
         
         mockMvc.perform(get("/attributes/update/"+1))
                 .andExpect(view().name("attribute/complex_attribute_update"))
@@ -112,7 +119,9 @@ public class ViewControllerTestCase {
                 .andExpect(model().attribute(PRIMITIVE_ATTRIBUTES, p));
         
         mockMvc.perform(get("/attributes/update/"+2))
-                .andExpect(view().name("attribute/primitive_attribute_update"));
+                .andExpect(view().name("attribute/primitive_attribute_update")).
+                andExpect(model().attribute(DATA_TYPES, DataType.values())).
+                andExpect(model().attribute(DEFAULT_DATA_SOURCES,DefaultDataSourceName.values()));
     }
     
     @Test

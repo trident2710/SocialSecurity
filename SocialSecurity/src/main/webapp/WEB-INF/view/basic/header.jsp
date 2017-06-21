@@ -18,6 +18,7 @@
             <li><a href="${pageContext.request.contextPath}/homepage">Home</a></li>
             <li><a href="${pageContext.request.contextPath}/attributes/all">Attributes</a></li>
             <li><a href="${pageContext.request.contextPath}/harmtrees/all">Harm trees</a></li>
+            <li><a href="${pageContext.request.contextPath}/settings">Settings</a></li>
             <li><a href="${pageContext.request.contextPath}/about">About</a></li>
        </ul>
     </nav>

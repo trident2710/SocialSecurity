@@ -5,7 +5,7 @@
  */
 package inria.socialsecurity.test;
 
-import inria.socialsecurity.constants.PrimitiveAttributeName;
+import inria.socialsecurity.constants.BasicPrimitiveAttributes;
 import inria.socialsecurity.constants.RiskSource;
 import inria.socialsecurity.constants.ThreatType;
 import inria.socialsecurity.converter.HarmTreeToCytoscapeNotationConverter;

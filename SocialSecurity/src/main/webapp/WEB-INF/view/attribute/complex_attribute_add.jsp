@@ -19,22 +19,28 @@
    <body>
         <%@include file="../basic/header.jsp" %>
 
-        <div class='add_attr_form'>
-            <form action="${pageContext.request.contextPath}/attributes/form-post" method="POST" class="input_fields_wrap">
-                <input id ='btn_create' type="submit" class="btn btn-success" value="Create">
-                <br>
-                <label for="name">Name:</label>
-                <input type="text" name='name' id="name" class="form-control"></input>
-                <br>
-                <label>Primitive attributes:</label>
-                <br>
-                <select id ='selectPrimitive' name="primitiveAttribut0" class="form-control">
-                    <c:forEach var="attr" items="${primitive_attributes}">
-                        <option value="${attr.id}">${attr.displayName}</option>
-                    </c:forEach> 
-                </select>
-            </form>
-            <button class="btn add_field_button">Add Primitive attribute</button>
+        <div class='add_attr_form panel panel-default'>
+            <div class="panel panel-heading">
+                Create new complex attribute
+            </div>
+            <div class="panel panel-body">
+                <form action="${pageContext.request.contextPath}/attributes/form-post" method="POST" class="input_fields_wrap">
+                    <input id ='btn_create' type="submit" class="btn btn-success" value="Create">
+                    <br>
+                    <label for="name">Name:</label>
+                    <input type="text" name='name' id="name" class="form-control"></input>
+                    <br>
+                    <label>Primitive attributes:</label>
+                    <br>
+                    <select id ='selectPrimitive' name="primitiveAttribut0" class="form-control">
+                        <c:forEach var="attr" items="${primitive_attributes}">
+                            <option value="${attr.id}">${attr.displayName}</option>
+                        </c:forEach> 
+                    </select>
+                </form>
+                <button class="btn add_field_button">Add Primitive attribute</button>
+            </div>
+            
         </div>
         <%@include file="../basic/footer.jsp" %>
        

@@ -5,6 +5,7 @@
  */
 package inria.socialsecurity.model;
 
+import inria.socialsecurity.constants.DefaultDataSourceName;
 import inria.socialsecurity.entity.attribute.AttributeDefinition;
 import inria.socialsecurity.entity.attribute.ComplexAttributeDefinition;
 import inria.socialsecurity.exception.ObjectNotFoundException;
@@ -17,6 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
 
 import static inria.socialsecurity.constants.param.AttributeDefinition.*;
+import inria.socialsecurity.entity.attribute.PrimitiveAttributeDefinition;
+import inria.socialsecurity.entity.attribute.Synonim;
+import inria.socialsecurity.repository.SynonimRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -29,6 +33,9 @@ public class AttributeDefinitionModelImpl implements AttributeDefinitionModel{
     //autowired bean for crud opertations for attributes
     @Autowired
     AttributeDefinitionRepository adr;
+    
+    @Autowired
+    SynonimRepository sr;
 
     @Override
     public ComplexAttributeDefinition getComplexAttributeDefinitionById(Long id) throws ObjectNotFoundException {
@@ -45,8 +52,17 @@ public class AttributeDefinitionModelImpl implements AttributeDefinitionModel{
     }
 
     @Override
-    public ComplexAttributeDefinition getPrimitiveAttributeDefinitionById(Long id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public PrimitiveAttributeDefinition getPrimitiveAttributeDefinitionById(Long id) throws ObjectNotFoundException {
+        PrimitiveAttributeDefinition pad;
+        try{
+            pad = (PrimitiveAttributeDefinition)adr.findOne(id);
+        } catch(ClassCastException ex){
+            throw new ObjectNotFoundException();
+        }
+        
+        if(pad == null) throw new ObjectNotFoundException();
+        
+        return pad;
     }
 
     @Override
@@ -115,8 +131,37 @@ public class AttributeDefinitionModelImpl implements AttributeDefinitionModel{
     }
 
 
-    private void updatePrimitiveAttributeDefinitionFromHttpRequest(Long id, HttpServletRequest request) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private void updatePrimitiveAttributeDefinitionFromHttpRequest(Long id, HttpServletRequest request) throws WrongArgumentException, ObjectNotFoundException {
+        if(request.getParameter(NAME)==null)
+            throw new WrongArgumentException();
+        
+        System.out.println(request.getParameter(DATA_TYPE));
+        if(request.getParameter(DATA_TYPE)==null)
+            throw new WrongArgumentException();
+        
+        for(DefaultDataSourceName n:DefaultDataSourceName.values())
+            if(request.getParameter(n.getName())==null)
+                throw new WrongArgumentException();
+        
+        try{
+            PrimitiveAttributeDefinition pad = (PrimitiveAttributeDefinition) adr.findOne(id);
+            pad.setDisplayName(request.getParameter(NAME));
+            pad.setName(pad.getDisplayName().toLowerCase().replace(" ", "_"));
+            pad.setDataType(request.getParameter(DATA_TYPE));
+            pad.setSynonims(null);
+            adr.save(pad);
+            
+            for(DefaultDataSourceName n:DefaultDataSourceName.values()){
+                Synonim s = new Synonim();
+                s.setDataSourceName(n.getName());
+                s.setAttributeName(request.getParameter(n.getName()));
+                sr.save(s);
+                pad.getSynonims().add(s);
+            }
+            adr.save(pad);
+        } catch (ClassCastException ex){
+            throw new ObjectNotFoundException();
+        }
     }
 
     private void updateComplexAttributeDefinitionFromHttpRequest(Long id, HttpServletRequest request) throws WrongArgumentException, ObjectNotFoundException {
@@ -126,7 +171,7 @@ public class AttributeDefinitionModelImpl implements AttributeDefinitionModel{
             String name = dispName.toLowerCase().replace(" ", "_");
             cad.setName(name);
             cad.setDisplayName(dispName);
-            cad.setPrimitiveAttributes(null);
+            cad.setSubAttributes(null);
             adr.save(cad);
             //body contains the primitive attribute ids in form 
             //"primitiveAttributei":val where i from 0 to 10 (the quantity is dynamic)
@@ -140,7 +185,7 @@ public class AttributeDefinitionModelImpl implements AttributeDefinitionModel{
                     }
                 }
             }
-            cad.setPrimitiveAttributes(pad);
+            cad.setSubAttributes(pad);
             adr.save(cad);
         } catch (NumberFormatException e) {
             throw new WrongArgumentException();
@@ -149,12 +194,38 @@ public class AttributeDefinitionModelImpl implements AttributeDefinitionModel{
         }
     }
 
-    private AttributeDefinition createPrimitiveAttributeDefinitionFromHttpRequest(HttpServletRequest request) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private AttributeDefinition createPrimitiveAttributeDefinitionFromHttpRequest(HttpServletRequest request) throws WrongArgumentException {
+        if(request.getParameter(NAME)==null)
+            throw new WrongArgumentException();
+        
+        if(request.getParameter(DATA_TYPE)==null)
+            throw new WrongArgumentException();
+        
+        for(DefaultDataSourceName n:DefaultDataSourceName.values())
+            if(request.getParameter(n.getName())==null)
+                throw new WrongArgumentException();
+        
+        PrimitiveAttributeDefinition atr = new PrimitiveAttributeDefinition();
+        
+        atr.setDataType(request.getParameter(DATA_TYPE));
+        atr.setDisplayName(request.getParameter(NAME));
+        atr.setName(atr.getDisplayName().toLowerCase().replace(" ", "_"));
+        
+        for(DefaultDataSourceName n:DefaultDataSourceName.values()){
+            Synonim s = new Synonim();
+            s.setDataSourceName(n.getName());
+            s.setAttributeName(request.getParameter(n.getName()));
+            sr.save(s);
+            atr.getSynonims().add(s);
+        }
+        return adr.save(atr);    
     }
 
     private ComplexAttributeDefinition createComplexAttributeDefinitionFromHttpRequest(HttpServletRequest request) throws WrongArgumentException {
        
+        if(request.getParameter(NAME)==null)
+            throw new WrongArgumentException();
+        
         ComplexAttributeDefinition cad = new ComplexAttributeDefinition();
         String dispName = request.getParameter(NAME);
         String name = dispName.toLowerCase().replace(" ", "_");
@@ -176,12 +247,15 @@ public class AttributeDefinitionModelImpl implements AttributeDefinitionModel{
             }
             i++;
         }
-        cad.setPrimitiveAttributes(pad);
+        cad.setSubAttributes(pad);
         return adr.save(cad);
     }
 
     @Override
     public AttributeDefinition getAttributeDefinitionById(Long id) throws ObjectNotFoundException {
+        AttributeDefinition ad = adr.findOne(id);
+        if(ad == null) throw new ObjectNotFoundException();
+        
         return adr.findOne(id);
     }
 

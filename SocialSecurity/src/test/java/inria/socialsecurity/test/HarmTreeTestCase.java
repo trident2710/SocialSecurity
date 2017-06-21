@@ -5,7 +5,7 @@
  */
 package inria.socialsecurity.test;
 
-import inria.socialsecurity.constants.PrimitiveAttributeName;
+import inria.socialsecurity.constants.BasicPrimitiveAttributes;
 import inria.socialsecurity.constants.RiskSource;
 import inria.socialsecurity.constants.ThreatType;
 import inria.socialsecurity.entity.harmtree.HarmTreeLeaf;
@@ -61,18 +61,18 @@ public class HarmTreeTestCase {
     @Test
     public void basicCrudHarmLeaf(){
         HarmTreeLeaf harmTreeLeaf = new HarmTreeLeaf();
-        harmTreeLeaf.setAttributeDefinition(adr.findByName(PrimitiveAttributeName.FIRST_NAME.getValue()));
+        harmTreeLeaf.setAttributeDefinition(adr.findByName(BasicPrimitiveAttributes.FIRST_NAME.getValue()));
         Long id =htr.save(harmTreeLeaf).getId();
         
         HarmTreeLeaf g = (HarmTreeLeaf)htr.findOne(id);
         Assert.assertNotNull(g);
         
-        g.setAttributeDefinition(adr.findByName(PrimitiveAttributeName.LAST_NAME.getValue()));
+        g.setAttributeDefinition(adr.findByName(BasicPrimitiveAttributes.LAST_NAME.getValue()));
         htr.save(g);
         
         HarmTreeLeaf ng = (HarmTreeLeaf)htr.findOne(id);
         Assert.assertNotNull(ng);
-        Assert.assertEquals(PrimitiveAttributeName.LAST_NAME.getValue(), ng.getAttributeDefinition().getName());
+        Assert.assertEquals(BasicPrimitiveAttributes.LAST_NAME.getValue(), ng.getAttributeDefinition().getName());
         
         htr.delete(ng);
         Assert.assertNull(htr.findOne(id));
@@ -113,7 +113,7 @@ public class HarmTreeTestCase {
                 HarmTreeLeaf hl = new HarmTreeLeaf();
                 hl.setRiskSource(RiskSource.values()[random.nextInt(RiskSource.values().length)].getValue());
                 hl.setThreatType(ThreatType.values()[random.nextInt(ThreatType.values().length)].getValue());
-                hl.setAttributeDefinition(adr.findByName(PrimitiveAttributeName.values()[random.nextInt(PrimitiveAttributeName.values().length)].getValue()));
+                hl.setAttributeDefinition(adr.findByName(BasicPrimitiveAttributes.values()[random.nextInt(BasicPrimitiveAttributes.values().length)].getValue()));
                 
                 htln.getLeafs().add(hl);
             }

@@ -5,13 +5,14 @@
  */
 package inria.socialsecurity.controller.view;
 
+import inria.socialsecurity.constants.DataType;
+import inria.socialsecurity.constants.DefaultDataSourceName;
 import static inria.socialsecurity.constants.param.AttributeDefinition.*;
 import inria.socialsecurity.entity.attribute.AttributeDefinition;
 import inria.socialsecurity.entity.attribute.ComplexAttributeDefinition;
 import inria.socialsecurity.exception.ObjectNotFoundException;
 import inria.socialsecurity.exception.WrongArgumentException;
 import inria.socialsecurity.model.AttributeDefinitionModel;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -68,10 +69,11 @@ public class AttributeDefinitionViewController {
             model.addAttribute(PRIMITIVE_ATTRIBUTES, adm.getPrimitiveAttributeDefinitions());
             return "attribute/complex_attribute_update";
         } else{
+            model.addAttribute(ATTRIBUTE,adm.getPrimitiveAttributeDefinitionById(idValue));
+            model.addAttribute(DATA_TYPES,DataType.values());
+            model.addAttribute(DEFAULT_DATA_SOURCES,DefaultDataSourceName.values());
             return "attribute/primitive_attribute_update";
         }
-        
- 
     }
 
     /**
@@ -90,6 +92,8 @@ public class AttributeDefinitionViewController {
                 model.addAttribute(PRIMITIVE_ATTRIBUTES, adm.getPrimitiveAttributeDefinitions()); //pass the primitive attributes to view
                 return "attribute/complex_attribute_add";
             case TYPE_PRIMITIVE:
+                model.addAttribute(DATA_TYPES,DataType.values());
+                model.addAttribute(DEFAULT_DATA_SOURCES,DefaultDataSourceName.values());
                 return "attribute/primitive_attribute_add";
             default:
                 throw new WrongArgumentException();

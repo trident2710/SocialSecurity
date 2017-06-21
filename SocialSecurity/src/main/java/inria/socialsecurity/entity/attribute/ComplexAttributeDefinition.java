@@ -6,6 +6,7 @@
 package inria.socialsecurity.entity.attribute;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -27,14 +28,16 @@ public class ComplexAttributeDefinition extends AttributeDefinition {
     //which can be either primitive or complex 
     @JsonIgnore
     @Relationship(type = "CONTAINS", direction = Relationship.OUTGOING)
-    private List<AttributeDefinition> primitiveAttributes;
+    private List<AttributeDefinition> subAttributes;
 
-    public List<AttributeDefinition> getPrimitiveAttributes() {
-        return primitiveAttributes;
+    public List<AttributeDefinition> getSubAttributes() {
+        if(subAttributes==null)
+            subAttributes = new ArrayList<>();
+        return subAttributes;
     }
 
-    public void setPrimitiveAttributes(List<AttributeDefinition> primitiveAttributes) {
-        this.primitiveAttributes = primitiveAttributes;
+    public void setSubAttributes(List<AttributeDefinition> primitiveAttributes) {
+        this.subAttributes = primitiveAttributes;
     }
 
     @Override

@@ -20,33 +20,39 @@
    <body>
         <%@include file="../basic/header.jsp" %>
 
-        <div class='add_attr_form'>
-            <form action="${pageContext.request.contextPath}/attributes/form-post" method="POST" class="input_fields_wrap">
-                <input id ='btn_create' type="submit" class="btn btn-success" value="Update"/>
-                <input name="id" type="hidden" value="${attribute.id}"/>
-                <br>
-                <label for="name">Name:</label>
-                <input type="text" name='name' id="name" class="form-control" value="${attribute.displayName}"></input>
-                <br>
-                <label>Primitive attributes:</label>
-                <br>
-                <c:set var="count" value="0" scope="page" />
-                <c:forEach var="p_attr" items="${attribute.primitiveAttributes}">
-                    <div class='removable_attr'>
-                        <select id ='selectPrimitive' name="primitiveAttribut${count}" class="form-control">
-                        <c:forEach var="attr" items="${primitive_attributes}">
-                            <option value="${attr.id}" ${attr.id == p_attr.id?'selected="selected"':''}>${attr.displayName}</option>
-                        </c:forEach> 
-                        </select>
-                        <c:if test="${count>0}">
-                            <a href='#' class='remove_field'>Remove</a>
-                        </c:if>                       
-                    </div>
-                        
-                    <c:set var="count" value="${count + 1}" scope="page"/>    
-                </c:forEach>
-            </form>
-            <button class="btn add_field_button">Add Primitive attribute</button>
+        <div class='add_attr_form panel panel-default'>
+            <div class="panel panel-heading">
+                Update complex attribute
+            </div>
+            <div class="panel panel-body">
+                <form action="${pageContext.request.contextPath}/attributes/form-post" method="POST" class="input_fields_wrap">
+                    <input id ='btn_create' type="submit" class="btn btn-success" value="Update"/>
+                    <input name="id" type="hidden" value="${attribute.id}"/>
+                    <br>
+                    <label for="name">Name:</label>
+                    <input type="text" name='name' id="name" class="form-control" value="${attribute.displayName}"></input>
+                    <br>
+                    <label>Primitive attributes:</label>
+                    <br>
+                    <c:set var="count" value="0" scope="page" />
+                    <c:forEach var="p_attr" items="${attribute.subAttributes}">
+                        <div class='removable_attr'>
+                            <select id ='selectPrimitive' name="primitiveAttribut${count}" class="form-control">
+                            <c:forEach var="attr" items="${primitive_attributes}">
+                                <option value="${attr.id}" ${attr.id == p_attr.id?'selected="selected"':''}>${attr.displayName}</option>
+                            </c:forEach> 
+                            </select>
+                            <c:if test="${count>0}">
+                                <a href='#' class='remove_field'>Remove</a>
+                            </c:if>                       
+                        </div>
+
+                        <c:set var="count" value="${count + 1}" scope="page"/>    
+                    </c:forEach>
+                </form>
+                <button class="btn add_field_button">Add Primitive attribute</button>
+            </div>
+            
         </div>
         <%@include file="../basic/footer.jsp" %>
        
@@ -54,7 +60,7 @@
         <script src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
         <script src="${pageContext.request.contextPath}/resources/js/attribute.js"></script>
         <script>
-            $x = parseInt("${fn:length(attribute.primitiveAttributes)}",10);
+            $x = parseInt("${fn:length(attribute.subAttributes)}",10);
         </script>
         
     </body>

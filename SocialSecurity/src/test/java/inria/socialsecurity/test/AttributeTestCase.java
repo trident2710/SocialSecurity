@@ -5,14 +5,21 @@
  */
 package inria.socialsecurity.test;
 
-import inria.socialsecurity.constants.PrimitiveAttributeName;
+import inria.socialsecurity.constants.DataType;
+import inria.socialsecurity.constants.DefaultDataSourceName;
+import inria.socialsecurity.constants.BasicPrimitiveAttributes;
 import inria.socialsecurity.entity.attribute.AttributeDefinition;
 import inria.socialsecurity.entity.attribute.ComplexAttributeDefinition;
+import inria.socialsecurity.entity.attribute.PrimitiveAttributeDefinition;
+import inria.socialsecurity.entity.attribute.Synonim;
 import inria.socialsecurity.repository.AttributeDefinitionRepository;
+import inria.socialsecurity.repository.SynonimRepository;
 import inria.socialsecurity.test.config.TestConfig;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,30 +38,41 @@ public class AttributeTestCase {
     
     @Autowired
     AttributeDefinitionRepository adr;
+    
+    @Autowired
+    SynonimRepository sr;
+    
+    Random random;
+    
+    @Before
+    public void setup(){
+        random = new Random();
+    }
           
     @Test
     public void crudBasicTest(){
+        BasicDataScript.getInstance().initDB(adr,sr);
         basicComplexAttrCrud();
-        basicAttrCrud();
+        basicPrimitiveAttrCrud();
     }
       
     public void basicComplexAttrCrud(){
         AttributeDefinition a = new AttributeDefinition();
-        a.setName(PrimitiveAttributeName.FIRST_NAME.getValue());
+        a.setName(BasicPrimitiveAttributes.FIRST_NAME.getValue());
         adr.save(a);
         
         AttributeDefinition b = new AttributeDefinition();
-        b.setName(PrimitiveAttributeName.LAST_NAME.getValue());
+        b.setName(BasicPrimitiveAttributes.LAST_NAME.getValue());
         adr.save(b);
         
         ComplexAttributeDefinition cad = new ComplexAttributeDefinition();
         cad.setName("full name");
         
         List<AttributeDefinition> primitiveAttributes = new ArrayList<>();
-        primitiveAttributes.add(adr.findByName(PrimitiveAttributeName.FIRST_NAME.getValue()));
-        primitiveAttributes.add(adr.findByName(PrimitiveAttributeName.LAST_NAME.getValue()));
+        primitiveAttributes.add(adr.findByName(BasicPrimitiveAttributes.FIRST_NAME.getValue()));
+        primitiveAttributes.add(adr.findByName(BasicPrimitiveAttributes.LAST_NAME.getValue()));
         
-        cad.setPrimitiveAttributes(primitiveAttributes);
+        cad.setSubAttributes(primitiveAttributes);
         Long id = adr.save(cad).getId();
         Assert.assertNotNull(id);
         
@@ -64,25 +82,37 @@ public class AttributeTestCase {
         adr.delete(cad1);
         Assert.assertNull(adr.findOne(id));
         
-         adr.delete(a);
-         adr.delete(b);
+        adr.delete(a);
+        adr.delete(b);
             
     }
     
-    public void basicAttrCrud(){
-        AttributeDefinition cad = new AttributeDefinition();
+    public void basicPrimitiveAttrCrud(){
+        PrimitiveAttributeDefinition cad = new PrimitiveAttributeDefinition();
         cad.setName("full name");
+        cad.setDisplayName("some_name");
+        cad.setDataType(DataType.values()[random.nextInt(DataType.values().length)].getName());
         
+        Synonim s = new Synonim();
+        s.setAttributeName("name");
+        s.setDataSourceName(DefaultDataSourceName.FACEBOOK.getName());
+        
+        s = sr.save(s);
+        
+        cad.getSynonims().add(s);
         
         Long id = adr.save(cad).getId();
         Assert.assertNotNull(id);
         
         AttributeDefinition cad1 = adr.findOne(id);
         Assert.assertNotNull(cad1);
-        
+        Assert.assertTrue(cad1 instanceof PrimitiveAttributeDefinition);
+        Assert.assertTrue(((PrimitiveAttributeDefinition)cad1).getSynonims().contains(s));
         adr.delete(cad1);
+        sr.delete(s);
         Assert.assertNull(adr.findOne(id));
     }
+    
     
     
    

@@ -7,6 +7,7 @@ package inria.socialsecurity.model;
 
 import inria.socialsecurity.entity.attribute.AttributeDefinition;
 import inria.socialsecurity.entity.attribute.ComplexAttributeDefinition;
+import inria.socialsecurity.entity.attribute.PrimitiveAttributeDefinition;
 import inria.socialsecurity.exception.ObjectNotFoundException;
 import inria.socialsecurity.exception.WrongArgumentException;
 import java.util.List;
@@ -30,7 +31,7 @@ public interface AttributeDefinitionModel {
      * @return 
      * @throws ObjectNotFoundException if such object of such class does not exist
      */
-    AttributeDefinition getPrimitiveAttributeDefinitionById(Long id) throws ObjectNotFoundException;
+    PrimitiveAttributeDefinition getPrimitiveAttributeDefinitionById(Long id) throws ObjectNotFoundException;
     
     /**
      * 

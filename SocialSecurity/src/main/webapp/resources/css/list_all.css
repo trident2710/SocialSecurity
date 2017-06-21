@@ -32,4 +32,11 @@ and open the template in the editor.
 #complex_box:hover  #chng_btn, #chng_btn:hover{
     display: inline-block;
 }
+#primitive_box:hover  #chng_btn, #chng_btn:hover{
+    display: inline-block;
+}
+.attr-container{
+    overflow-y: scroll; 
+    height:800px;
+}
 

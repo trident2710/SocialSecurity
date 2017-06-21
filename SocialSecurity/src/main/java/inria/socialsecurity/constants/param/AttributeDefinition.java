@@ -20,5 +20,9 @@ public class AttributeDefinition extends Basic{
     
     public static final String TYPE_PRIMITIVE = "primitive";
     public static final String TYPE_COMPLEX = "complex";
+    public static final String DATA_TYPES = "data_types";
+    public static final String DEFAULT_DATA_SOURCES = "default_data_sources";
+    
+    public static final String DATA_TYPE = "data_type";
     
 }
