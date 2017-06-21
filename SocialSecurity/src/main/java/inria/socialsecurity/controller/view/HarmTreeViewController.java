@@ -52,7 +52,6 @@ public class HarmTreeViewController {
      */
     @RequestMapping(value = "add", method = RequestMethod.GET)
     public String getHarmTreeAddPage(Model model) {
-        model.addAttribute(HARM_TREES, htm.getHarmTrees());
         HarmTreeVertex t = htm.createHarmTree("new harm tree", "description");
         return "redirect:harmtrees/update/" + t.getId();
     }

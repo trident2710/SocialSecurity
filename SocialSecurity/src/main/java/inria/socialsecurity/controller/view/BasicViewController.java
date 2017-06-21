@@ -14,8 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @author adychka
  */
 @Controller
-@RequestMapping({"/", "/homepage", "/about"})
-public class BasicController {
+public class BasicViewController {
 
     @RequestMapping(value = {"/", "/homepage"})
     public String home() {

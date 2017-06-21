@@ -11,7 +11,6 @@ import inria.socialsecurity.exception.ObjectNotFoundException;
 import inria.socialsecurity.exception.WrongArgumentException;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
-import org.springframework.http.HttpRequest;
 
 /**
  * model layer for the request processing attribute definition objects
@@ -25,12 +24,21 @@ public interface AttributeDefinitionModel {
      * @throws ObjectNotFoundException if such object of such class does not exist
      */
     ComplexAttributeDefinition getComplexAttributeDefinitionById(Long id) throws ObjectNotFoundException;
+    
     /**
      * @param id - primitive attribute definition id
      * @return 
      * @throws ObjectNotFoundException if such object of such class does not exist
      */
     AttributeDefinition getPrimitiveAttributeDefinitionById(Long id) throws ObjectNotFoundException;
+    
+    /**
+     * 
+     * @param id
+     * @return
+     * @throws ObjectNotFoundException if such object of such class does not exist
+     */
+    AttributeDefinition getAttributeDefinitionById(Long id) throws ObjectNotFoundException;
     
     /**
      * get all attribute definitons both complex and primitive

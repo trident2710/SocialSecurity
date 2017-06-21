@@ -17,6 +17,6 @@ function deleteEntity(id) {
         window.location.replace("harmtrees/all");
     }
   };
-  xhttp.open("DELETE", "/SocialSecurity/rest/harmtrees/"+id, true);
+  xhttp.open("DELETE", "/rest/harmtrees/"+id, true);
   xhttp.send();
 }

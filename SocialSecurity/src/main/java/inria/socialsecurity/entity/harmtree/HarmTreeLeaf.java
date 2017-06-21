@@ -6,6 +6,8 @@
 package inria.socialsecurity.entity.harmtree;
 
 import inria.socialsecurity.entity.attribute.AttributeDefinition;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Property;
 import org.neo4j.ogm.annotation.Relationship;
@@ -40,12 +42,6 @@ public class HarmTreeLeaf extends HarmTreeElement {
     @Relationship(type = "ATTRIBUTE", direction = Relationship.OUTGOING)
     private AttributeDefinition attributeDefinition;
 
-    /**
-     * incoming relation defining the parent of this leaf
-     */
-    @Relationship(type = "HAS_DESCENDANT", direction = Relationship.INCOMING)
-    private HarmTreeLogicalNode harmTreeLogicalNode;
-
     public String getThreatType() {
         return threatType;
     }
@@ -70,12 +66,14 @@ public class HarmTreeLeaf extends HarmTreeElement {
         this.attributeDefinition = attributeDefinition;
     }
 
-    public HarmTreeLogicalNode getHarmTreeLogicalNode() {
-        return harmTreeLogicalNode;
+    @Override
+    public boolean equals(Object other) {
+        return EqualsBuilder.reflectionEquals(this, other);
     }
 
-    public void setHarmTreeLogicalNode(HarmTreeLogicalNode harmTreeLogicalNode) {
-        this.harmTreeLogicalNode = harmTreeLogicalNode;
+    @Override
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 
 }

@@ -6,6 +6,8 @@
 package inria.socialsecurity.controller.view;
 
 import static inria.socialsecurity.constants.param.AttributeDefinition.*;
+import inria.socialsecurity.entity.attribute.AttributeDefinition;
+import inria.socialsecurity.entity.attribute.ComplexAttributeDefinition;
 import inria.socialsecurity.exception.ObjectNotFoundException;
 import inria.socialsecurity.exception.WrongArgumentException;
 import inria.socialsecurity.model.AttributeDefinitionModel;
@@ -17,6 +19,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 /**
  * controller bean containig the response logic for the attributes connects the
  * jsp views with the requests
@@ -59,24 +62,39 @@ public class AttributeDefinitionViewController {
         } catch (NumberFormatException e) {
             throw new WrongArgumentException();
         }
+        AttributeDefinition ad = adm.getAttributeDefinitionById(idValue);
+        if(ad instanceof ComplexAttributeDefinition){
+            model.addAttribute(ATTRIBUTE, adm.getComplexAttributeDefinitionById(idValue));
+            model.addAttribute(PRIMITIVE_ATTRIBUTES, adm.getPrimitiveAttributeDefinitions());
+            return "attribute/complex_attribute_update";
+        } else{
+            return "attribute/primitive_attribute_update";
+        }
         
-        model.addAttribute(ATTRIBUTE, adm.getComplexAttributeDefinitionById(idValue));
-        model.addAttribute(PRIMITIVE_ATTRIBUTES, adm.getPrimitiveAttributeDefinitions());
-        return "attribute/complex_attribute_update";
  
     }
 
     /**
      * @todo: update with primitive attribute
+     * @throws inria.socialsecurity.exception.WrongArgumentException
+     * @param type - TYPE_PRIMITIVE for primitive attribute TYPE_COMPLEX for complex one 
      * get the page for adding new complex attribute
      *
      * @param model
      * @return the jsp page name for adding the attribute
      */
     @RequestMapping(value = "add", method = RequestMethod.GET)
-    public String getAttributeAddPage(Model model) {
-        model.addAttribute(PRIMITIVE_ATTRIBUTES, adm.getPrimitiveAttributeDefinitions()); //pass the primitive attributes to view
-        return "attribute/complex_attribute_add";
+    public String getAttributeAddPage(@RequestParam String type,Model model) throws WrongArgumentException {
+        switch(type){
+            case TYPE_COMPLEX:
+                model.addAttribute(PRIMITIVE_ATTRIBUTES, adm.getPrimitiveAttributeDefinitions()); //pass the primitive attributes to view
+                return "attribute/complex_attribute_add";
+            case TYPE_PRIMITIVE:
+                return "attribute/primitive_attribute_add";
+            default:
+                throw new WrongArgumentException();
+        }
+        
     }
     
     /**

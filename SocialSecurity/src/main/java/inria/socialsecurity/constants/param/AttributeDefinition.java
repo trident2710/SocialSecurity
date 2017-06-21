@@ -18,4 +18,7 @@ public class AttributeDefinition extends Basic{
     
     public static final String PRIMITIVE_ATTRIBUTE = "primitiveAttribut";
     
+    public static final String TYPE_PRIMITIVE = "primitive";
+    public static final String TYPE_COMPLEX = "complex";
+    
 }

@@ -7,6 +7,7 @@ package inria.socialsecurity.model;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import inria.socialsecurity.converter.HarmTreeToCytoscapeNotationConverter;
 import inria.socialsecurity.entity.harmtree.HarmTreeElement;
 import inria.socialsecurity.entity.harmtree.HarmTreeLeaf;
@@ -17,6 +18,7 @@ import inria.socialsecurity.repository.AttributeDefinitionRepository;
 import inria.socialsecurity.repository.HarmTreeRepository;
 import java.util.List;
 import org.neo4j.ogm.session.Session;
+import org.neo4j.shell.util.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -157,6 +159,10 @@ public class HarmTreeModelImpl implements HarmTreeModel {
         HarmTreeVertex vertex = new HarmTreeVertex();
         vertex.setName(name);
         vertex.setDescription(description);
+        JsonObject object = new JsonObject();
+        object.addProperty("x", 300);
+        object.addProperty("y", 300);
+        vertex.setDisplayNotation(object.toString());
         return htr.save(vertex);
     }
 

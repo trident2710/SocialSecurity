@@ -180,6 +180,11 @@ public class AttributeDefinitionModelImpl implements AttributeDefinitionModel{
         return adr.save(cad);
     }
 
+    @Override
+    public AttributeDefinition getAttributeDefinitionById(Long id) throws ObjectNotFoundException {
+        return adr.findOne(id);
+    }
+
 
 
    

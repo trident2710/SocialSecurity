@@ -5,13 +5,15 @@
  */
 package inria.socialsecurity.entity.harmtree;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Property;
 
 /**
  * represents the vertex of the harm tree i.e. the head node which contains the
  * information such as name of this harm tree and it's description
- *
+ * while evaluation, will be regarded as "and" logical node
  * @author adychka
  */
 @NodeEntity
@@ -43,6 +45,15 @@ public class HarmTreeVertex extends HarmTreeNode {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+    @Override
+    public boolean equals(Object other) {
+        return EqualsBuilder.reflectionEquals(this, other);
+    }
+
+    @Override
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 
 }

@@ -8,6 +8,8 @@ package inria.socialsecurity.entity.harmtree;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Property;
 import org.neo4j.ogm.annotation.Relationship;
@@ -71,7 +73,6 @@ public class HarmTreeLogicalNode extends HarmTreeNode {
             leafs = new ArrayList<>();
         }
         leafs.add(leaf);
-        leaf.setHarmTreeLogicalNode(this);
     }
 
     /**
@@ -85,7 +86,15 @@ public class HarmTreeLogicalNode extends HarmTreeNode {
             leafs = new ArrayList<>();
             return;
         }
-        leaf.setHarmTreeLogicalNode(null);
         leafs.remove(leaf);
+    }
+    @Override
+    public boolean equals(Object other) {
+        return EqualsBuilder.reflectionEquals(this, other);
+    }
+
+    @Override
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 }

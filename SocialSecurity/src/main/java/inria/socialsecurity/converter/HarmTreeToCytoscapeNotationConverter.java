@@ -42,9 +42,12 @@ public class HarmTreeToCytoscapeNotationConverter implements Converter<HarmTreeV
         if (object.getDescendants() == null || object.getDescendants().isEmpty()) {
             return res;
         }
-
-        saveHarmTreeEdge(object.getId(), ((HarmTreeLogicalNode) htr.findOne(object.getDescendants().get(0).getId())).getId(), res);
-        formHarmTreeNotationObject(res, (HarmTreeLogicalNode) htr.findOne(object.getDescendants().get(0).getId()));
+        object.getDescendants().stream().map((l) -> {
+            saveHarmTreeEdge(object.getId(), l.getId(), res);
+            return l;
+        }).forEachOrdered((l) -> {
+            formHarmTreeNotationObject(res, (HarmTreeLogicalNode) htr.findOne(l.getId()));
+        });
         return res;
     }
 
@@ -68,24 +71,28 @@ public class HarmTreeToCytoscapeNotationConverter implements Converter<HarmTreeV
     }
 
     private void formHarmTreeNotationObject(JsonObject object, HarmTreeLogicalNode hte) {
+        if(hte==null) return;
+        
         saveHarmTreeLogicalNode(hte, object);
-        hte.getDescendants().forEach((element) -> {
-            HarmTreeLogicalNode node = (HarmTreeLogicalNode) htr.findOne(element.getId());
-            formHarmTreeNotationObject(object, node);
-            saveHarmTreeEdge(hte.getId(), element.getId(), object);
-
-        });
         hte.getLeafs().forEach((leaf) -> {
             leaf = (HarmTreeLeaf) htr.findOne(leaf.getId());
-            saveHarmTreeLeaf(leaf, object);
             saveHarmTreeEdge(hte.getId(), leaf.getId(), object);
+            saveHarmTreeLeaf(leaf, object);
+            
         });
+        hte.getDescendants().forEach((element) -> {
+            HarmTreeLogicalNode node = (HarmTreeLogicalNode) htr.findOne(element.getId());
+            saveHarmTreeEdge(hte.getId(), element.getId(), object);
+            formHarmTreeNotationObject(object, node);
+        });
+        
     }
 
     private void saveHarmTreeLogicalNode(HarmTreeLogicalNode htl, JsonObject source) {
+        if(htl==null) return;
+        
         StringBuilder sb = new StringBuilder();
-
-        if (Objects.equals(htl.getLogicalRequirement(), HarmTreeLogicalNode.AND)) {
+        if (htl.getLogicalRequirement().equals(HarmTreeLogicalNode.AND)) {
             sb.append("AND\n");
         } else if (Objects.equals(htl.getLogicalRequirement(), HarmTreeLogicalNode.OR)) {
             sb.append("OR\n");
@@ -96,6 +103,8 @@ public class HarmTreeToCytoscapeNotationConverter implements Converter<HarmTreeV
     }
 
     private void saveHarmTreeLeaf(HarmTreeLeaf htl, JsonObject source) {
+        if(htl==null) return;
+        
         StringBuilder sb = new StringBuilder();
         sb.append("Risk source: ").append(htl.getRiskSource()).append("\n");
         sb.append("Threat type: ").append(htl.getThreatType()).append("\n");
@@ -104,6 +113,8 @@ public class HarmTreeToCytoscapeNotationConverter implements Converter<HarmTreeV
     }
 
     private void saveHarmTreeNode(HarmTreeElement htl, JsonObject source, String label) {
+        if(htl==null) return;
+        
         JsonObject object = new JsonObject();
         object.addProperty("group", "nodes");
         object.addProperty("classes", htl.getClass().getSimpleName() + " " + HarmTreeElement.class.getSimpleName());

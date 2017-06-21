@@ -45,7 +45,7 @@
                                     </div>
                                 </div>
                     </c:forEach>
-                    <a type="button" class="btn btn-success" href="${pageContext.request.contextPath}/attributes/add">Add new</a>
+                    <a type="button" class="btn btn-success" href="${pageContext.request.contextPath}/attributes/add?type=complex">Add new</a>
                 </div>
         </div> 
     </div>
