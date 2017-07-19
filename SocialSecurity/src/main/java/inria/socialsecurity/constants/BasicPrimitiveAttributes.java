@@ -30,7 +30,7 @@ public enum BasicPrimitiveAttributes {
     EDUCATION_LEVEL("education_level", "education level",DataType.STRING),
     GENDER("gender", "gender",DataType.STRING),
     INTERESTS("interests", "interests",DataType.STRING),
-    POLITICAL_VIEW("p_view", "political_view",DataType.STRING),
+    POLITICAL_VIEW("p_view", "political view",DataType.STRING),
     RELIGIOUS_VIEW("r_view", "religious view",DataType.STRING),
     WORKPLACE("work", "workplace name",DataType.STRING),
     WORK_POSITION("w_position", "workplace position",DataType.STRING),

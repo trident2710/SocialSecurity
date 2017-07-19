@@ -13,7 +13,7 @@ package inria.socialsecurity.constants;
  */
 public enum DataType {
     STRING("string",String.class),
-    NUMBER("number",Integer.class);
+    NUMBER("number",Number.class);
     
     final String name;
     final Class cls;
@@ -26,10 +26,13 @@ public enum DataType {
         return cls;
     }
     
-    
-    
     private DataType(String name,Class cls){
         this.name = name;
         this.cls = cls;
+    }
+    
+    public static DataType getByName(String name){
+        for(DataType d:DataType.values())if(name.equals(d.name))return d;
+        return null;
     }
 }
