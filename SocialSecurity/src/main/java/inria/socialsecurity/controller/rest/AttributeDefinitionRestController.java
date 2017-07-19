@@ -8,7 +8,7 @@ package inria.socialsecurity.controller.rest;
 import inria.socialsecurity.entity.attribute.AttributeDefinition;
 import inria.socialsecurity.exception.ObjectNotFoundException;
 import inria.socialsecurity.exception.WrongArgumentException;
-import inria.socialsecurity.model.AttributeDefinitionModel;
+import inria.socialsecurity.model.attributedefinition.AttributeDefinitionModel;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,7 +68,6 @@ public class AttributeDefinitionRestController {
      */
     @RequestMapping(method = RequestMethod.POST)
     public void createAttribute(HttpServletRequest request) throws WrongArgumentException, ObjectNotFoundException {
-        
         adm.createAttributeDefinitionFromHttpRequest(request);
     }
 

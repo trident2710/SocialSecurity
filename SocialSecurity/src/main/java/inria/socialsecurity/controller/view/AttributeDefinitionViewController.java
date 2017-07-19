@@ -12,7 +12,7 @@ import inria.socialsecurity.entity.attribute.AttributeDefinition;
 import inria.socialsecurity.entity.attribute.ComplexAttributeDefinition;
 import inria.socialsecurity.exception.ObjectNotFoundException;
 import inria.socialsecurity.exception.WrongArgumentException;
-import inria.socialsecurity.model.AttributeDefinitionModel;
+import inria.socialsecurity.model.attributedefinition.AttributeDefinitionModel;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

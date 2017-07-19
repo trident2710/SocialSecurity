@@ -7,7 +7,7 @@ package inria.socialsecurity.controller.view;
 
 import static inria.socialsecurity.constants.param.HarmTree.*;
 import inria.socialsecurity.entity.harmtree.HarmTreeVertex;
-import inria.socialsecurity.model.HarmTreeModel;
+import inria.socialsecurity.model.harmtree.HarmTreeModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

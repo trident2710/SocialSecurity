@@ -14,7 +14,7 @@ import inria.socialsecurity.entity.harmtree.HarmTreeElement;
 import inria.socialsecurity.entity.harmtree.HarmTreeVertex;
 import inria.socialsecurity.exception.ObjectNotFoundException;
 import inria.socialsecurity.exception.WrongArgumentException;
-import inria.socialsecurity.model.HarmTreeModel;
+import inria.socialsecurity.model.harmtree.HarmTreeModel;
 import inria.socialsecurity.repository.HarmTreeRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
