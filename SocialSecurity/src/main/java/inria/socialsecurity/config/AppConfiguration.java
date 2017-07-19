@@ -7,6 +7,7 @@ package inria.socialsecurity.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 /**
  *
@@ -14,12 +15,15 @@ import org.springframework.context.annotation.Import;
  * @see springframework
  */
 @Configuration
+@EnableAsync
 @Import({
-    WebConfig.class, //configuration of the web app
+    ScopeConfig.class,
     PersistenceContext.class, //configuration of the db connection
+    WebConfig.class, //configuration of the web app
     ConverterConfiguration.class, //custom configuration declaring the converters @see converter.Converter.java
     MvcConfiguration.class, //custom configuration for the declaration of model layer beans 
     RootConfig.class})
 public class AppConfiguration {
     //assembles all declared configuraions in one
+    
 }
