@@ -14,13 +14,14 @@
        
      <nav class="navbar navbar-expand-md navbar-inverse fixed-top bg-inverse">
       <a class="navbar-brand" href="${pageContext.request.contextPath}/">Social Security App</a>
-       <ul class="nav navbar-nav">
+        <ul class="nav navbar-nav">
             <li><a href="${pageContext.request.contextPath}/homepage">Home</a></li>
             <li><a href="${pageContext.request.contextPath}/attributes/all">Attributes</a></li>
             <li><a href="${pageContext.request.contextPath}/harmtrees/all">Harm trees</a></li>
+            <li><a href="${pageContext.request.contextPath}/profiledata/all">Profile data</a></li>
             <li><a href="${pageContext.request.contextPath}/settings">Settings</a></li>
             <li><a href="${pageContext.request.contextPath}/about">About</a></li>
-       </ul>
+        </ul>
     </nav>
     </body>
 </html>

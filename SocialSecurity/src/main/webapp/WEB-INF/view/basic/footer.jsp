@@ -11,7 +11,7 @@
         <link href="${pageContext.request.contextPath}/resources/css/sticky-footer.css" rel="stylesheet">
     </head>
     <body>
-         <footer class="footer">
+         <footer class="footer navbar-fixed-bottom">
             <div class="container">
               <p class="text-muted">Inria 2017</p>
             </div>

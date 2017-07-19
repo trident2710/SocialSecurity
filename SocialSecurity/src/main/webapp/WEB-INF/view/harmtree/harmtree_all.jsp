@@ -26,18 +26,18 @@
     <div id="container">
         <div id="primitive_attr" class="panel panel-default">
             <div class="panel-heading">Harm trees</div>
-                <div  class="panel-body">
-                    <c:forEach var="ht" items="${harm_trees}">
-                                <div id="complex_box" class="panel panel-default">
-                                    <div class="panel-body">
-                                      <c:out value="${ht.name}"/> 
-                                      <button id=chng_btn type="button" class="btn btn-danger" onclick="deleteEntity(${ht.id})">Remove</button>
-                                      <a id=chng_btn type="button" class="btn btn-primary" href="${pageContext.request.contextPath}/harmtrees/update/${ht.id}">View/Update</a>
-                                    </div>
-                                </div>
-                    </c:forEach>
-                    <a type="button" class="btn btn-success" href="${pageContext.request.contextPath}/harmtrees/add">Add new</a>
-                </div>
+            <div  class="panel-body">
+                <c:forEach var="ht" items="${harm_trees}">
+                    <div id="complex_box" class="panel panel-default">
+                        <div class="panel-body">
+                            <c:out value="${ht.name}"/> 
+                            <button id=chng_btn type="button" class="btn btn-danger" onclick="deleteEntity(${ht.id})">Remove</button>
+                            <a id=chng_btn type="button" class="btn btn-primary" href="${pageContext.request.contextPath}/harmtrees/update/${ht.id}">View/Update</a>
+                        </div>
+                    </div>
+                </c:forEach>
+                <a type="button" class="btn btn-success" href="${pageContext.request.contextPath}/harmtrees/add">Add new</a>
+            </div>
         </div> 
     </div>
             
