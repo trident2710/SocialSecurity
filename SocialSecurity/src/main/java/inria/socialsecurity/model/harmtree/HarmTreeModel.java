@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package inria.socialsecurity.model;
+package inria.socialsecurity.model.harmtree;
 
 import com.google.gson.JsonElement;
 import inria.socialsecurity.entity.harmtree.HarmTreeVertex;
