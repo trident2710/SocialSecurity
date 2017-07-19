@@ -292,7 +292,6 @@ class LogicNodeInput{
         removeElementById('logic_input');
 
         let input  = document.createElement('input');
-        input.innerHTML='sdfsdf';
         input.setAttribute('type','number');
         input.setAttribute('min',1);
         input.setAttribute('max',10);

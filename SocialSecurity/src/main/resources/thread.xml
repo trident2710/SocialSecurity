@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+
+
+<bean id="threadCounter" 
+      class="org.springbyexample.bean.scope.thread.Counter" 
+      scope="thread" />
+
+<bean class="org.springframework.beans.factory.config.CustomScopeConfigurer">
+    <property name="scopes">
+        <map>
+            <entry key="thread">
+                <bean class="org.springbyexample.bean.scope.thread.ThreadScope"/>
+            </entry>
+        </map>
+    </property>
+</bean>

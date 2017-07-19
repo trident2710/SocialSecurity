@@ -1,0 +1,38 @@
+.s_panel{
+     display: inline-block;
+     float:left;
+     height: 89vh;
+     width: 99vw;
+     margin-bottom: 40px;
+}
+
+.s_menu{
+    width: 20%;
+    height: 100%;
+}
+.s_content {
+    float:left;
+    overflow-y: scroll;
+    width: 80%;
+    height: 100%;
+    
+}
+.btn{
+    margin:10px;
+}
+.s_section{
+    width: 99%;
+    margin-right: 50px;
+    height: 98%;
+     overflow-y: scroll;
+}
+#chng_btn{
+    margin-left:10px;
+    display: none;
+}
+#hover_box:hover  #chng_btn, #chng_btn:hover{
+    display: inline-block;
+}
+
+
+
