@@ -12,7 +12,7 @@ import inria.socialsecurity.controller.view.AttributeDefinitionViewController;
 import inria.socialsecurity.controller.view.BasicViewController;
 import inria.socialsecurity.entity.attribute.AttributeDefinition;
 import inria.socialsecurity.entity.attribute.ComplexAttributeDefinition;
-import inria.socialsecurity.model.AttributeDefinitionModel;
+import inria.socialsecurity.model.attributedefinition.AttributeDefinitionModel;
 import inria.socialsecurity.test.config.TestConfig;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +23,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import inria.socialsecurity.controller.view.HarmTreeViewController;
 import inria.socialsecurity.entity.harmtree.HarmTreeVertex;
-import inria.socialsecurity.model.HarmTreeModel;
+import inria.socialsecurity.model.harmtree.HarmTreeModel;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -79,7 +79,6 @@ public class ViewControllerTestCase {
         mockMvc.perform(get("/")).andExpect(view().name("basic/welcomepage"));
         mockMvc.perform(get("/homepage")).andExpect(view().name("basic/welcomepage"));
         mockMvc.perform(get("/about")).andExpect(view().name("basic/about"));
-        mockMvc.perform(get("/settings")).andExpect(view().name("basic/settings"));
     }
     
     @Test

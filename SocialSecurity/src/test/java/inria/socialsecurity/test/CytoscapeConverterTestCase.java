@@ -73,7 +73,7 @@ public class CytoscapeConverterTestCase {
     
     public HarmTreeLogicalNode generateRandomTree(int depthActual,int depthMax,Random random,int edgesMax){
         HarmTreeLogicalNode htln = new HarmTreeLogicalNode();
-        int c = 1+random.nextInt(edgesMax);
+        int c = 1+random.nextInt(1+edgesMax);
         
         if(depthActual!=0)
             htln.setLogicalRequirement(
@@ -91,8 +91,8 @@ public class CytoscapeConverterTestCase {
                 hl.setThreatType(ThreatType.values()[random.nextInt(ThreatType.values().length)].getValue());
                 hl.setAttributeDefinition(new AttributeDefinition());
                 Long id = random.nextLong()%10000;
-                htln.setId(id);
-                when(htr.findOne(id)).thenReturn(htln);
+                hl.setId(id);
+                when(htr.findOne(id)).thenReturn(hl);
                 htln.getLeafs().add(hl);
             }
         } 

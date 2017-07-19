@@ -40,6 +40,7 @@ public final class BasicDataScript {
         
     }
     
+    
     private void createBasicPrimitiveAttributes(){
         for(BasicPrimitiveAttributes n:BasicPrimitiveAttributes.values()){
             PrimitiveAttributeDefinition pad = new PrimitiveAttributeDefinition();

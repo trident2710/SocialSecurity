@@ -5,11 +5,9 @@
  */
 package inria.socialsecurity.test;
 
-import inria.socialsecurity.entity.user.FacebookAccount;
-import inria.socialsecurity.entity.user.User;
+import inria.socialsecurity.entity.user.FacebookProfile;
+import inria.socialsecurity.entity.user.ProfileData;
 import inria.socialsecurity.repository.AttributeDefinitionRepository;
-import inria.socialsecurity.repository.FacebookAccountRepository;
-import inria.socialsecurity.repository.UserRepository;
 import inria.socialsecurity.test.config.TestConfig;
 import org.junit.Assert;
 import org.junit.Test;
@@ -18,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+import inria.socialsecurity.repository.ProfileDataRepository;
+import inria.socialsecurity.repository.FacebookProfileRepository;
 
 /**
  *
@@ -30,10 +30,10 @@ public class UserTestCase {
     
     
     @Autowired 
-    UserRepository userRepository;
+    ProfileDataRepository userRepository;
     
     @Autowired
-    FacebookAccountRepository facebookAccountRepository;
+    FacebookProfileRepository facebookAccountRepository;
     
     @Autowired
     AttributeDefinitionRepository adr;
@@ -42,7 +42,7 @@ public class UserTestCase {
     public void CRUDFacebookAccount(){
         Long fbId = facebookAccountRepository.save(getFbAcc()).getId();
         Assert.assertNotNull(fbId);
-        FacebookAccount account = facebookAccountRepository.findOne(fbId);
+        FacebookProfile account = facebookAccountRepository.findOne(fbId);
         Assert.assertNotNull(account);
         Assert.assertEquals(fbId, account.getId());
         facebookAccountRepository.delete(account);
@@ -53,28 +53,28 @@ public class UserTestCase {
     
     @Test
     public void CRUDUser(){
-        User newUser = new User();
-        FacebookAccount fa = getFbAcc();
-        newUser.setFacebookAccount(fa);
+        ProfileData newUser = new ProfileData();
+        FacebookProfile fa = getFbAcc();
+        newUser.setFacebookProfile(fa);
         Long userId = userRepository.save(newUser).getId();
         Assert.assertNotNull(userId);
         
-        User user = userRepository.findOne(userId);
-        Assert.assertNotNull(user.getFacebookAccount());
+        ProfileData user = userRepository.findOne(userId);
+        Assert.assertNotNull(user.getFacebookProfile());
         
-        user.setFacebookAccount(null);
+        user.setFacebookProfile(null);
         userRepository.save(user);
-        User updatedUser;
+        ProfileData updatedUser;
         updatedUser = userRepository.findOne(userId);
-        Assert.assertNull(updatedUser.getFacebookAccount());
+        Assert.assertNull(updatedUser.getFacebookProfile());
         
         userRepository.delete(updatedUser);
         Assert.assertNull(userRepository.findOne(userId));    
     }
 
   
-    private FacebookAccount getFbAcc(){
-        FacebookAccount fb = new FacebookAccount("");
+    private FacebookProfile getFbAcc(){
+        FacebookProfile fb = new FacebookProfile();
         return fb;
     }
 }
