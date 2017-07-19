@@ -1,1 +1,8 @@
 /SocialSecurity/target/
+/Crawler/nbproject/private/
+/Crawler/target/
+/JavaApplication4/nbproject/private/
+/JavaApplication4/build/
+/CrawlerV2/target/
+geckodriver
+phantomjs
