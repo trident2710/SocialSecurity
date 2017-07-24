@@ -1,4 +1,5 @@
 <%-- 
+<%-- 
     Document   : userdata_all.jsp
     Created on : 5 juil. 2017, 15:33:34
     Author     : adychka
@@ -15,70 +16,37 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/resources/css/list_all.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/resources/css/profiledata.css" rel="stylesheet">
     </head>
-    <body>
-        <%@include file="../basic/header.jsp" %>
-        <h2>Attributes from stranger perspective:</h2>
-        <table>
-            <tr>
-                <th>Facebook Profile</th>
-            <c:forEach var="a" items="${attributes}">
-                <th>a.displayName</th>
-            </c:forEach>   
-            </tr>
+    <body class="container-fullwidth">
+        <div style="margin:20px">
+            <c:if test = "${avmatrix.isEmpty() == false}">
+                <h2>Attributes visibility matrix:</h2>
+                <table class="table table-bordered table-hover">
+                    <tr>
+                        <th>Facebook Profile</th>
+                    <c:forEach var="attr" items="${avmatrix.entrySet().iterator().next().getValue().keySet()}">
+                        <th>${attr}</th>
+                    </c:forEach>   
+                    </tr>
+
+                    <c:forEach var="item" items="${avmatrix}">
+                        <tr>
+                            <td>${item.key}</td>
+                        <c:forEach var="attrs" items="${item.value}">
+                            <td>${attrs.value}</td>
+                        </c:forEach>  
+                        </tr>
+                    </c:forEach>      
+                </table>
+            </c:if>
             
-            <c:forEach var="profile" items="${stranger_perspective}">
-                <tr>
-                    <td>profile.key</td>
-                <c:forEach var="attrs" items="profile">
-                    <td>attrs.value</td>
-                </c:forEach>  
-                </tr>
-            </c:forEach>      
-        </table>
-        
-        <h2>Attributes from friend perspective:</h2>
-        <table>
-            <tr>
-                <th>Facebook Profile</th>
-            <c:forEach var="a" items="${attributes}">
-                <th>a.displayName</th>
-            </c:forEach>   
-            </tr>
-            
-            <c:forEach var="profile" items="${friend_perspective}">
-                <tr>
-                    <td>profile.key</td>
-                <c:forEach var="attrs" items="profile">
-                    <td>attrs.value</td>
-                </c:forEach>  
-                </tr>
-            </c:forEach>      
-        </table>
-        
-        <h2>Attributes from friend of friend perspective:</h2>
-        <table>
-            <tr>
-                <th>Facebook Profile</th>
-            <c:forEach var="a" items="${attributes}">
-                <th>a.displayName</th>
-            </c:forEach>   
-            </tr>
-            
-            <c:forEach var="profile" items="${ffriend_perspective}">
-                <tr>
-                    <td>profile.key</td>
-                <c:forEach var="attrs" items="profile">
-                    <td>attrs.value</td>
-                </c:forEach>  
-                </tr>
-            </c:forEach>      
-        </table>
-        
-        <%@include file="../basic/footer.jsp" %>
+           
+        </div>
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <!-- Include all compiled plugins (below), or include individual files as needed -->
         <script src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
+        
     </body>
 </html>

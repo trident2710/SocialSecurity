@@ -5,14 +5,20 @@
  */
 package inria.socialsecurity.controller.view;
 
+import inria.socialsecurity.constants.CrawlDepth;
 import inria.socialsecurity.constants.CrawlResultPerspective;
+import inria.socialsecurity.converter.FacebookProfileToCytoscapeNotationConverter;
+import inria.socialsecurity.entity.attribute.AttributeDefinition;
 import inria.socialsecurity.entity.user.ProfileData;
 import inria.socialsecurity.exception.WrongArgumentException;
+import inria.socialsecurity.model.attributedefinition.AttributeDefinitionModel;
 import inria.socialsecurity.model.profiledata.ProfileDataModel;
 import inria.socialsecurity.repository.AttributeDefinitionRepository;
 import inria.socialsecurity.repository.FacebookLoginAccountRepository;
 import inria.socialsecurity.repository.FacebookProfileRepository;
 import inria.socialsecurity.repository.ProfileDataRepository;
+import java.util.Map;
+import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,6 +40,9 @@ public class ProfileDataViewController {
     ProfileDataModel pdm;
     
     @Autowired
+    AttributeDefinitionModel adm;
+    
+    @Autowired
     FacebookLoginAccountRepository flar;
     
     @Autowired
@@ -44,6 +53,8 @@ public class ProfileDataViewController {
     
     @Autowired
     AttributeDefinitionRepository adr;
+    
+
   
     @RequestMapping(value = "all", method = RequestMethod.GET)
     public String getAllProfileDataPage(Model model){
@@ -54,6 +65,7 @@ public class ProfileDataViewController {
     @RequestMapping(value = "add", method = RequestMethod.GET)
     public String getAddProfileDataPage(Model model){
         model.addAttribute("accounts",flar.findByIsClosed(Boolean.FALSE));
+        model.addAttribute("depth_values",CrawlDepth.values());
         return "profiledata/profiledata_add";
     }
     
@@ -63,13 +75,23 @@ public class ProfileDataViewController {
         return "profiledata/profiledata_view";
     }
     
-    @RequestMapping(value = "avmatrix/{id}", method = RequestMethod.GET)
-    public String getAttributeValueMatrixProfileDataPage(@PathVariable("id") Long id,Model model){
+    @RequestMapping(value = "amatrix/{id}", method = RequestMethod.GET)
+    public String getAttributeMatrixProfileDataPage(@PathVariable("id") Long id,Model model){ 
         model.addAttribute("stranger_perspective",pdm.getAttributeMatrixForPerspective(CrawlResultPerspective.STRANGER, id));
         model.addAttribute("friend_perspective",pdm.getAttributeMatrixForPerspective(CrawlResultPerspective.FRIEND, id));
         model.addAttribute("ffriend_perspective",pdm.getAttributeMatrixForPerspective(CrawlResultPerspective.FRIEND_OF_FRIEND, id));
-        model.addAttribute("attributes",adr.findAll());
-        return "profiledata/profiledata_view";
+        return "profiledata/profiledata_amatrix";
+    }
+    
+    @RequestMapping(value = "avmatrix/{id}", method = RequestMethod.GET)
+    public String getAttributeVisibilityMatrixProfileDataPage(@PathVariable("id") Long id,Model model){
+        model.addAttribute("avmatrix",pdm.getAttributeVisibilityMatrix(id));
+        return "profiledata/profiledata_avmatrix";
+    }
+    
+    @RequestMapping(value = "fgraph/{id}", method = RequestMethod.GET)
+    public String getFriendGraphForProfileDataPage(@PathVariable("id") Long id,Model model){
+        return "profiledata/profiledata_fgraph";
     }
     
     /**
@@ -92,4 +114,6 @@ public class ProfileDataViewController {
 
         return "redirect:profiledata/all";
     }
+    
+    
 }

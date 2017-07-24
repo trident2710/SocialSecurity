@@ -12,18 +12,12 @@ package inria.socialsecurity.constants;
  * @author adychka
  */
 public enum RiskSource {
-    A1("A1"), //user friends 
-    A2("A2"), //friends of friends
-    A3("A3"), // friends of friends of friends
-    A4("A4"); // strangers
-
-    private final String value;
-
-    private RiskSource(String value) {
-        this.value = value;
-    }
+    A1, //user friends 
+    A2, //friends of friends
+    A3, // friends of friends of friends
+    A4; // strangers
 
     public String getValue() {
-        return value;
+        return name();
     }
 }

@@ -51,7 +51,6 @@ public class AttributeTestCase {
           
     @Test
     public void crudBasicTest(){
-        BasicDataScript.getInstance().initDB(adr,sr);
         basicComplexAttrCrud();
         basicPrimitiveAttrCrud();
     }
@@ -91,7 +90,6 @@ public class AttributeTestCase {
         PrimitiveAttributeDefinition cad = new PrimitiveAttributeDefinition();
         cad.setName("full name");
         cad.setDisplayName("some_name");
-        cad.setDataType(DataType.values()[random.nextInt(DataType.values().length)].getName());
         
         Synonim s = new Synonim();
         s.setAttributeName("name");

@@ -15,50 +15,32 @@ package inria.socialsecurity.constants;
  * @author adychka
  */
 public enum BasicPrimitiveAttributes {
-    FIRST_NAME("f_name", "first name",DataType.STRING),
-    LAST_NAME("l_name", "last name",DataType.STRING),
-    HOME_COUNTRY("h_country", "home country",DataType.STRING),
-    HOME_CITY("h_city", "home city",DataType.STRING),
-    HOME_STREET("h_street", "home street",DataType.STRING),
-    HOME_STREET_TYPE("h_street_type", "home street type",DataType.STRING),
-    HOME_BUILDING("h_building", "home building",DataType.NUMBER),
-    HOME_FLAT("h_flat", "home flat number",DataType.NUMBER),
-    HOME_INDEX("h_index", "home index",DataType.NUMBER),
-    BIRTH_DAY("b_day", "birth day",DataType.NUMBER),
-    BIRTH_MONTH("b_month", "birth month",DataType.NUMBER),
-    BIRTH_YEAR("b_year", "birth year",DataType.NUMBER),
-    EDUCATION_LEVEL("education_level", "education level",DataType.STRING),
-    GENDER("gender", "gender",DataType.STRING),
-    INTERESTS("interests", "interests",DataType.STRING),
-    POLITICAL_VIEW("p_view", "political view",DataType.STRING),
-    RELIGIOUS_VIEW("r_view", "religious view",DataType.STRING),
-    WORKPLACE("work", "workplace name",DataType.STRING),
-    WORK_POSITION("w_position", "workplace position",DataType.STRING),
-    PHONES("phones", "phones",DataType.STRING),
-    EMAILS("emails", "emails",DataType.STRING),
-    RELATIONSHIP_STATUS("relationship_status", "relationship status",DataType.STRING);
+    FIRST_NAME,
+    LAST_NAME,
+    BIRTHDAY,
+    GENDER,
+    GENDER_INTERESTS,
+    POLITICAL_VIEW,
+    RELIGIOUS_VIEW,
+    LANGUAGES,
+    PHONES,
+    ADDRESS,
+    EMAIL_ADDRESS,
+    WORK_IDS,
+    EDUCATION_IDS;
 
-    private final String value; //the attribute variable name used in the app
-    private final String displayName; //the public name displayed to user 
-    private final DataType dataType; //type of this field
-
-    private BasicPrimitiveAttributes(String value, String displayName,DataType dt) {
-        this.value = value;
-        this.displayName = displayName;
-        this.dataType = dt;
+    private BasicPrimitiveAttributes() {
     }
 
     public String getValue() {
-        return value;
+        return this.name().toLowerCase();
     }
 
     public String getDisplayName() {
-        return displayName;
+        return this.name().toLowerCase().replace("_", " ");
     }
 
-    public DataType getDataType() {
-        return dataType;
-    }
+
     
     
 

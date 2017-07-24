@@ -41,6 +41,8 @@ public interface ProfileDataModel {
     void crawlFacebookData(CrawlingInfo ci);
     
     
-    Map<String, Map<AttributeDefinition, Object>> getAttributeMatrixForPerspective(CrawlResultPerspective perspective,Long profileDataId);
+    Map<String,Map<String, String>> getAttributeMatrixForPerspective(CrawlResultPerspective perspective,Long profileDataId);
+    
+    Map<String,Map<String, String>> getAttributeVisibilityMatrix(Long profileDataId);
     
 }

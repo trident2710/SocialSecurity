@@ -6,9 +6,12 @@
 package inria.socialsecurity.config;
 
 import inria.crawlerv2.engine.account.AccountManager;
-import inria.socialsecurity.converter.attributeparser.AttributeParser;
-import inria.socialsecurity.converter.attributeparser.FacebookCrawlingAttributeParser;
+import inria.socialsecurity.constants.CrawlDepth;
+import inria.socialsecurity.converter.FacebookProfileToCytoscapeNotationConverter;
+import inria.socialsecurity.converter.transformer.AttributeMatrixToJsonConverter;
+import inria.socialsecurity.converter.transformer.FacebookDatasetToAttributeMatrixTransformer;
 import inria.socialsecurity.entity.settings.CrawlingSettings;
+import inria.socialsecurity.model.DefaultDataProcessor;
 import inria.socialsecurity.model.attributedefinition.AttributeDefinitionModel;
 import inria.socialsecurity.model.attributedefinition.AttributeDefinitionModelImpl;
 import inria.socialsecurity.model.harmtree.HarmTreeModel;
@@ -22,6 +25,8 @@ import inria.socialsecurity.repository.CrawlingSettingsRepository;
 import org.neo4j.ogm.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.neo4j.repository.GraphRepositoryImpl;
+import inria.socialsecurity.converter.transformer.DatasetTransformer;
+import inria.socialsecurity.converter.transformer.FacebookDatasetToAttributeVisibilityTransformer;
 
 /**
  * declaration of the beans representing the model level of web application i.e.
@@ -73,13 +78,39 @@ public class MvcConfiguration {
     }
     
     /**
-     * for parsing the attributes from the datasource 
+     * for parsing the attribute matrix from the datasource 
      * @see AttributeDefinition
      * @see CrawlingEngine
      * @return 
      */
     @Bean
-    public FacebookCrawlingAttributeParser getAttributeParser(){
-        return new FacebookCrawlingAttributeParser();
+    public FacebookDatasetToAttributeMatrixTransformer getAttributeTransformer(){
+        return new FacebookDatasetToAttributeMatrixTransformer();
+    }
+    
+    /**
+     * for parsing the attribute visibility matrix from the datasource 
+     * @see AttributeDefinition
+     * @see CrawlingEngine
+     * @return 
+     */
+    @Bean
+    public FacebookDatasetToAttributeVisibilityTransformer getVisibilityTransformer(){
+        return new FacebookDatasetToAttributeVisibilityTransformer();
+    }
+    
+    @Bean
+    public DefaultDataProcessor getDefaultDataProcessor(){
+        return new DefaultDataProcessor();
+    }
+    
+    @Bean
+    public FacebookProfileToCytoscapeNotationConverter getFacebookProfileToCytoscapeNotationConverter(){
+        return new FacebookProfileToCytoscapeNotationConverter();
+    }
+    
+    @Bean
+    public AttributeMatrixToJsonConverter getAttributeMatrixToJsonConverter(){
+        return new AttributeMatrixToJsonConverter();
     }
 }

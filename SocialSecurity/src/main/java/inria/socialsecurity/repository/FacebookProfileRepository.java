@@ -6,7 +6,9 @@
 package inria.socialsecurity.repository;
 
 import inria.socialsecurity.entity.user.FacebookProfile;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.GraphRepository;
 import org.springframework.data.repository.query.Param;
@@ -21,12 +23,20 @@ import org.springframework.data.repository.query.Param;
 public interface FacebookProfileRepository extends GraphRepository<FacebookProfile> {
     List<FacebookProfile> findByFbUrl(String fbUrl);
     
-    @Query("MATCH (p) WHERE id(p)={id}  MATCH p-[:HAS_FRIENDS]->()-[*0..10]->n RETURN DISTINCT n")
+    @Query("MATCH (p:FacebookProfile) WHERE id(p)={id}  MATCH p-[:HAS_FRIENDS*0..2]-(n:FacebookProfile) RETURN DISTINCT n")
     List<FacebookProfile> getFriendshipTreeForFacebookProfile(@Param("id") Long fbProfileid);
     
-    @Query("MATCH (k) WHERE id(k)={id}  MATCH k-[:HAS_FB_ACCOUNT]->p  MATCH p-[:HAS_FRIENDS]->()-[*0..10]->(n {fbUrl:{url}}) RETURN DISTINCT n")
+    @Query("MATCH (k:ProfileData) WHERE id(k)={id}  MATCH k-[:HAS_FB_ACCOUNT]->(p:FacebookProfile)  MATCH p-[:HAS_FRIENDS*0..2]-(n:FacebookProfile {fbUrl:{url}}) RETURN DISTINCT n")
     FacebookProfile findByFbUrlInFriendshipTreeForFacebookProfile(@Param("id") Long profileDataId, @Param("url") String fbId);
     
-    @Query("MATCH (k) WHERE id(k)={id}  MATCH k-[:HAS_FB_ACCOUNT]->p MATCH p-[:HAS_FRIENDS]->()-[*0..10]->n RETURN DISTINCT n.fbUrl")
+    @Query("MATCH (k:ProfileData) WHERE id(k)={id}  MATCH k-[:HAS_FB_ACCOUNT]->(p:FacebookProfile) MATCH p-[:HAS_FRIENDS*0..2]-(n:FacebookProfile) RETURN DISTINCT n.fbUrl")
     List<String> getUrlsInFriendshipTreeForFacebookProfile(@Param("id") Long profileDataId);
+    
+    @Query("MATCH (n:FacebookProfile) MATCH n-[:HAS_FRIENDS]-(k:FacebookProfile)  WITH DISTINCT n,k WHERE id(n)={id} return DISTINCT id(k)")
+    Set<Long> getFriendIdsForFacebookProfile(@Param("id") Long fbProfileid);
+    
+    @Query("MATCH (n:FacebookProfile) WHERE id(n)={id} return n")
+    FacebookProfile getOne(@Param("id") Long fbProfileid);
+    
+   
 }

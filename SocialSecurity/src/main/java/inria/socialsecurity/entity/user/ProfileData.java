@@ -5,6 +5,8 @@
  */
 package inria.socialsecurity.entity.user;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
@@ -39,12 +41,20 @@ public class ProfileData {
     
     @Property
     Long realTimeInMinutes;
+    
+    @Property
+    Integer depth;
 
     /**
      * user's facebook account
      */
     @Relationship(type = "HAS_FB_ACCOUNT", direction = "OUTGOING")
     FacebookProfile facebookAccount;
+    
+    String visibilityMatrixJsonString;
+    
+    @Relationship(type = "HAS_ATTRIBUTE_MATRIX", direction = "OUTGOING")
+    List<JsonStoringEntity> attributeMatrix;
 
     public FacebookProfile getFacebookProfile() {
         return facebookAccount;
@@ -96,6 +106,39 @@ public class ProfileData {
 
     public void setRealTimeInMinutes(Long realTimeInMinutes) {
         this.realTimeInMinutes = realTimeInMinutes;
+    }
+
+    public Integer getDepth() {
+        return depth;
+    }
+
+    public void setDepth(Integer depth) {
+        this.depth = depth;
+    }
+
+    public FacebookProfile getFacebookAccount() {
+        return facebookAccount;
+    }
+
+    public void setFacebookAccount(FacebookProfile facebookAccount) {
+        this.facebookAccount = facebookAccount;
+    }
+
+    public String getVisibilityMatrixJsonString() {
+        return visibilityMatrixJsonString;
+    }
+
+    public void setVisibilityMatrixJsonString(String visibilityMatrixJsonString) {
+        this.visibilityMatrixJsonString = visibilityMatrixJsonString;
+    }
+
+    public List<JsonStoringEntity> getAttributeMatrix() {
+        if(attributeMatrix==null) attributeMatrix = new ArrayList<>();
+        return attributeMatrix;
+    }
+
+    public void setAttributeMatrix(List<JsonStoringEntity> attributeMatrix) {
+        this.attributeMatrix = attributeMatrix;
     }
     
     @Override

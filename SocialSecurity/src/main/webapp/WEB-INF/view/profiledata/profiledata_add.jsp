@@ -33,7 +33,11 @@
                     <input type="text" name='fb_url' id="fb_url" class="form-control"></input>
                     <br>
                     <label for="depth" data-toggle="tooltip" data-placement="top" title="Crawling depth i.e. how deep crawler will go to friendship chain. !IMPORTANT! consider exponential time increase, and check number of friends capture in settings'">Depth:</label>
-                    <input type="number" min="1" max="10" name='depth' id="depth" class="form-control"/>
+                    <select id ="depth" name="depth" class="form-control">
+                        <c:forEach var="a" items="${depth_values}">
+                            <option value="${a.depth()}">${a.name()}</option>
+                        </c:forEach> 
+                    </select>
                     <br>
                     <label for="acc_friend" data-toggle="tooltip" data-placement="top" title="For being able to collect data from 'friend' point of view, it is needed have one of the accounts in friends with the specified target">Crawling account in friends:</label>
                     <select id ="acc_friend" name="acc_friend" class="form-control">

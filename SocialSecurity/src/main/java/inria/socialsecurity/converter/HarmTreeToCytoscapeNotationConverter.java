@@ -25,7 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @see http://js.cytoscape.org/
  * @see HarmTreeElement
  */
-public class HarmTreeToCytoscapeNotationConverter implements Converter<HarmTreeVertex, JsonElement> {
+public class HarmTreeToCytoscapeNotationConverter extends CytoscapeNotationConverter<HarmTreeVertex> {
 
     @Autowired
     HarmTreeRepository htr;
@@ -49,25 +49,6 @@ public class HarmTreeToCytoscapeNotationConverter implements Converter<HarmTreeV
             formHarmTreeNotationObject(res, (HarmTreeLogicalNode) htr.findOne(l.getId()));
         });
         return res;
-    }
-
-    @Override
-    public HarmTreeVertex convertTo(JsonElement object) {
-        throw new UnsupportedOperationException("not supported yet");
-    }
-
-    /**
-     * create empty object in form accepted by the cytoscape.js
-     *
-     * @return
-     */
-    private JsonObject createDefaultJsonObject() {
-        return new JsonParser().parse("{\n"
-                + "	\"elements\": {\n"
-                + "		\"nodes\": [],\n"
-                + "		\"edges\": []\n"
-                + "	}\n"
-                + "}").getAsJsonObject();
     }
 
     private void formHarmTreeNotationObject(JsonObject object, HarmTreeLogicalNode hte) {
@@ -137,6 +118,11 @@ public class HarmTreeToCytoscapeNotationConverter implements Converter<HarmTreeV
         object.add("data", data);
 
         source.get("elements").getAsJsonObject().get("edges").getAsJsonArray().add(object);
+    }
+
+    @Override
+    public HarmTreeVertex convertTo(JsonElement destination) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

@@ -147,7 +147,6 @@ public class AttributeDefinitionModelImpl implements AttributeDefinitionModel{
             PrimitiveAttributeDefinition pad = (PrimitiveAttributeDefinition) adr.findOne(id);
             pad.setDisplayName(request.getParameter(NAME));
             pad.setName(pad.getDisplayName().toLowerCase().replace(" ", "_"));
-            pad.setDataType(request.getParameter(DATA_TYPE));
             pad.setSynonims(null);
             adr.save(pad);
             
@@ -207,7 +206,6 @@ public class AttributeDefinitionModelImpl implements AttributeDefinitionModel{
         
         PrimitiveAttributeDefinition atr = new PrimitiveAttributeDefinition();
         
-        atr.setDataType(request.getParameter(DATA_TYPE));
         atr.setDisplayName(request.getParameter(NAME));
         atr.setName(atr.getDisplayName().toLowerCase().replace(" ", "_"));
         

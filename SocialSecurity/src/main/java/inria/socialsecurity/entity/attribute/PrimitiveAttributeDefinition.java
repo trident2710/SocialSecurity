@@ -12,7 +12,6 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.neo4j.ogm.annotation.NodeEntity;
-import org.neo4j.ogm.annotation.Property;
 import org.neo4j.ogm.annotation.Relationship;
 
 /**
@@ -23,20 +22,9 @@ import org.neo4j.ogm.annotation.Relationship;
  */
 @NodeEntity
 public class PrimitiveAttributeDefinition extends AttributeDefinition{
-    
-    @Property
-    private String dataType;
-    
+     
     @Relationship(type = "HAS_SYNONIMS",direction = Relationship.OUTGOING)
     private List<Synonim> synonims;
-
-    public String getDataType() {
-        return dataType;
-    }
-
-    public void setDataType(String dataType) {
-        this.dataType = dataType;
-    }
 
     public List<Synonim> getSynonims() {
         if(synonims == null)

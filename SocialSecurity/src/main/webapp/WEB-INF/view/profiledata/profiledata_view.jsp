@@ -38,6 +38,7 @@
 
                      <c:if test = "${data.completed == true}">
                         <a style="margin: 10px" id=chng_btn type="button" class="btn btn-primary" href="${pageContext.request.contextPath}/profiledata/fgraph/${data.id}">View friendship graph</a>
+                        <a style="margin: 10px" id=chng_btn type="button" class="btn btn-primary" href="${pageContext.request.contextPath}/profiledata/amatrix/${data.id}">View attribute matrix</a>
                         <a style="margin: 10px" id=chng_btn type="button" class="btn btn-primary" href="${pageContext.request.contextPath}/profiledata/avmatrix/${data.id}">View attribute visibility matrix</a>
                      </c:if>
                  </div>

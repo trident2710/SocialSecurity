@@ -11,10 +11,20 @@ package inria.socialsecurity.constants;
  * defines from which perspective data was obtained
 **/
 public enum CrawlResultPerspective{
-    FRIEND,
-    FRIEND_OF_FRIEND,
-    STRANGER;    
+    FRIEND(RiskSource.A1),
+    FRIEND_OF_FRIEND(RiskSource.A2),
+    STRANGER(RiskSource.A4);    
 
+    private final RiskSource riskSource;
+
+    private CrawlResultPerspective(RiskSource riskSource) {
+        this.riskSource = riskSource;
+    }
+
+    public RiskSource getRiskSource() {
+        return riskSource;
+    }
+    
     public static CrawlResultPerspective getWeakerFor(CrawlResultPerspective perspective){
         return perspective.ordinal()==CrawlResultPerspective.values().length-1?perspective:CrawlResultPerspective.values()[perspective.ordinal()+1];
     }

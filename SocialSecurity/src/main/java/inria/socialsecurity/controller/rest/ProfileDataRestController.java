@@ -5,10 +5,13 @@
  */
 package inria.socialsecurity.controller.rest;
 
+import inria.socialsecurity.converter.FacebookProfileToCytoscapeNotationConverter;
 import inria.socialsecurity.exception.WrongArgumentException;
 import inria.socialsecurity.model.profiledata.ProfileDataModel;
+import inria.socialsecurity.repository.ProfileDataRepository;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,6 +28,18 @@ public class ProfileDataRestController {
     @Autowired
     ProfileDataModel pdm;
     
+    @Autowired
+    FacebookProfileToCytoscapeNotationConverter fptcnc;
     
+    @Autowired
+    ProfileDataRepository pdr;
+    
+    @RequestMapping(value = "friendgraph/{id}", method = RequestMethod.GET)
+    String getFriendGraphForProfileId(@PathVariable("id") Long profileId){
+        System.out.println("here!!!");
+        String res =  fptcnc.convertFrom(pdr.findOne(profileId).getFacebookAccount()).toString();
+        System.out.println("data "+res);
+        return res;
+    }
     
 }

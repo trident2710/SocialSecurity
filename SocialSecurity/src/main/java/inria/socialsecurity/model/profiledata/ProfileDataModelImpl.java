@@ -10,12 +10,14 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import inria.crawlerv2.engine.CrawlingCallable;
-import inria.crawlerv2.engine.CrawlingEngine;
-import inria.crawlerv2.engine.CrawlingEngineSettings;
+import inria.crawlerv2.engine.CrawlingRunable;
+import inria.crawlerv2.engine.CrawlingInstanceSettings;
 import inria.crawlerv2.engine.account.Account;
 import inria.crawlerv2.provider.AttributeName;
 import inria.socialsecurity.constants.CrawlResultPerspective;
-import inria.socialsecurity.converter.attributeparser.FacebookCrawlingAttributeParser;
+import inria.socialsecurity.converter.transformer.AttributeMatrixToJsonConverter;
+import inria.socialsecurity.converter.transformer.FacebookDatasetToAttributeMatrixTransformer;
+import inria.socialsecurity.converter.transformer.FacebookDatasetToAttributeVisibilityTransformer;
 import inria.socialsecurity.entity.attribute.AttributeDefinition;
 import inria.socialsecurity.entity.settings.CrawlingSettings;
 import inria.socialsecurity.entity.snaccount.FacebookLoginAccount;
@@ -31,7 +33,9 @@ import inria.socialsecurity.repository.ProfileDataRepository;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +45,7 @@ import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
+import org.neo4j.ogm.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 
@@ -72,8 +77,14 @@ public class ProfileDataModelImpl implements ProfileDataModel{
     FacebookLoginAccountRepository flar;
     
     @Autowired
-    FacebookCrawlingAttributeParser fcap;
+    FacebookDatasetToAttributeMatrixTransformer fdtamt;
     
+    @Autowired
+    FacebookDatasetToAttributeVisibilityTransformer fdtavt;
+    
+    @Autowired
+    AttributeMatrixToJsonConverter amtjc;
+      
     private static final Logger LOG = Logger.getLogger(ProfileDataModel.class.getName());
     
     @Override
@@ -113,98 +124,87 @@ public class ProfileDataModelImpl implements ProfileDataModel{
         ProfileData data = new ProfileData();
         data.setName(name);
         data.setRequestUrl(fbUrl);
+        data.setDepth(depth);
         pdr.save(data);
         
         return new CrawlingInfo(data, depth, fbUrl, account);
     }
-
-//    @Async
-//    @Override
-//    public void crawlFacebookData(CrawlingInfo ci){
-//        try {
-//            LOG.log(Level.INFO,"start crawling data with parameters: {0}",ci.toString());
-//            
-//            CrawlingEngineSettings settings = createCrawlingEngineSettings();
-//            ProfileData parent = ci.getPd();
-//            ExecutorService es = Executors.newSingleThreadExecutor();
-//            InverseSemaphore crawlSemaphore = new InverseSemaphore();
-//            parent.setEstimateTimeInMinutes(getEstimatedCrawlingTimeInMinutes(settings, ci.getDepth(),  getAccountSatisfyingPerspective(ci.getAccount(), CrawlResultPerspective.FRIEND)!=null));
-//            parent = pdr.save(parent);
-//            long timeBeginnig = System.currentTimeMillis();
-//            for(CrawlResultPerspective p:CrawlResultPerspective.values()){
-//                Account account = getAccountSatisfyingPerspective(ci.getAccount(), p);
-//                if(account!=null){
-//                    crawl(ci.getUrl(),settings,account,null,ci.getDepth(),1,parent,es,p,crawlSemaphore);
-//                    crawlSemaphore.awaitCompletion();
-//                    
-//                    InverseSemaphore updateSemaphore = new InverseSemaphore();
-//                    while (p!=CrawlResultPerspective.getWeakerFor(p)) {            
-//                        p = CrawlResultPerspective.getWeakerFor(p);
-//                        updateFacebookProfile(getAccountSatisfyingPerspective(ci.getAccount(), p), pdr.findOne(ci.getPd().getId()).getFacebookProfile(),es,settings,p,updateSemaphore);
-//                    }
-//                    updateSemaphore.awaitCompletion();
-//                    parent.setCompleted(true);
-//                    parent.setRealTimeInMinutes((System.currentTimeMillis()-timeBeginnig)/60000);
-//                    parent = pdr.save(parent);
-//                    break;
-//                }
-//            }
-//            
-//        } catch (InterruptedException ex) {
-//            LOG.log(Level.SEVERE, null, ex);
-//        }
-//    }
     
     @Async
     @Override
     public void crawlFacebookData(CrawlingInfo ci){
         LOG.log(Level.INFO,"start crawling data with parameters: {0}",ci.toString());
-        CrawlingEngineSettings settings = createCrawlingEngineSettings();
+        CrawlingInstanceSettings settings = createCrawlingEngineSettings();
         ProfileData parent = ci.getPd();
         parent.setEstimateTimeInMinutes(getEstimatedCrawlingTimeInMinutes(settings, ci.getDepth(),  getAccountSatisfyingPerspective(ci.getAccount(), CrawlResultPerspective.FRIEND)!=null));
         parent = pdr.save(parent);
         long timeBeginnig = System.currentTimeMillis();
         for(CrawlResultPerspective p:CrawlResultPerspective.values()){
             Account account = getAccountSatisfyingPerspective(ci.getAccount(), p);
+            Long id ;
             if(account!=null){
-                FacebookProfile tree = crawlRecursively(ci.getUrl(),settings,account,null,ci.getDepth(),1,p,parent.getId());
-                saveFacebookProfileForHead(parent, tree);
+                LOG.log(Level.INFO,"start crawling data");
+                crawlRecursively(ci.getUrl(),settings,account,null,ci.getDepth(),1,p,parent);
+                id = parent.getFacebookProfile().getId();
+                LOG.log(Level.INFO,"update with weaker perspectives");
+                updateFacebookProfilesWithWeakerPerspectives(pdr.findOne(ci.getPd().getId()).getFacebookProfile(),settings,ci.getAccount());
+                LOG.log(Level.INFO,"filling attribute matrices");
+                fillAttributeMatrices(parent);
                 parent.setCompleted(true);
                 parent.setRealTimeInMinutes((System.currentTimeMillis()-timeBeginnig)/60000);
+                parent.setFacebookProfile(fpr.findOne(id));
                 parent = pdr.save(parent);
                 break;
             }
         }
     }
     
-    private void updateFacebookProfile(Account account,FacebookProfile profile,ExecutorService es,CrawlingEngineSettings settings,CrawlResultPerspective perspective,InverseSemaphore semaphore){
-        profile = fpr.findOne(profile.getId());
-        for(FacebookProfile p:profile.getFriends()){
-            try {
-                es.submit(new CrawlingEngine(settings, new URI(profile.getFbUrl()), account, (object)->{
-                    try {
-                        if(p.getAttributesForPerspective(perspective.name())==null){
-                            JsonStoringEntity entity = new JsonStoringEntity(object.toString());
-                            entity.setPerspective(perspective.name());
-                            entity = jser.save(entity);
-                            p.getAttributes().add(entity);
-                            fpr.save(p);
-
-                            updateFacebookProfile(account, p, es, settings, CrawlResultPerspective.getWeakerFor(perspective),semaphore);
-                        }
-                    } catch (Exception ex) {
-                        LOG.log(Level.SEVERE, null, ex);
-                    } finally{
-                       semaphore.taskCompleted(); 
-                    }
-                    
-                }));
-            } catch (URISyntaxException ex) {
-                LOG.log(Level.SEVERE, null, ex);
-            } finally{
-                semaphore.beforeSubmit();
-            }
+    private void fillAttributeMatrices(ProfileData data){
+        for(CrawlResultPerspective p:CrawlResultPerspective.values()){
+            getAttributeMatrixForPerspective(p, data.getId());
         }
+        getAttributeVisibilityMatrix(data.getId());
+    }
+     
+    private void updateFacebookProfilesWithWeakerPerspectives(FacebookProfile profile,CrawlingInstanceSettings settings,FacebookLoginAccount acc){
+        settings.setAttributes(getAttributesWithoutFriends());
+        try {
+            Account ff = getAccountSatisfyingPerspective(acc, CrawlResultPerspective.FRIEND_OF_FRIEND);
+            if(ff!=null){
+                LOG.log(Level.INFO,"updating target from friend of friend perspective");
+                JsonObject res = new CrawlingCallable(settings, new URI(profile.getFbUrl()), ff).call();
+                JsonStoringEntity entity = new JsonStoringEntity(res.toString());
+                entity.setPerspective(CrawlResultPerspective.FRIEND_OF_FRIEND.name());
+                entity = jser.save(entity);
+                profile.getAttributes().add(entity);
+                fpr.save(profile); 
+            }
+            Account s = getAccountSatisfyingPerspective(acc, CrawlResultPerspective.STRANGER);
+            if(s!=null){
+                LOG.log(Level.INFO,"updating target from stranger perspective");
+                JsonObject res = new CrawlingCallable(settings, new URI(profile.getFbUrl()), ff).call();
+                JsonStoringEntity entity = new JsonStoringEntity(res.toString());
+                entity.setPerspective(CrawlResultPerspective.STRANGER.name());
+                entity = jser.save(entity);
+                profile.getAttributes().add(entity);
+                fpr.save(profile); 
+            }
+            for(FacebookProfile friend:profile.getFriends()){
+                if(ff!=null||s!=null){
+                    LOG.log(Level.INFO,"updating friend from stranger perspective");
+                    JsonObject res = new CrawlingCallable(settings, new URI(friend.getFbUrl()), ff!=null?ff:s).call();
+                    JsonStoringEntity entity = new JsonStoringEntity(res.toString());
+                    entity.setPerspective(CrawlResultPerspective.STRANGER.name());
+                    entity = jser.save(entity);
+                    friend.getAttributes().add(entity);
+                    fpr.save(friend); 
+                }
+            }
+            
+        } catch (URISyntaxException ex) {
+            LOG.log(Level.SEVERE, "unable to update, wrong URI", ex);
+        }
+        
     }
     
     private Account getAccountSatisfyingPerspective(FacebookLoginAccount friendAccount,CrawlResultPerspective perspective){
@@ -227,70 +227,12 @@ public class ProfileDataModelImpl implements ProfileDataModel{
         return null;
     }
     
-    private void crawl(String target,CrawlingEngineSettings settings,Account account,FacebookProfile parent,int depthMax,int depthActual,ProfileData head,ExecutorService es,CrawlResultPerspective perspective,InverseSemaphore semaphore){
-        try {
-            LOG.log(Level.INFO,"start crawling target: {0} with call params: depthMax={1} depthActual={2} crawlResultPerspective={3}",new Object[]{target,depthMax,depthActual,perspective});
-            URI t = new URI(target);
-            es.submit(new CrawlingEngine(settings,t,account, (obj)->{
-                try {
-                    FacebookProfile profile;
-                    FacebookProfile sameUrlProfile = fpr.findByFbUrlInFriendshipTreeForFacebookProfile(head.getId(), target);
-                    if(sameUrlProfile==null){
-                        JsonStoringEntity entity = new JsonStoringEntity(obj.toString());
-                        entity.setPerspective(perspective.name());
-                        jser.save(entity);
-                        profile = new FacebookProfile();
-                        profile.setFbUrl(t.toString());
-                        profile.getAttributes().add(entity);
-                        
-                        profile = fpr.save(profile);
-                    } else profile = sameUrlProfile;
-
-                    if(depthActual==1) saveFacebookProfileForHead(head, profile);
-                    else establishFriendship(parent, profile);
-
-                    if(depthActual<depthMax){
-                        List<String> ids = new ArrayList<>();
-                        for(JsonElement e: obj.get(AttributeName.FRIEND_IDS.getName()).getAsJsonArray()){
-                            if(!e.isJsonNull()) ids.add(e.toString());
-                        }   
-                        Collections.shuffle(ids);
-
-                        for(int i=0;i<Math.min(settings.getMaxFriendsToCollect(),ids.size());i++){
-                            crawl("https://facebook.com/profile.php?id="+ids.get(i).replace("\"", ""),
-                                    settings,
-                                    account,
-                                    profile,
-                                    depthMax,
-                                    depthActual+1,
-                                    head,
-                                    es,
-                                    CrawlResultPerspective.getWeakerFor(perspective),
-                                    semaphore);
-                        }
-                    }
-                } catch(Exception ex){
-                    LOG.log(Level.SEVERE, null, ex);
-                } finally{
-                    semaphore.taskCompleted();
-                    LOG.log(Level.INFO,"semaphore: {0}",semaphore.getValue());
-                }     
-            }));   
-        } catch (URISyntaxException ex) {
-            LOG.log(Level.SEVERE, null, ex);
-        }
-        finally{
-            semaphore.beforeSubmit();
-            LOG.log(Level.INFO,"semaphore: {0}",semaphore.getValue());
-        }
-    }
-    
-    private FacebookProfile crawlRecursively(String target,CrawlingEngineSettings settings,Account account,FacebookProfile parent,int depthMax,int depthActual,CrawlResultPerspective perspective,Long profileDataId){
+    private void crawlRecursively(String target,CrawlingInstanceSettings settings,Account account,FacebookProfile parent,int depthMax,int depthActual,CrawlResultPerspective perspective,ProfileData head){
         try {
             URI t = new URI(target);
             JsonObject res = new CrawlingCallable(settings, t, account).call();
             FacebookProfile profile;
-            FacebookProfile sameUrlProfile = fpr.findByFbUrlInFriendshipTreeForFacebookProfile(profileDataId, target);
+            FacebookProfile sameUrlProfile = fpr.findByFbUrlInFriendshipTreeForFacebookProfile(head.getId(), target);
             if(sameUrlProfile==null){
                 JsonStoringEntity entity = new JsonStoringEntity(res.toString());
                 entity.setPerspective(perspective.name());
@@ -302,10 +244,12 @@ public class ProfileDataModelImpl implements ProfileDataModel{
                 profile = fpr.save(profile);
             } else profile = sameUrlProfile;
 
+            if(depthActual==1)
+                saveFacebookProfileForHead(head, profile);
             if(parent!=null)
             establishFriendship(parent, profile);
 
-            if(depthActual<depthMax){
+            if(res.has(AttributeName.FRIEND_IDS.getName())){
                 List<String> ids = new ArrayList<>();
                 for(JsonElement e: res.get(AttributeName.FRIEND_IDS.getName()).getAsJsonArray()){
                     if(!e.isJsonNull()) ids.add(e.toString());
@@ -313,26 +257,34 @@ public class ProfileDataModelImpl implements ProfileDataModel{
                 Collections.shuffle(ids);
 
                 for(int i=0;i<Math.min(settings.getMaxFriendsToCollect(),ids.size());i++){
-                    crawlRecursively("https://facebook.com/profile.php?id="+ids.get(i).replace("\"", ""),
-                            settings,
-                            account,
-                            profile,
-                            depthMax,
-                            depthActual+1,
-                            CrawlResultPerspective.getWeakerFor(perspective),
-                            profileDataId);
+                    String url = "https://facebook.com/profile.php?id="+ids.get(i).replace("\"", "");
+                    FacebookProfile friendInGraph = fpr.findByFbUrlInFriendshipTreeForFacebookProfile(head.getId(), url);
+                    if(friendInGraph!=null)
+                        establishFriendship(friendInGraph, profile);
+                    else
+                    if(depthActual<depthMax)
+                        crawlRecursively(url,settings,account,profile,depthMax,depthActual+1,CrawlResultPerspective.getWeakerFor(perspective), head);
                 }
             }
-            return profile;
+            
         } catch (URISyntaxException ex) {
-            Logger.getLogger(ProfileDataModelImpl.class.getName()).log(Level.SEVERE, null, ex);
+            LOG.log(Level.SEVERE, "unable to crawl, wrong URI", ex);
         }
-        return null;
+    }
+    
+    private AttributeName[] getAttributesWithoutFriends(){
+        AttributeName[] res = new AttributeName[AttributeName.values().length-1];
+        int j=0;
+        for(int i=0;i<AttributeName.values().length;i++){
+            if(AttributeName.values()[i]!=AttributeName.FRIEND_IDS){
+                res[j++] = AttributeName.values()[i];
+            }
+        }
+        return res;
     }
     
     private void saveFacebookProfileForHead(ProfileData head,FacebookProfile profile){
         LOG.log(Level.INFO,"saving facebookProfile {0} for profileData: {1}",new String[]{head.toString(),profile.toString()});
-        head = pdr.findOne(head.getId());
         profile = fpr.save(profile);
         head.setFacebookProfile(profile);
         head = pdr.save(head);
@@ -340,18 +292,16 @@ public class ProfileDataModelImpl implements ProfileDataModel{
     
     private void establishFriendship(FacebookProfile p1,FacebookProfile p2){
         LOG.log(Level.INFO,"establishing friendship between {0} and {1}",new String[]{p1.toString(),p2.toString()});
-        p1 = fpr.findOne(p1.getId());
-        p2 = fpr.findOne(p2.getId());
         p1.getFriends().add(p2);
+        LOG.log(Level.INFO,"saving");
         p1 = fpr.save(p1);
-        p2.getFriends().add(p1);
-        p2 = fpr.save(p2);
+        LOG.log(Level.INFO,"done");   
     }
 
-    private CrawlingEngineSettings createCrawlingEngineSettings(){
+    private CrawlingInstanceSettings createCrawlingEngineSettings(){
         
         CrawlingSettings settings = getCrawlingSettings();
-        return CrawlingEngineSettings.getStaticBuilder()
+        return CrawlingInstanceSettings.getStaticBuilder()
                 .setWebDriverOption(settings.getWebDriverOption())
                 .setChangeAccountAfter(settings.getChangeAccountAfter())
                 .setCollectAttributes(AttributeName.values())
@@ -375,23 +325,68 @@ public class ProfileDataModelImpl implements ProfileDataModel{
         return csr.findAll().iterator().next();
     } 
     
-    private long getEstimatedCrawlingTimeInMinutes(CrawlingEngineSettings settings,int depth,boolean hasFriendAccount){
-        return (long)Math.pow(settings.getMaxFriendsToCollect(), depth-1)*(settings.getShortWaitMillis()*(settings.getMaxFriendsToCollect()/20)+settings.getMaxFriendsToCollect()*1000)/60000;
+    private long getEstimatedCrawlingTimeInMinutes(CrawlingInstanceSettings settings,int depth,boolean hasFriendAccount){
+        return (long)Math.pow(settings.getMaxFriendsToCollect(), depth-1)*(settings.getShortWaitMillis()*(settings.getMaxFriendsToCollect()/20)+settings.getMaxFriendsToCollect()*1000)/60000*(hasFriendAccount?1:3);
     }
 
     @Override
-    public Map<String, Map<AttributeDefinition, Object>> getAttributeMatrixForPerspective(CrawlResultPerspective perspective,Long profileDataId) {
-        FacebookProfile target = pdr.findOne(profileDataId).getFacebookProfile();
-        List<FacebookProfile> friends = fpr.getFriendshipTreeForFacebookProfile(target.getId());
+    public Map<String,Map<String, String>> getAttributeMatrixForPerspective(CrawlResultPerspective perspective,Long profileDataId) {
+        ProfileData data = pdr.findOne(profileDataId);
         JsonParser parser = new JsonParser();
+        if(!data.getAttributeMatrix().isEmpty()){
+            for(JsonStoringEntity entity:data.getAttributeMatrix()){
+                if(entity.getPerspective().equals(perspective.name())){
+                    return amtjc.convertTo(parser.parse(entity.getJsonString()).getAsJsonObject());
+                }
+            }    
+        }
+        
+        FacebookProfile target = data.getFacebookProfile(); 
+        List<FacebookProfile> friends = fpr.getFriendshipTreeForFacebookProfile(target.getId());
+        
         Set<JsonObject> objects = new HashSet<>();
-        friends.forEach((f)->{
-            if(f.getAttributesForPerspective(perspective.name())!=null)
-                objects.add(parser.parse(f.getAttributesForPerspective(perspective.name()).getJsonString()).getAsJsonObject());
+        friends.forEach((f)->{      
+            List<JsonStoringEntity> lst  = jser.getAttributesForFacebookProfile(f.getId());
+            for(JsonStoringEntity e:lst){
+                if(e.getPerspective().equals(perspective.name())){
+                    objects.add(parser.parse(e.getJsonString()).getAsJsonObject());
+              }
+            }       
         });
-        Map<String,Map<AttributeDefinition,Object>> res = fcap.parsefromSourceSet(objects);
-        if(target.getAttributesForPerspective(perspective.name())!=null)
-            res.put("target", fcap.parseFromSource(parser.parse(target.getAttributesForPerspective(perspective.name()).getJsonString()).getAsJsonObject()));
+        
+        Map<String,Map<String, String>> res = fdtamt.parsefromSourceSet(objects);
+        JsonStoringEntity entity = new JsonStoringEntity();
+        entity.setJsonString(amtjc.convertFrom(res).toString());
+        entity.setPerspective(perspective.name());
+        entity = jser.save(entity);
+        data.getAttributeMatrix().add(entity);
+        pdr.save(data);
+        return res;
+    }
+
+    @Override
+    public Map<String, Map<String, String>> getAttributeVisibilityMatrix(Long profileDataId) {
+        ProfileData data = pdr.findOne(profileDataId);
+        FacebookProfile target = data.getFacebookProfile();
+        JsonParser parser = new JsonParser();
+        if(data.getVisibilityMatrixJsonString()!=null){
+            return amtjc.convertTo(parser.parse(data.getVisibilityMatrixJsonString()).getAsJsonObject());
+        }
+        List<FacebookProfile> friends = fpr.getFriendshipTreeForFacebookProfile(target.getId());
+        
+        Set<Map<String,JsonObject>> objects = new HashSet<>();
+        friends.forEach((f)->{      
+            List<JsonStoringEntity> lst  = jser.getAttributesForFacebookProfile(f.getId());
+            Map<String,JsonObject> attrsForPersp = new HashMap<>();
+            for(JsonStoringEntity e:lst){
+                attrsForPersp.put(e.getPerspective(),parser.parse(e.getJsonString()).getAsJsonObject());
+            }
+            objects.add(attrsForPersp);
+        });
+        
+        Map<String,Map<String,String>> res= fdtavt.parsefromSourceSet(objects);
+        data.setVisibilityMatrixJsonString(amtjc.convertFrom(res).toString());
+        pdr.save(data);
         return res;
     }
 }

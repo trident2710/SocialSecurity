@@ -25,16 +25,19 @@
                     <li class="active"><a href="#sec_attr">Primitive attributes</a></li>
                     <li><a href="#sec_crawl">Crawling settings</a></li>
                     <li><a href="#sec_crawl_acc">Crawling accounts</a></li>
+                    <li><a href="#sec_crawl_adv">Advanced</a></li>
                     
                 </ul>
             </nav>
             <div  class="s_content"  data-spy="scroll" data-target="#myScrollspy">
+                
                 <div id="sec_attr" class='s_section panel panel-default'>
                     <div class="panel panel-heading">Primitive attributes</div>
                     <div class="panel panel-body">
                         
                     </div> 
                 </div>
+                
                 <div id="sec_crawl" class='s_section panel panel-default'>
                     <div class="panel panel-heading">Crawling settings </div>
                     <div class="panel panel-body">
@@ -71,6 +74,7 @@
                         </form>
                     </div>
                 </div>
+                            
                 <div id="sec_crawl_acc" class='s_section panel panel-default'>
                     <div class="panel panel-heading">Facebook login accounts</div>
                     <div class="panel panel-body">
@@ -86,6 +90,16 @@
                     </div>
                     <a type="button" class="btn btn-success" href="${pageContext.request.contextPath}/snaccount/page_add">Add new</a>
                 </div> 
+                
+                <div id="sec_crawl_adv" class='s_section panel panel-default'>
+                    <div class="panel panel-heading">Advanced settings</div>
+                    <div class="panel panel-body">
+                        <button class="btn btn-danger" id="reset_def" onclick="resetDefaultAttributeDefinitions('${pageContext.request.contextPath}/settings/restore/attributes');">Restore default attribute definitions</button>
+                        <br>
+                        <button class="btn btn-danger" id="reset_def">Delete all data</button>
+                    </div>
+                    
+                </div> 
             </div>        
         </div>
         <%@include file="footer.jsp" %>
@@ -93,6 +107,6 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <!-- Include all compiled plugins (below), or include individual files as needed -->
         <script src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
-        <script src="${pageContext.request.contextPath}/resources/js/attribute.js"></script>
+        <script src="${pageContext.request.contextPath}/resources/js/settings.js"></script>
     </body>
 </html>

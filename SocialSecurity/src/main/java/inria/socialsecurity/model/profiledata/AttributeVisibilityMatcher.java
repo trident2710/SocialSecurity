@@ -3,13 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package inria.socialsecurity.converter;
+package inria.socialsecurity.model.profiledata;
+
+import java.util.Map;
 
 /**
  *
  * @author adychka
  */
-public interface Converter<S,D> {
-    D convertFrom(S source);
-    S convertTo(D destination);
+public interface AttributeVisibilityMatcher {
+
 }

@@ -7,6 +7,7 @@ package inria.socialsecurity.controller.view;
 
 import inria.crawlerv2.driver.WebDriverOption;
 import inria.socialsecurity.entity.settings.CrawlingSettings;
+import inria.socialsecurity.model.DefaultDataProcessor;
 import inria.socialsecurity.repository.AttributeDefinitionRepository;
 import inria.socialsecurity.repository.CrawlingSettingsRepository;
 import inria.socialsecurity.repository.FacebookLoginAccountRepository;
@@ -33,6 +34,9 @@ public class SettingsViewController {
     
     @Autowired
     FacebookLoginAccountRepository flar;
+    
+    @Autowired
+    DefaultDataProcessor ddp;
     
     /**
      * get the page with settings
@@ -63,5 +67,11 @@ public class SettingsViewController {
         csr.deleteAll();
         csr.save(settings);
         return "redirect:/settings#sec_crawl";
+    }
+    
+    @RequestMapping(value = {"restore/attributes"},method = RequestMethod.DELETE)
+    public void restoreDefaultAttributeDefinitions(){
+       ddp.deleteAllAttributeDefinitions();
+       ddp.initAttributeDefinitions();
     }
 }

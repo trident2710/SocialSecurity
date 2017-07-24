@@ -30,10 +30,13 @@ public class FacebookProfile {
     @Property
     String fbUrl;
     
+    @Property
+    String displayNotation;
+    
     /**
      * friend relationship between this account and other ones
      */
-    @Relationship(type = "HAS_FRIENDS", direction = "OUTGOING")
+    @Relationship(type = "HAS_FRIENDS", direction = "BOTH")
     List<FacebookProfile> friends;
     
     @Relationship(type = "ATTRIBUTES", direction = "OUTGOING")
@@ -85,6 +88,14 @@ public class FacebookProfile {
         return null;
     }
 
+    public String getDisplayNotation() {
+        return displayNotation;
+    }
+
+    public void setDisplayNotation(String displayNotation) {
+        this.displayNotation = displayNotation;
+    }
+    
     @Override
     public boolean equals(Object other) {
         return EqualsBuilder.reflectionEquals(this, other);
