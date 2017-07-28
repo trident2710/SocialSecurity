@@ -26,26 +26,30 @@
                 <form action="${pageContext.request.contextPath}/profiledata/add" method="POST" class="input_fields_wrap" onsubmit="alert('Collecting the data started. It might take some time, up to couple of HOURS')">
                     <input id ='btn_create' type="submit" class="btn btn-success" value="Start collecting">
                     <br>
+                    <br>
+                    <label for="fburl" data-toggle="tooltip" data-placement="top">Facebook page url:</label>
+                    <input type="text" name='fburl' id="fburl" class="form-control"/>
+                    
                     <label for="name" data-toggle="tooltip" data-placement="top" title="Label which will be used to identify collected data. For example, 'Analize of John Smith'">Name:</label>
-                    <input type="text" name='name' id="name" class="form-control"></input>
+                    <input type="text" name='name' id="name" class="form-control"/>
                     <br>
-                    <label for="fb_url" data-toggle="tooltip" data-placement="top" title="URL in form: https://www.facebook.com/name or https://www.facebook.com/profile.php?id=12345">Facebook profile url:</label>
-                    <input type="text" name='fb_url' id="fb_url" class="form-control"></input>
+                    <label for="t_login" data-toggle="tooltip" data-placement="top" >T profile login:</label>
+                    <input type="text" name='t_login"' id="t_login" class="form-control"/>
                     <br>
-                    <label for="depth" data-toggle="tooltip" data-placement="top" title="Crawling depth i.e. how deep crawler will go to friendship chain. !IMPORTANT! consider exponential time increase, and check number of friends capture in settings'">Depth:</label>
-                    <select id ="depth" name="depth" class="form-control">
-                        <c:forEach var="a" items="${depth_values}">
-                            <option value="${a.depth()}">${a.name()}</option>
-                        </c:forEach> 
-                    </select>
+                    <label for="t_pass" data-toggle="tooltip" data-placement="top" >T profile password:</label>
+                    <input type="text" name='t_pass"' id="t_pass" class="form-control"/>
                     <br>
-                    <label for="acc_friend" data-toggle="tooltip" data-placement="top" title="For being able to collect data from 'friend' point of view, it is needed have one of the accounts in friends with the specified target">Crawling account in friends:</label>
-                    <select id ="acc_friend" name="acc_friend" class="form-control">
-                        <option value='-1' selected='selected'>none</option>
-                        <c:forEach var="a" items="${accounts}">
-                            <option value="${a.id}">${a.login}</option>
-                        </c:forEach> 
-                    </select>
+                    <label for="t_prime_login" data-toggle="tooltip" data-placement="top" >T' profile login:</label>
+                    <input type="text" name='t_prime_login"' id="t_prime_login" class="form-control"/>
+                    <br>
+                    <label for="t_prime_pass" data-toggle="tooltip" data-placement="top" >T' profile password:</label>
+                    <input type="text" name='t_prime_pass"' id="t_prime_pass" class="form-control"/>
+                    <br>
+                    <label for="t_sec_login" data-toggle="tooltip" data-placement="top" >T'' profile login:</label>
+                    <input type="text" name='t_sec_login"' id="t_sec_login" class="form-control"/>
+                    <br>
+                    <label for="t_sec_pass" data-toggle="tooltip" data-placement="top" >T'' profile password:</label>
+                    <input type="text" name='t_sec_pass"' id="t_sec_pass" class="form-control"/>
                 </form>
             </div>
         </div>
@@ -54,8 +58,6 @@
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <!-- Include all compiled plugins (below), or include individual files as needed -->
-        <script src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
-        
-            
+        <script src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>    
     </body>
 </html>

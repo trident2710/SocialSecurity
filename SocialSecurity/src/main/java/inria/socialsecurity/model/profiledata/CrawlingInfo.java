@@ -5,6 +5,7 @@
  */
 package inria.socialsecurity.model.profiledata;
 
+import inria.crawlerv2.engine.account.Account;
 import inria.socialsecurity.entity.snaccount.FacebookLoginAccount;
 import inria.socialsecurity.entity.user.ProfileData;
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -16,49 +17,28 @@ import org.apache.commons.lang.builder.ReflectionToStringBuilder;
  * @author adychka
  */
 public final class CrawlingInfo {
-    private final ProfileData pd;
-    private final Integer depth;
-    private final String url;
-    private final FacebookLoginAccount account;
+    private ProfileData profileData;
+    private Account[] accounts;
 
-    public CrawlingInfo(ProfileData pd, Integer depth, String url,FacebookLoginAccount account) {
-        this.pd = pd;
-        this.depth = depth;
-        this.url = url;
-        this.account = account;
+    public CrawlingInfo(ProfileData pd, Account[] accounts) {
+        this.profileData = pd;
+        this.accounts = accounts;
     }
 
-    public ProfileData getPd() {
-        return pd;
+    public Account[] getAccounts() {
+        return accounts;
     }
 
-    public Integer getDepth() {
-        return depth;
+    public void setAccounts(Account[] accounts) {
+        this.accounts = accounts;
     }
 
-    public String getUrl() {
-        return url;
+    public ProfileData getProfileData() {
+        return profileData;
     }
 
-    public FacebookLoginAccount getAccount() {
-        return account;
+    public void setProfileData(ProfileData profileData) {
+        this.profileData = profileData;
     }
-    
-    @Override
-    public boolean equals(Object other) {
-        return EqualsBuilder.reflectionEquals(this, other);
-    }
-
-    @Override
-    public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
-    }
-    
-    @Override
-    public String toString() {
-        return ReflectionToStringBuilder.toString(this);
-    }
-    
-    
     
 }

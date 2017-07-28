@@ -110,18 +110,6 @@ public class ProfileDataModelImpl implements ProfileDataModel{
     
     private static final Logger LOG = Logger.getLogger(ProfileDataModel.class.getName());
     
-//    static {
-//       LOG = Logger.getLogger(ProfileDataModel.class.getName());
-//       FileHandler fh;  
-//        try {  
-//            fh = new FileHandler("/users/adychka/Documents/SocialSecurity/webapp/SocialSecurity/log/Log.log");  
-//            LOG.addHandler(fh);
-//            SimpleFormatter formatter = new SimpleFormatter();  
-//            fh.setFormatter(formatter); 
-//        } catch (SecurityException | IOException e) {  
-//            e.printStackTrace();  
-//        }  
-//    }
     
     @Override
     public Set<ProfileData> getAllProfileData() {
@@ -135,77 +123,121 @@ public class ProfileDataModelImpl implements ProfileDataModel{
         if(request==null)
             throw new WrongArgumentException();
         
-        String fbUrl,name;
-        Integer depth;
+        String name,fbUrl;
+        Account[] accounts = new Account[3];
         
         if(request.getParameter("name")==null||request.getParameter("name").isEmpty())
             throw new WrongArgumentException();
         name = request.getParameter("name");
         
-        if(request.getParameter("fb_url")==null||request.getParameter("fb_url").isEmpty())
+        if(request.getParameter("fburl")==null||request.getParameter("fburl").isEmpty())
             throw new WrongArgumentException();
-        fbUrl = request.getParameter("fb_url");
-        if(!fbUrl.contains("https://www.facebook.com/"))
-            throw new WrongArgumentException();
+        fbUrl = request.getParameter("fburl");
         
-        if(request.getParameter("depth")==null||request.getParameter("depth").isEmpty())
+        String tl,tp;
+        if(request.getParameter("t_login")==null||request.getParameter("t_login").isEmpty())
             throw new WrongArgumentException();
-        depth = Integer.parseInt(request.getParameter("depth"));
-        if(depth==null)
+        tl = request.getParameter("t_login");
+        if(request.getParameter("t_pass")==null||request.getParameter("t_pass").isEmpty())
             throw new WrongArgumentException();
+        tp = request.getParameter("t_pass");
+        accounts[0]=new Account(tl, tp, Boolean.FALSE);
         
-        if(request.getParameter("acc_friend")==null||request.getParameter("acc_friend").isEmpty())
+        if(request.getParameter("t_prime_login")==null||request.getParameter("t_prime_login").isEmpty())
             throw new WrongArgumentException();
-        FacebookLoginAccount account = request.getParameter("acc_friend").equals("-1")?null:flar.findOne(Long.parseLong(request.getParameter("acc_friend")));
+        tl = request.getParameter("t_prime_login");
+        if(request.getParameter("t_prime_pass")==null||request.getParameter("t_prime_pass").isEmpty())
+            throw new WrongArgumentException();
+        tp = request.getParameter("t_prime_pass");
+        accounts[1]=new Account(tl, tp, Boolean.FALSE);
+        
+        if(request.getParameter("t_sec_login")==null||request.getParameter("t_sec_login").isEmpty())
+            throw new WrongArgumentException();
+        tl = request.getParameter("t_sec_login");
+        if(request.getParameter("t_sec_pass")==null||request.getParameter("t_sec_pass").isEmpty())
+            throw new WrongArgumentException();
+        tp = request.getParameter("t_sec_pass");
+        accounts[2]=new Account(tl, tp, Boolean.FALSE);
+       
         ProfileData data = new ProfileData();
         data.setName(name);
         data.setRequestUrl(fbUrl);
-        data.setDepth(depth);
-        data = pdr.save(data);
-        return new CrawlingInfo(data, depth, fbUrl, account);
+        return new CrawlingInfo(data, accounts);
     }
     
     //@Async
     //@Transactional
     @Override
     public void crawlFacebookData(CrawlingInfo ci){
-        LOG.log(Level.INFO,"start crawling data with parameters: {0}",ci.toString());
-        CrawlingInstanceSettings settings = createCrawlingEngineSettings();
-        ProfileData parent = pdr.save(ci.getPd());
-        
         try {
-            parent.setEstimateTimeInMinutes(getEstimatedCrawlingTimeInMinutes(settings, ci.getDepth(),  getAccountSatisfyingPerspective(ci.getAccount(), CrawlResultPerspective.FRIEND)!=null));
-            parent.setCompleted(Boolean.TRUE); //set completed in any case
-            long timeBeginnig = System.currentTimeMillis();
-            for(CrawlResultPerspective p:CrawlResultPerspective.values()){
-                Account account = getAccountSatisfyingPerspective(ci.getAccount(), p);
-                System.out.println("account "+account);
-                if(account!=null){
-                    LOG.log(Level.INFO,"start crawling data");
-                    crawlRecursively(ci.getUrl(),settings,account,null,ci.getDepth(),1,p,parent);
-                    if(parent.getFacebookProfile()!=null){
-                        LOG.log(Level.INFO,"update with weaker perspectives");
-                        if(ci.getAccount()!=null)
-                        updateFacebookProfilesWithWeakerPerspectives(pdr.findOne(ci.getPd().getId()).getFacebookProfile(),settings,ci.getAccount());
-                        LOG.log(Level.INFO,"filling attribute matrices");
-                        parent.setRealTimeInMinutes((System.currentTimeMillis()-timeBeginnig)/60000);
-                        fillAttributeMatrices(parent); 
-                        performAnalysis(parent);
-                    } else  LOG.log(Level.SEVERE,"parent fb profile is empty!");
+            LOG.log(Level.INFO,"start crawling data with parameters: {0}");
+            CrawlingInstanceSettings settings = createCrawlingEngineSettings();
+            ProfileData parent = pdr.save(ci.getProfileData());
+            List<JsonObject> collectedData = new ArrayList<JsonObject>();
+            try {
+                JsonObject data = new CrawlingCallable(settings, new URI(parent.getRequestUrl()), ci.getAccounts()[0]).call();
+                if(data==null) throw new Exception("data null");
+                collectedData.add(data);
+                if(data.has(AttributeName.FRIEND_IDS.getName())){
+                    List<String> ids = new ArrayList<>();
+                    for(JsonElement e: data.get(AttributeName.FRIEND_IDS.getName()).getAsJsonArray()){
+                        if(!e.isJsonNull()) ids.add(e.toString());
+                    }   
+                    Collections.shuffle(ids);
 
-
-                    break;
+                    for(int i=0;i<Math.min(settings.getMaxFriendsToCollect(),ids.size());i++){
+                        String url = "https://facebook.com/profile.php?id="+ids.get(i).replace("\"", "");
+                        try {
+                            JsonObject f = new CrawlingCallable(settings, new URI(url), ci.getAccounts()[0]).call();
+                            if(f==null) throw new Exception("data null");
+                        } catch (Exception ex) {
+                            LOG.log(Level.SEVERE, "unable to get friend", ex);
+                        }
+                    }
                 }
+            } catch (Exception ex) {
+                LOG.log(Level.SEVERE, "unable to get target", ex);
             }
-        } catch (Exception e) {
-            LOG.log(Level.INFO,"exception raised while crawling: ",e);
+            
+        } catch (Exception ex) {
+            LOG.log(Level.SEVERE, "exception", ex);
         }
-        finally{
-            parent.setCompleted(true);
-            parent = pdr.save(parent);
-            LOG.log(Level.INFO,"completed");
-        }   
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     private void fillAttributeMatrices(ProfileData data){
         for(CrawlResultPerspective p:CrawlResultPerspective.values()){
