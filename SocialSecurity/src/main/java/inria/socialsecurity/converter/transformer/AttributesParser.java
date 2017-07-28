@@ -25,7 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  *
  * @author adychka
  */
-public abstract class AttributesParser {
+public class AttributesParser {
     @Autowired
     AttributeDefinitionRepository adr;
     
@@ -34,19 +34,10 @@ public abstract class AttributesParser {
     protected Map<String,String> parseAttributesFromJson(JsonObject object){
         Map<String,String> res = new HashMap<>();
         adr.findPrimitiveAttributes().forEach((d) -> {
-            String val = getValueForPrimitiveAttribute(object, (PrimitiveAttributeDefinition)d);
-            if (val!=null) {
-                res.put(d.getDisplayName(), val);
-            }
+            res.put(d.getDisplayName(), getValueForPrimitiveAttribute(object, (PrimitiveAttributeDefinition)d));
         });
         adr.findComplexAttributes().forEach((cd)->{
-            StringBuilder builder = new StringBuilder();
-            cd.getSubAttributes().forEach((a)->{
-                Object v = getValueForPrimitiveAttribute(object, (PrimitiveAttributeDefinition)a);
-                if(v!=null)builder.append(String.valueOf(v)).append(" ");
-            });
-            String s = builder.toString();
-            if(!s.isEmpty())res.put(cd.getDisplayName(), s);
+            res.put(cd.getDisplayName(), getValueForComplexAttribute(object, cd));
         });
         return res;
     }
@@ -59,7 +50,23 @@ public abstract class AttributesParser {
         } else{
              return "-";
         }
-    }   
+    }  
+    
+    public String getValueForAttribute(JsonObject object,AttributeDefinition ad){
+        return ad instanceof PrimitiveAttributeDefinition?
+            getValueForPrimitiveAttribute(object, (PrimitiveAttributeDefinition)ad):
+            getValueForComplexAttribute(object, (ComplexAttributeDefinition)ad);
+    }
+    
+    protected String getValueForComplexAttribute(JsonObject object,ComplexAttributeDefinition cd){
+        cd = (ComplexAttributeDefinition)adr.findOne(cd.getId());
+        StringBuilder builder = new StringBuilder();
+        cd.getSubAttributes().forEach((a)->{
+            builder.append(getValueForPrimitiveAttribute(object, (PrimitiveAttributeDefinition)a)).append(" ");
+        });
+        String s = builder.toString();
+        return s;
+    }
     
     protected String getStringFromJsonElement(JsonElement e){
         if(e==null||e.isJsonNull()) return "-";

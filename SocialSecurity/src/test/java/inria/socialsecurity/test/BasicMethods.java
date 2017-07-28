@@ -3,20 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package inria.socialsecurity.constants;
+package inria.socialsecurity.test;
 
 /**
- * Representation of the thret types.
  *
- * @see Documentation p.19
  * @author adychka
  */
-public enum ThreatType {
-    FE1,
-    FE2;
+public class BasicMethods {
     
-    public String getValue() {
-        return name();
-    }
-
 }

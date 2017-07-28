@@ -8,6 +8,7 @@ package inria.socialsecurity.controller.rest;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import inria.socialsecurity.constants.LogicalRequirement;
 import inria.socialsecurity.constants.RiskSource;
 import inria.socialsecurity.constants.ThreatType;
 import inria.socialsecurity.entity.harmtree.HarmTreeElement;
@@ -57,15 +58,22 @@ public class HarmTreeRestController {
         JsonObject object = new JsonObject();
         JsonArray threatTypes = new JsonArray();
         JsonArray riskSources = new JsonArray();
+        JsonArray logicalRequirements = new JsonArray();
 
         for (RiskSource r : RiskSource.values()) {
             riskSources.add(r.getValue());
         }
+        
         for (ThreatType r : ThreatType.values()) {
             threatTypes.add(r.getValue());
         }
+        
+        for (LogicalRequirement l : LogicalRequirement.values()) {
+            logicalRequirements.add(l.getName());
+        }
         object.add("riskSources", riskSources);
         object.add("threatTypes", threatTypes);
+        object.add("logicalRequirements", logicalRequirements);
 
         return object.toString();
     }

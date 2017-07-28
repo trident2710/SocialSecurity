@@ -37,6 +37,7 @@ public class Synonim {
      */
     @Property
     private String attributeName;
+    
 
     public Long getId() {
         return id;

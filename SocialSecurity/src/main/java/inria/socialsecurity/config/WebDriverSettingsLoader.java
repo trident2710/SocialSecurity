@@ -17,11 +17,11 @@ public class WebDriverSettingsLoader {
   /**
    * where geckodriver is located
    */
-    public static final String GECKODRIVER_PATH = "/users/adychka/Documents/SocialSecurity/webapp/SocialSecurity/geckodriver";
+    public static final String GECKODRIVER_PATH = "/users/adychka/Documents/SocialSecurity/geckodriver";
   /**
    * where phantomjs is located
    */
-    public static final String PHANTOMJS_PATH = "/users/adychka/Documents/SocialSecurity/webapp/SocialSecurity/phantomjs";
+    public static final String PHANTOMJS_PATH = "/users/adychka/Documents/SocialSecurity/phantomjs";
   
   /**
    * system property for providing the path to geckodriver

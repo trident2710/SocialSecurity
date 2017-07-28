@@ -19,6 +19,6 @@ public interface JsonStoringEntityRepository extends GraphRepository<JsonStoring
     @Query("MATCH (n:FacebookProfile) WHERE id(n)={id} MATCH n-[:ATTRIBUTES]->(k:JsonStoringEntity) RETURN DISTINCT k")
     List<JsonStoringEntity> getAttributesForFacebookProfile(@Param("id") Long facebookProfileId);
     
-    @Query("MATCH (n:FacebookProfile) WHERE id(n)={id} MATCH n-[:ATTRIBUTES]->(k:JsonStoringEntity {perspective:{aPerspective}}) RETURN k")
+    @Query("MATCH (n:FacebookProfile) WHERE id(n)={id} MATCH n-[:ATTRIBUTES]->(k:JsonStoringEntity {perspective:{perspective}}) RETURN k")
     JsonStoringEntity getAttributesForFacebookProfile(@Param("id") Long facebookProfileId,@Param("perspective") String aPerspective);
 }

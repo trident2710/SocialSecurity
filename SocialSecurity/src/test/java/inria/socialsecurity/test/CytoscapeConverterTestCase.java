@@ -6,6 +6,7 @@
 package inria.socialsecurity.test;
 
 import inria.socialsecurity.constants.BasicPrimitiveAttributes;
+import inria.socialsecurity.constants.LogicalRequirement;
 import inria.socialsecurity.constants.RiskSource;
 import inria.socialsecurity.constants.ThreatType;
 import inria.socialsecurity.converter.HarmTreeToCytoscapeNotationConverter;
@@ -78,11 +79,12 @@ public class CytoscapeConverterTestCase {
         if(depthActual!=0)
             htln.setLogicalRequirement(
                 random.nextBoolean()?
-                    HarmTreeLogicalNode.OR:
+                    LogicalRequirement.OR.getName():
                     random.nextBoolean()?
-                        HarmTreeLogicalNode.AND:
-                        c>1?1+random.nextInt(c-1):1);
-        else htln.setLogicalRequirement(HarmTreeLogicalNode.AND);
+                        LogicalRequirement.AND.getName():
+                             LogicalRequirement.K_OUT_OF_N.getName()
+                            );
+        else htln.setLogicalRequirement(LogicalRequirement.AND.getName());
         
         if(depthActual == depthMax){
             for(int i=0;i<c;i++){

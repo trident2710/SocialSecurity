@@ -55,6 +55,8 @@ public class ProfileData {
     
     @Relationship(type = "HAS_ATTRIBUTE_MATRIX", direction = "OUTGOING")
     List<JsonStoringEntity> attributeMatrix;
+    
+    String likelihoodCalculationJsonString;
 
     public FacebookProfile getFacebookProfile() {
         return facebookAccount;
@@ -139,6 +141,14 @@ public class ProfileData {
 
     public void setAttributeMatrix(List<JsonStoringEntity> attributeMatrix) {
         this.attributeMatrix = attributeMatrix;
+    }
+
+    public String getLikelihoodCalculationJsonString() {
+        return likelihoodCalculationJsonString;
+    }
+
+    public void setLikelihoodCalculationJsonString(String likelihoodCalculationJsonString) {
+        this.likelihoodCalculationJsonString = likelihoodCalculationJsonString;
     }
     
     @Override

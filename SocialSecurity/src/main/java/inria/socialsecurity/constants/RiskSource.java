@@ -14,7 +14,6 @@ package inria.socialsecurity.constants;
 public enum RiskSource {
     A1, //user friends 
     A2, //friends of friends
-    A3, // friends of friends of friends
     A4; // strangers
 
     public String getValue() {

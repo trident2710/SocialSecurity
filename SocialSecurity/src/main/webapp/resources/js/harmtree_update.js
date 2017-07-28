@@ -70,11 +70,11 @@ function init(id){
                 
                 const addController = new NodeCreateController((value)=>{
                     processChangeRequest(value);
-                }, harmTreeLeafCreateData,[{'name':'and','value':-1},{'name':'or','value':1}]);
+                }, harmTreeLeafCreateData,settings['logicalRequirements']);
                 
                 let data = {};
                 data['harmTreeLeafData'] = harmTreeLeafCreateData;
-                data['harmTreeLogicData'] = [{'name':'and','value':-1},{'name':'or','value':1}];
+                data['harmTreeLogicData'] = settings['logicalRequirements'];
                 const updateController = new NodeUpdateController((value)=>{
                     processChangeRequest(value);
                 },data);
@@ -82,16 +82,16 @@ function init(id){
                 $cy.json(harmTree);
                 $cy.on('click', 'node', function(evt){
                     addController.setNodeId(this.id());
-                    if(getNodeData(this.id())['classes'].split(" ")[0]=='HarmTreeVertex'){
+                    if(getNodeData(this.id())['classes'].split(" ")[0]==='HarmTreeVertex'){
                         updateController.init(this.id());
                         addController.setState('parentClass','HarmTreeVertex');
                         addController.setState('stage','CLICKED');    
                     }
-                    if(getNodeData(this.id())['classes'].split(" ")[0]=='HarmTreeLeaf'){
+                    if(getNodeData(this.id())['classes'].split(" ")[0]==='HarmTreeLeaf'){
                         updateController.init(this.id());
                         addController.clear();
                     }
-                    if(getNodeData(this.id())['classes'].split(" ")[0]=='HarmTreeLogicalNode'){
+                    if(getNodeData(this.id())['classes'].split(" ")[0]==='HarmTreeLogicalNode'){
                         updateController.init(this.id());
                         addController.setState('parentClass','HarmTreeLogicalNode');
                         addController.setState('stage','CLICKED');
@@ -99,7 +99,7 @@ function init(id){
                 });
                 $cy.on('mouseup','node',(evt)=>{
                     sendUpdateHarmTreeRequest($harmTreeId);
-                })
+                });
             });
         });
     });
@@ -118,7 +118,7 @@ function processChangeRequest(data){
             sendData('/rest/harmtrees/node/'+data['nodeId'],data,'PUT',callback);
             break;
         case 'delete':
-            deleteData('/rest/harmtrees/node/'+data['nodeId'],callback)
+            deleteData('/rest/harmtrees/node/'+data['nodeId'],callback);
             break;
     }
 }
@@ -220,6 +220,7 @@ class NodeTypeInput {
     }, '');
    
     container.addEventListener('change', () => {
+        console.log("here 2 "+container.value);
       this.onChange(container.value);
     });
     this.onChange(container.value);
@@ -229,7 +230,7 @@ class NodeTypeInput {
 
 function removeElementById(id){
     var elem = document.getElementById(id);
-    if(elem!=null)
+    if(elem!==null)
         elem.parentNode.removeChild(elem);
 }
 
@@ -242,96 +243,62 @@ class LogicNodeInput{
     /**
     * @param {Array} options
     * @param {Function} onChange
+    * @param {Array} defaultValue 
     */ 
     constructor(options,onChange,defaultValue) {
-    this.options = options;
-    this.onChange = onChange;
-    this.state='default';
-    this.defaultValue = defaultValue;
+        this.options = options;
+        this.onChange = onChange;
+        this.state='default';
+        this.defaultValue = defaultValue;
     }
 
     setState(state){
-      this.state = state;
-      this.render();
+        this.state = state;
+        this.render();
     }
 
     render() {
-    if(document.getElementById('logic_input_type')==null){
-        let button = document.createElement('button');
-        button.setAttribute('id','logic_input_type');
-        button.setAttribute('class','btn btn-default')
-        button.innerHTML = 'Switch input mode';
-        button.addEventListener('click',()=>{
-            if(this.state=='custom')
-                this.setState('default');
-            else this.setState('custom');
-        });
+        if(document.getElementById('create')==null){
 
-        let create = document.createElement('button');
-        create.setAttribute('id','create');
-        create.setAttribute('class','btn btn-primary')
-        create.innerHTML = this.defaultValue!=null?'Update':'Create';
-        create.addEventListener('click',()=>{
-            if(this.state=='custom'){
-                this.onChange(document.getElementById("logic_input").value);
-            } else{
+            let create = document.createElement('button');
+            create.setAttribute('id','create');
+            create.setAttribute('class','btn btn-primary');
+            create.innerHTML = this.defaultValue!==null?'Update':'Create';
+            create.addEventListener('click',()=>{
                 this.onChange(document.getElementById("logic_select").value);
+            });
+
+            let container = document.createElement('div');
+            container.setAttribute('id','logic_container');
+            insertText(container,"Logical requirement:");
+            container.appendChild(create);
+            document.getElementById('menu').appendChild(container);
+        }
+    
+        if(this.state==='default'){
+            removeElementById('logic_select');
+            removeElementById('logic_input');
+
+            let select = document.createElement('select');
+            select.setAttribute('class','form-control');
+            select.setAttribute('id','logic_select');
+            select.setAttribute('class','form-control logic');
+            select.innerHTML = this.options.reduce((result, elem) => {
+              result += 
+                `<option value="${elem}">${elem}</option>`;
+              return result;
+            }, '');
+            if(this.defaultValue!==null){
+                select.value = this.defaultValue;
             }
-        });
-
-        let container = document.createElement('div');
-        container.setAttribute('id','logic_container');
-        insertText(container,"Logical requirement:");
-        container.appendChild(button);
-        container.appendChild(create);
-        document.getElementById('menu').appendChild(container);
-    }
-    
-    if(this.state=='custom'){
-        removeElementById('logic_select');
-        removeElementById('logic_input');
-
-        let input  = document.createElement('input');
-        input.setAttribute('type','number');
-        input.setAttribute('min',1);
-        input.setAttribute('max',10);
-        input.setAttribute('id','logic_input');
-        input.setAttribute('value','1');
-        input.setAttribute('class','form-control logic');
-        input.onkeypress=function(evt){
-            evt.preventDefault();
-        };
-        if(this.defaultValue!=null){
-            input.value = this.defaultValue['value'];
+            document.getElementById('logic_container').appendChild(select);
         }
-        document.getElementById('logic_container').appendChild(input);
-        
-    }
-    
-    if(this.state=='default'){
-        removeElementById('logic_select');
-        removeElementById('logic_input');
 
-        let select = document.createElement('select');
-        select.setAttribute('class','form-control');
-        select.setAttribute('id','logic_select');
-        select.setAttribute('class','form-control logic');
-        select.innerHTML = this.options.reduce((result, elem) => {
-          result += 
-            `<option value="${elem['value']}">${elem['name']}</option>`;
-          return result;
-        }, '');
-        if(this.defaultValue!=null){
-            select.value = this.defaultValue['value'];
-        }
-        document.getElementById('logic_container').appendChild(select);
-    }
-
-
-    let container  = document.getElementById('logic_container');
-    return container;
+        let container  = document.getElementById('logic_container');
+        return container;
     }
 }
+
 /**
  * @see HarmTreeLeaf
  * for rendering the view which contains the elements needed to create the leaf node
@@ -342,17 +309,18 @@ class LeafNodeInput {
     * @param {Array} options in format: 
     * ["threatType":[1,2,3],"riskSource":[1,2],"attributeDefinition":[{"name":"n","value":"v"}]];
     * @param {Function} onChange
+    * @param {Array} defaultValue 
     */ 
     constructor(options, onChange,defaultValue) {
         this.options = options;
         this.onChange = onChange;
         this.defaultValue = defaultValue;
-    
     }
 
     render() {
         let container = document.createElement('div');
         container.setAttribute('id','logic_container');
+        
         let containerThreatType = document.createElement('select');
         containerThreatType.setAttribute('class','form-control');
         containerThreatType.innerHTML = this.options['threatType'].reduce((result, elem) => {
@@ -361,7 +329,7 @@ class LeafNodeInput {
           return result;
         }, '');
         
-        if(this.defaultValue!=null){
+        if(this.defaultValue!==null){
             containerThreatType.value = this.defaultValue['threatType'];
         }
         
@@ -372,7 +340,8 @@ class LeafNodeInput {
             `<option value="${elem}">${elem}</option>`;
           return result;
         }, '');
-        if(this.defaultValue!=null){
+        
+        if(this.defaultValue!==null){
             containerRiskSource.value = this.defaultValue['riskSource'];
         }
         
@@ -383,14 +352,14 @@ class LeafNodeInput {
             `<option value="${elem['value']}">${elem['name']}</option>`;
           return result;
         }, '');
-        if(this.defaultValue!=null){
+        if(this.defaultValue!==null){
             containerAttributeDefinition.value = this.defaultValue['attributeDefinition'];
         }
 
         let buttonCreate = document.createElement('button');
         buttonCreate.setAttribute('id',"b_create");
-        buttonCreate.setAttribute('class','btn btn-primary')
-        buttonCreate.innerHTML = this.defaultValue!=null?'Update':'Create';
+        buttonCreate.setAttribute('class','btn btn-primary');
+        buttonCreate.innerHTML = this.defaultValue!==null?'Update':'Create';
         buttonCreate.addEventListener('click',()=>{
            let values = {};
            values['threatType']=containerThreatType.value;
@@ -412,46 +381,60 @@ class LeafNodeInput {
 }
 
 class HarmTreeHeadInput{
+    
     constructor(onChange,defaultData){
         this.onChange = onChange;
         this.defaultData = defaultData;
     }
     
     render(){
+        console.log(this.defaultData['likelihood']);
         let container = document.createElement('div');
         container.setAttribute('id','harm_tree_head_info');
+        
         let name = document.createElement('input');
         name.setAttribute('id','harm_tree_name');
         name.setAttribute('class','form-control');
-        
-        if(this.defaultData!=null){
+        if(this.defaultData!==null){
             name.setAttribute('value',this.defaultData['name']);
         }
             
         
         let description = document.createElement('input');
         description.setAttribute('id','harm_tree_description');
-        description.setAttribute('class','form-control');
-        
-        if(this.defaultData!=null){
+        description.setAttribute('class','form-control'); 
+        if(this.defaultData!==null){
             description.setAttribute('value',this.defaultData['description']);
+        }
+        
+        let likelihood = document.createElement('input');
+        likelihood.setAttribute('id','harm_tree_likelihood');
+        likelihood.setAttribute('class','form-control'); 
+        likelihood.setAttribute('type','number');
+        likelihood.setAttribute('min','0');
+        likelihood.setAttribute('max','1');
+        if(this.defaultData!==null){
+            likelihood.setAttribute('value',this.defaultData['likelihood']);
         }
         
         let update = document.createElement('button');
         update.innerHTML = 'Update';
         update.setAttribute('id','b_update');
-        update.setAttribute('class','btn btn-primary')
+        update.setAttribute('class','btn btn-primary');
         update.addEventListener('click',()=>{
             let res = {};
             res['name'] = name.value;
             res['description'] = description.value;
+            res['likelihood'] = likelihood.value;
             this.onChange(res);
         });
         
-        insertText(container,"Tree name:")
+        insertText(container,"Tree name:");
         container.appendChild(name);
         insertText(container,"Tree description:");
         container.appendChild(description);
+        insertText(container,"Likelihood:");
+        container.appendChild(likelihood);
         container.appendChild(update);
         
         return container;
@@ -466,6 +449,8 @@ class NodeCreateController {
     /**
      * 
      * @param {Fuction} onSubmit
+     * @param {Array} harmTreeLeafCreateData
+     * @param {Array} harmTreeLogicCreateData
      */
     constructor(onSubmit,harmTreeLeafCreateData,harmTreeLogicCreateData) {
         this.stageTypes = ['INACTIVE','CLICKED','SELECT_NODE_TYPE','ADD_LEAF_CHOSEN','ADD_LOGIC_CHOSEN'];
@@ -484,12 +469,14 @@ class NodeCreateController {
     getNodeId(){
         return this.nodeId;
     }
+    
     /**
      * 
      * @param prop 'stage' to change the stage
      * @param {String} value one of @see this.stageTypes
      */
     setState(prop, value) {
+        console.log(value);
         this.state[prop] = value;
         this.render();
     }
@@ -506,15 +493,17 @@ class NodeCreateController {
         formContainer.innerHTML = '<p class=s_title>Create options</p>';;
         document.getElementById('menu').appendChild(formContainer);
     }
+    
     clear(){
         removeElementById('create_container');
     }
 
     render() {
-        if(this.state['stage']=='INACTIVE'){
+        if(this.state['stage']==='INACTIVE'){
             removeElementById('create_container');
         }
-        if(this.state['stage']=='CLICKED'){
+        
+        if(this.state['stage']==='CLICKED'){
             removeElementById('create_container');
             this.createForm();
             
@@ -522,7 +511,7 @@ class NodeCreateController {
            
             const addChildButton = document.createElement('button');
             addChildButton.setAttribute('id','b_add');
-            addChildButton.setAttribute('class','btn btn-success')
+            addChildButton.setAttribute('class','btn btn-success');
             addChildButton.innerHTML = 'Add child';
             addChildButton.setAttribute('id','node_add_child');
             addChildButton.addEventListener('click',()=>{
@@ -532,23 +521,20 @@ class NodeCreateController {
             formContainer.appendChild(addChildButton);
     
         }
-        if(this.state['stage']=='SELECT_NODE_TYPE'){
-           
+        
+        if(this.state['stage']==='SELECT_NODE_TYPE'){ 
             const changeCallback = (selectedValue) => {
                if(selectedValue==1){
                    this.setState('stage','ADD_LEAF_CHOSEN');
                } else{
                    this.setState('stage','ADD_LOGIC_CHOSEN');
                }
-            }
-            const elem = new NodeTypeInput(this.state['parentClass']=='HarmTreeVertex'?this.harmTreeElementTypesVertex:this.harmTreeElementTypes, changeCallback);
-            document.getElementById('create_container').appendChild(elem.render());
-
-
-            
+            };
+            const elem = new NodeTypeInput(this.state['parentClass']==='HarmTreeVertex'?this.harmTreeElementTypesVertex:this.harmTreeElementTypes, changeCallback);
+            document.getElementById('create_container').appendChild(elem.render());    
         }
-        if(this.state['stage']=='ADD_LEAF_CHOSEN'){
-            
+        if(this.state['stage']==='ADD_LEAF_CHOSEN'){
+            console.log('here 1');
             removeElementById('node_add_child');
             removeElementById('logic_container');
             
@@ -558,12 +544,13 @@ class NodeCreateController {
                 res['nodeId'] = this.getNodeId();
                 this.onSubmit(res);
                 this.setState('CLICKED');
-            }
+            };
             
             const leafInput = new LeafNodeInput(this.harmTreeLeafCreateData,callback,null);
             document.getElementById('create_container').appendChild(leafInput.render());
         }
-        if(this.state['stage']=='ADD_LOGIC_CHOSEN'){
+        
+        if(this.state['stage']==='ADD_LOGIC_CHOSEN'){
             
             removeElementById('node_add_child');
             removeElementById('logic_container');
@@ -598,11 +585,8 @@ class NodeUpdateController{
         removeElementById('update_container');
         this.createContainer();
         
-        
-        
-        
         getData('/rest/harmtrees/node/'+id,(node)=>{
-            if(node['class']=='HarmTreeVertex'){ 
+            if(node['class']==='HarmTreeVertex'){ 
                 const updateHead = new HarmTreeHeadInput((object)=>{
                     let res = {};
                     res['nodeId'] = this.getCurrentNodeId();
@@ -615,7 +599,7 @@ class NodeUpdateController{
             } else{
                 const deleteButton = document.createElement('button');
                 deleteButton.innerHTML = 'Delete node';
-                deleteButton.setAttribute('class','btn btn-danger')
+                deleteButton.setAttribute('class','btn btn-danger');
                 deleteButton.setAttribute('id','node_delete');
                 deleteButton.addEventListener('click',()=>{
                     let res = {"action":"delete"};
@@ -624,20 +608,20 @@ class NodeUpdateController{
                 });
                 document.getElementById('update_container').appendChild(deleteButton);
             }
-            if(node['class']=='HarmTreeLeaf'){
+            if(node['class']==='HarmTreeLeaf'){
                 const callback = (result)=>{
-                let res = {};
-                res['action'] = 'update';
-                res['type'] = 1;
-                res['data'] = result;
-                res['nodeId'] = this.getCurrentNodeId();
-                this.onSubmit(res);
-                }
+                    let res = {};
+                    res['action'] = 'update';
+                    res['type'] = 1;
+                    res['data'] = result;
+                    res['nodeId'] = this.getCurrentNodeId();
+                    this.onSubmit(res);
+                };
                 let initialState = {'riskSource':node['riskSource'],'threatType':node['threatType'],'attributeDefinition':node['attributeDefinition']['id']};
                 const leafInput = new LeafNodeInput(this.harmTreeLeafCreateData,callback,initialState);
                 document.getElementById('update_container').appendChild(leafInput.render());
             }
-            if(node['class']=='HarmTreeLogicalNode'){
+            if(node['class']==='HarmTreeLogicalNode'){
                 const callback = (result)=>{
                 let res = {};
                 res['action'] = 'update';
@@ -648,14 +632,13 @@ class NodeUpdateController{
                 this.onSubmit(res);
                 };
 
-                const logicInput = new LogicNodeInput(this.harmTreeLogicCreateData,callback,{'value':node['logicalRequirement']});
-                logicInput.setState((node['logicalRequirement']==1||node['logicalRequirement']==-1)?'default':'custom');
+                const logicInput = new LogicNodeInput(this.harmTreeLogicCreateData,callback,node['logicalRequirement']);
+                logicInput.setState('default');
                 document.getElementById('update_container').appendChild(logicInput.render());
             }
-        });
-        
-        
+        });    
     }
+    
     clear(){
         removeElementById('update_container');
     }
@@ -671,9 +654,7 @@ class NodeUpdateController{
         formContainer.innerHTML = '<p class=s_title>Update options</p>';
                 
         document.getElementById('menu').appendChild(formContainer);
-    }
-    
-    
+    }   
 }
 
 

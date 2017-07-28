@@ -31,6 +31,9 @@ public class HarmTreeVertex extends HarmTreeNode {
      */
     @Property
     private String description;
+    
+    @Property
+    private Double severity = 1d;
 
     public String getName() {
         return name;
@@ -47,6 +50,15 @@ public class HarmTreeVertex extends HarmTreeNode {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public Double getSeverity() {
+        return severity;
+    }
+
+    public void setSeverity(Double severity) {
+        this.severity = severity;
+    }
+    
     @Override
     public boolean equals(Object other) {
         return EqualsBuilder.reflectionEquals(this, other);

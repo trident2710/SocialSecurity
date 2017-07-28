@@ -43,6 +43,7 @@ public final class DefaultDataProcessor {
             PrimitiveAttributeDefinition pad = new PrimitiveAttributeDefinition();
             pad.setName(n.getValue());
             pad.setDisplayName(n.getDisplayName());
+            pad.setIsUnique(n.isUnique());
             pad = adr.save(pad);
             createSynonimsForAttribute(pad);
         }

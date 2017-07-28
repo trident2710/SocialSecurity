@@ -25,27 +25,20 @@ import org.neo4j.ogm.annotation.Transient;
 @NodeEntity
 public class HarmTreeLogicalNode extends HarmTreeNode {
 
-    @Transient
-    public static final Integer OR = 1;
-    //i.e all descendants should be true.
-    //Impossible to define preciesely because the count of descendants is not static
-    @Transient
-    public static final Integer AND = -1;
-
     //the interger value representing the logical requirement for this element to be true
     @Property
-    private Integer logicalRequirement;
+    private String logicalRequirement;
 
     //the list of descendant leafs
     @JsonIgnore
     @Relationship(type = "HAS_LEAFS", direction = Relationship.OUTGOING)
     private List<HarmTreeLeaf> leafs;
 
-    public Integer getLogicalRequirement() {
+    public String getLogicalRequirement() {
         return logicalRequirement;
     }
 
-    public void setLogicalRequirement(Integer logicalRequirement) {
+    public void setLogicalRequirement(String logicalRequirement) {
         this.logicalRequirement = logicalRequirement;
     }
 
@@ -57,9 +50,6 @@ public class HarmTreeLogicalNode extends HarmTreeNode {
     }
 
     public void setLeafs(List<HarmTreeLeaf> leafs) {
-        if (leafs == null) {
-            return;
-        }
         this.leafs = leafs;
     }
 

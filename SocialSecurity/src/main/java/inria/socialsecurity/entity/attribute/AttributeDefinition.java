@@ -32,6 +32,8 @@ public class AttributeDefinition implements Serializable {
 
     @Property
     private String displayName; //display name
+    
+    private Boolean isUnique;
 
     public Long getId() {
         return id;
@@ -57,6 +59,14 @@ public class AttributeDefinition implements Serializable {
         this.displayName = displayName;
     }
 
+    public Boolean getIsUnique() {
+        return isUnique;
+    }
+
+    public void setIsUnique(Boolean isUnique) {
+        this.isUnique = isUnique;
+    }
+    
     @Override
     public boolean equals(Object other) {
         return EqualsBuilder.reflectionEquals(this, other);

@@ -9,16 +9,19 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import inria.socialsecurity.entity.harmtree.HarmTreeElement;
+import inria.socialsecurity.constants.BasicComplexAttributes;
+import inria.socialsecurity.constants.BasicPrimitiveAttributes;
+import inria.socialsecurity.converter.transformer.AttributesParser;
+import inria.socialsecurity.entity.attribute.AttributeDefinition;
 import inria.socialsecurity.entity.user.FacebookProfile;
-import inria.socialsecurity.entity.user.ProfileData;
+import inria.socialsecurity.entity.user.JsonStoringEntity;
+import inria.socialsecurity.repository.AttributeDefinitionRepository;
 import inria.socialsecurity.repository.FacebookProfileRepository;
-import java.util.HashMap;
+import inria.socialsecurity.repository.JsonStoringEntityRepository;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import org.neo4j.ogm.session.Session;
+import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 /**
  *
@@ -29,50 +32,65 @@ public class FacebookProfileToCytoscapeNotationConverter extends CytoscapeNotati
     @Autowired
     FacebookProfileRepository fpr;
     
-    DisplayNotationFactory factory = new DisplayNotationFactory(100,400,400,36);
+    @Autowired
+    JsonStoringEntityRepository jser;
+    
+    @Autowired
+    AttributeDefinitionRepository adr;
+    
+    @Autowired
+    @Qualifier("basic parser")
+    AttributesParser ap;
+    
+    DisplayNotationFactory factory;
     
     
     @Override
     public JsonElement convertFrom(FacebookProfile object) {
+        factory = new DisplayNotationFactory(100,400,400,20);
         JsonObject res = createDefaultJsonObject();
         
-        createFriendshipGraph(res, fpr.getFriendshipTreeForFacebookProfile(object.getId()));
+        createFriendshipGraph(res, fpr.getFriendshipTreeForFacebookProfile(object.getId()),object.getId());
         return res;
     }
     
-    private void createFriendshipGraph(JsonObject source,List<FacebookProfile> tree){
+    private void createFriendshipGraph(JsonObject source,List<FacebookProfile> tree,Long targetId){
         for(FacebookProfile profile:tree){
-            saveProfileData(profile, source, profile.getDisplayNotation()==null?factory.next():null);
-           
-            try {
-                Set<Long> s = fpr.getFriendIdsForFacebookProfile(profile.getId());
-//                while (s.iterator().hasNext()) {                    
-//                    System.out.println(s.iterator().next());
-//                }
-                for(Long i:s){
-                    System.out.println(i);
-                }
-                System.out.println("wtf");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            for(Long id:fpr.getFriendIdsForFacebookProfile(profile.getId())){
-                saveFriendship(profile.getId(), id, source);
+            saveProfileData(profile, source, profile.getDisplayNotation()!=null?null:factory.next(),targetId);
+            for(Integer id:fpr.getFriendIdsForFacebookProfile(profile.getId())){
+                saveFriendship(profile.getId(), Integer.toUnsignedLong(id), source);
             }
         }
         
     }
     
-    private void saveProfileData(FacebookProfile profile,JsonObject source,JsonObject displayNotation){
+    private String getAttributeFromFacebookProfile(AttributeDefinition ad,Long fbProfileId){
+        List<JsonStoringEntity> entities = jser.getAttributesForFacebookProfile(fbProfileId);
+        JsonParser parser = new JsonParser();
+        for(JsonStoringEntity entity:entities){
+            if(!entity.getJsonString().isEmpty()){
+                JsonObject object = parser.parse(entity.getJsonString()).getAsJsonObject();
+                String res = ap.getValueForAttribute(object, ad);
+                if(!res.equals("-"))
+                    return res;
+            }
+            
+        }
+        return null;
+    }
+    
+    private void saveProfileData(FacebookProfile profile,JsonObject source,JsonObject displayNotation,Long targetId){
         if(profile==null) return;
         if(displayNotation!=null)
             profile.setDisplayNotation(displayNotation.toString());
         JsonObject object = new JsonObject();
         object.addProperty("group", "nodes");
-        object.addProperty("classes", profile.getClass().getSimpleName());
+        String gender = getAttributeFromFacebookProfile(adr.findPrimitiveAttributeDefinitionByName(BasicPrimitiveAttributes.GENDER.getValue()), profile.getId());
+        object.addProperty("classes", gender!=null?gender:"undefined"+" "+(Objects.equals(targetId, profile.getId())?"target":""));
         JsonObject data = new JsonObject();
         data.addProperty("id", "" + profile.getId());
-        data.addProperty("label", profile.getFbUrl().replace("https://facebook.com/profile.php?id=", ""));
+        String fullName = getAttributeFromFacebookProfile(adr.findComplexAttributeDefinitionByName(BasicComplexAttributes.FULL_NAME.getName()), profile.getId());
+        data.addProperty("label", fullName);
         object.add("data", data);
         object.add("position",new JsonParser().parse(profile.getDisplayNotation()));
         source.get("elements").getAsJsonObject().get("nodes").getAsJsonArray().add(object);
@@ -92,7 +110,11 @@ public class FacebookProfileToCytoscapeNotationConverter extends CytoscapeNotati
 
     @Override
     public FacebookProfile convertTo(JsonElement destination) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Long id = destination.getAsJsonObject().get("id").getAsLong();
+        FacebookProfile profile = fpr.getOne(id);
+        profile.setDisplayNotation(destination.getAsJsonObject().get("position").toString());
+        fpr.save(profile);
+        return null;
     }
     
     private class DisplayNotationFactory{
@@ -118,6 +140,7 @@ public class FacebookProfileToCytoscapeNotationConverter extends CytoscapeNotati
             if(angle>=360){
                 level++;
                 angle = 0;
+                moveDeg = (int) (moveDeg*0.8);
             }
             JsonObject res = createForXY(startX-radius*level*Math.sin(Math.toRadians(angle)), startY+radius*level*Math.cos(Math.toRadians(angle)));
             angle+=moveDeg;

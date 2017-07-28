@@ -34,7 +34,7 @@ public class FacebookDatasetToAttributeVisibilityTransformer extends AttributesP
             StringBuilder builder = new StringBuilder();
             for(CrawlResultPerspective perspective:CrawlResultPerspective.values()){
                 if(source.containsKey(perspective.name())){
-                    if(!parseAttributesFromJson(source.get(perspective.name())).get(a.getDisplayName()).equals("-"))
+                    if(!getValueForAttribute(source.get(perspective.name()),a).equals("-"))
                         builder.append(" ").append(perspective.getRiskSource().name());
                 }
                 

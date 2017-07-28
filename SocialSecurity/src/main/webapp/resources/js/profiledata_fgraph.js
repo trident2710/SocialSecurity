@@ -6,9 +6,21 @@
 
 var myStyle = [
     {
-        "selector": ".FacebookProfile",
+        "selector": ".Male",
         "style": {
         "background-color": "blue"
+        }
+    },
+    {
+        "selector": ".Female",
+        "style": {
+        "background-color": "purple"
+        }
+    },
+    {
+        "selector": ".target",
+        "style": {
+        "background-color": "green"
         }
     },
     {
@@ -45,11 +57,12 @@ function init(id){
 
         $cy.json($friendGraph);
         $cy.on('click', 'node', function(evt){
-            
+            window.open("/profiledata/"+this.id(), '_blank');
+            //window.location="/profiledata/"+this.id();
         });
-        $cy.on('mouseup','node',(evt)=>{
-            sendUpdateProfileFriendGraphRequest($profileId);
-        })
+        $cy.on('mouseup','node',function(evt){
+            sendNodePosition($profileId, this.id());
+        });
     });
 }
 
@@ -63,17 +76,26 @@ function getData(path,callback){
     });
 }
 
-function sendUpdateProfileFriendGraphRequest(profileDataId){
+
+
+function sendUpdateProfileFriendGraphRequest(profileDataId,data){
     $.ajax({
         contentType: 'application/json',
-        data: JSON.stringify($cy.json()),
+        data: JSON.stringify(data),
         dataType: 'json',
-        success: function(){
-        },
-        error: function(){
-        },
         processData: false,
         type: 'POST',
-        url: '/profiledata/friendgraph/'+profileDataId
+        url: '/rest/profiledata/friendgraph/'+profileDataId
     });
+}
+
+function sendNodePosition(profileDataId,nodeId){
+    $cy.json().elements.nodes.forEach((node)=>{
+        console.log(node.data.id);
+        console.log("looking "+nodeId);
+        if(JSON.stringify(node.data.id)===JSON.stringify(nodeId)){
+            sendUpdateProfileFriendGraphRequest(profileDataId,{id:nodeId,position:node['position']});
+        }
+    });
+   
 }

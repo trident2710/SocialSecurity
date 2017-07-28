@@ -105,15 +105,29 @@ public class ProfileDataViewController {
     
     @RequestMapping(value = "remove/{id}", method = RequestMethod.GET)
     String removeProfileData(@PathVariable("id") long id){
-        ProfileData data = pdr.findOne(id);
-        if(data!=null){
-            if(data.getFacebookProfile()!=null)
-            fpr.delete(data.getFacebookProfile());
-            pdr.delete(data);
-        }
-
+        pdr.detachDelete(id);
         return "redirect:profiledata/all";
     }
     
+    
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public String getFacebookProfilePage(@PathVariable("id") Long id,Model model){
+        Map<String,String> s_attrs = pdm.getAttributesForFacebookProfileFromPerspective(id, CrawlResultPerspective.STRANGER);
+        if(s_attrs!=null&&!s_attrs.isEmpty()){
+            model.addAttribute("s_attrs",s_attrs);
+            model.addAttribute("attrs",s_attrs.keySet());
+        }
+        Map<String,String> f_attrs = pdm.getAttributesForFacebookProfileFromPerspective(id, CrawlResultPerspective.FRIEND);
+        if(f_attrs!=null&&!f_attrs.isEmpty()){
+            model.addAttribute("f_attrs",f_attrs);
+            model.addAttribute("attrs",f_attrs.keySet());
+        }
+        Map<String,String> ff_attrs = pdm.getAttributesForFacebookProfileFromPerspective(id, CrawlResultPerspective.FRIEND_OF_FRIEND);
+        if(ff_attrs!=null&&!ff_attrs.isEmpty()){
+            model.addAttribute("ff_attrs",ff_attrs);
+            model.addAttribute("attrs",ff_attrs.keySet());
+        }
+        return "profiledata/profiledata_info";
+    }
     
 }

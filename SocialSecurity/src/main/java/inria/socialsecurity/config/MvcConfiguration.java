@@ -5,10 +5,15 @@
  */
 package inria.socialsecurity.config;
 
+import com.google.gson.JsonObject;
+import inria.crawlerv2.engine.CrawlingCallable;
+import inria.crawlerv2.engine.CrawlingInstanceSettings;
+import inria.crawlerv2.engine.account.Account;
 import inria.crawlerv2.engine.account.AccountManager;
 import inria.socialsecurity.constants.CrawlDepth;
 import inria.socialsecurity.converter.FacebookProfileToCytoscapeNotationConverter;
 import inria.socialsecurity.converter.transformer.AttributeMatrixToJsonConverter;
+import inria.socialsecurity.converter.transformer.AttributesParser;
 import inria.socialsecurity.converter.transformer.FacebookDatasetToAttributeMatrixTransformer;
 import inria.socialsecurity.entity.settings.CrawlingSettings;
 import inria.socialsecurity.model.DefaultDataProcessor;
@@ -27,6 +32,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.neo4j.repository.GraphRepositoryImpl;
 import inria.socialsecurity.converter.transformer.DatasetTransformer;
 import inria.socialsecurity.converter.transformer.FacebookDatasetToAttributeVisibilityTransformer;
+import inria.socialsecurity.model.analysis.HarmTreeEvaluator;
+import inria.socialsecurity.model.analysis.ProfileDataAnalyzer;
+import inria.socialsecurity.model.analysis.ProfileDataAnalyzerImpl;
+import inria.socialsecurity.model.profiledata.CrawlingEngineFactory;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.concurrent.Callable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * declaration of the beans representing the model level of web application i.e.
@@ -113,4 +127,35 @@ public class MvcConfiguration {
     public AttributeMatrixToJsonConverter getAttributeMatrixToJsonConverter(){
         return new AttributeMatrixToJsonConverter();
     }
+    
+    @Bean(name ="basic parser")
+    AttributesParser getAttributesParser(){
+        return new AttributesParser();
+    }
+    
+    @Bean
+    HarmTreeEvaluator getHarmTreeEvaluator(){
+        return new HarmTreeEvaluator();
+    }
+    
+    @Bean
+    ProfileDataAnalyzer getProfileDataAnalyzer(){
+        return new ProfileDataAnalyzerImpl();
+    }
+    
+    @Bean
+    CrawlingEngineFactory getCrawlingEngineFactory(){
+        return new CrawlingEngineFactory() {
+            @Override
+            public Callable<JsonObject> createCrawlingCallable(CrawlingInstanceSettings settings, String target, Account account) {
+                try {
+                    return new CrawlingCallable(settings, new URI(target), account);
+                } catch (URISyntaxException ex) {
+                    Logger.getLogger(MvcConfiguration.class.getName()).log(Level.SEVERE, "wrong target", ex);
+                }
+                return null;
+            }
+        };
+    }
+    
 }

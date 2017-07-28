@@ -32,8 +32,8 @@ public interface FacebookProfileRepository extends GraphRepository<FacebookProfi
     @Query("MATCH (k:ProfileData) WHERE id(k)={id}  MATCH k-[:HAS_FB_ACCOUNT]->(p:FacebookProfile) MATCH p-[:HAS_FRIENDS*0..2]-(n:FacebookProfile) RETURN DISTINCT n.fbUrl")
     List<String> getUrlsInFriendshipTreeForFacebookProfile(@Param("id") Long profileDataId);
     
-    @Query("MATCH (n:FacebookProfile) MATCH n-[:HAS_FRIENDS]-(k:FacebookProfile)  WITH DISTINCT n,k WHERE id(n)={id} return DISTINCT id(k)")
-    Set<Long> getFriendIdsForFacebookProfile(@Param("id") Long fbProfileid);
+    @Query("MATCH (n:FacebookProfile) MATCH n-[:HAS_FRIENDS]->(k:FacebookProfile)  WHERE id(n)={id} WITH DISTINCT k return DISTINCT id(k) LIMIT 1000")
+    Set<Integer> getFriendIdsForFacebookProfile(@Param("id") Long fbProfileid);
     
     @Query("MATCH (n:FacebookProfile) WHERE id(n)={id} return n")
     FacebookProfile getOne(@Param("id") Long fbProfileid);

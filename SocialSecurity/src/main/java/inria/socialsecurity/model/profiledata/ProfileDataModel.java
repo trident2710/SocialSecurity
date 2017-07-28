@@ -6,11 +6,8 @@
 package inria.socialsecurity.model.profiledata;
 
 import inria.socialsecurity.constants.CrawlResultPerspective;
-import inria.socialsecurity.entity.attribute.AttributeDefinition;
 import inria.socialsecurity.entity.user.ProfileData;
 import inria.socialsecurity.exception.WrongArgumentException;
-import java.net.URISyntaxException;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
@@ -40,9 +37,10 @@ public interface ProfileDataModel {
      */
     void crawlFacebookData(CrawlingInfo ci);
     
-    
     Map<String,Map<String, String>> getAttributeMatrixForPerspective(CrawlResultPerspective perspective,Long profileDataId);
     
     Map<String,Map<String, String>> getAttributeVisibilityMatrix(Long profileDataId);
+    
+    Map<String,String> getAttributesForFacebookProfileFromPerspective(Long facebookProfileId,CrawlResultPerspective perspective);
     
 }

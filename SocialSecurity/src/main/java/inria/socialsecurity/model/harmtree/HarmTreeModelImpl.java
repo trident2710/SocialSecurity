@@ -71,6 +71,7 @@ public class HarmTreeModelImpl implements HarmTreeModel {
             HarmTreeVertex v = (HarmTreeVertex) element;
             v.setName(properties.getAsJsonObject().get("data").getAsJsonObject().get("name").getAsString());
             v.setDescription(properties.getAsJsonObject().get("data").getAsJsonObject().get("description").getAsString());
+            v.setSeverity(properties.getAsJsonObject().get("data").getAsJsonObject().get("likelihood").getAsDouble());
             htr.save(v);
         }
         if (element instanceof HarmTreeLeaf) {
@@ -84,7 +85,7 @@ public class HarmTreeModelImpl implements HarmTreeModel {
         }
         if (element instanceof HarmTreeLogicalNode) {
             HarmTreeLogicalNode n = (HarmTreeLogicalNode) element;
-            n.setLogicalRequirement(Integer.parseInt(properties.getAsJsonObject().get("data").getAsJsonObject().get("value").getAsString()));
+            n.setLogicalRequirement(properties.getAsJsonObject().get("data").getAsJsonObject().get("value").getAsString());
             htr.save(n);
         }
     }
@@ -109,7 +110,7 @@ public class HarmTreeModelImpl implements HarmTreeModel {
             case 2:
                 HarmTreeLogicalNode htln = new HarmTreeLogicalNode();
                 htln.setDisplayNotation(parent.getDisplayNotation());
-                htln.setLogicalRequirement(Integer.parseInt(properties.getAsJsonObject().get("data").getAsJsonObject().get("value").getAsString()));
+                htln.setLogicalRequirement(properties.getAsJsonObject().get("data").getAsJsonObject().get("value").getAsString());
                 ((HarmTreeNode) parent).addDescendant(htln);
                 htr.save(htln);
                 break;

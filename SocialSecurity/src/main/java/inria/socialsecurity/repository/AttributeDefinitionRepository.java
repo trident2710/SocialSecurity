@@ -7,9 +7,11 @@ package inria.socialsecurity.repository;
 
 import inria.socialsecurity.entity.attribute.AttributeDefinition;
 import inria.socialsecurity.entity.attribute.ComplexAttributeDefinition;
+import inria.socialsecurity.entity.attribute.PrimitiveAttributeDefinition;
 import java.util.List;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.GraphRepository;
+import org.springframework.data.repository.query.Param;
 
 /**
  * interface defining the data accessing repository for the objects of type
@@ -53,4 +55,10 @@ public interface AttributeDefinitionRepository extends GraphRepository<Attribute
      */
     @Query("match (n) where id(n)={0} detach delete n")
     void detachDelete(Long id);
+    
+    @Query("match (n:PrimitiveAttributeDefinition) WHERE n.name = {name} RETURN n")
+    PrimitiveAttributeDefinition findPrimitiveAttributeDefinitionByName(@Param("name") String name);
+    
+    @Query("match (n:ComplexAttributeDefinition) WHERE n.name = {name} RETURN n")
+    ComplexAttributeDefinition findComplexAttributeDefinitionByName(@Param("name") String name);
 }

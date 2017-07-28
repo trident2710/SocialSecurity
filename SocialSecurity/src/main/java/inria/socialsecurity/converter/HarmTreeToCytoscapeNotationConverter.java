@@ -8,6 +8,7 @@ package inria.socialsecurity.converter;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import inria.socialsecurity.constants.LogicalRequirement;
 import inria.socialsecurity.entity.harmtree.HarmTreeElement;
 import inria.socialsecurity.entity.harmtree.HarmTreeLeaf;
 import inria.socialsecurity.entity.harmtree.HarmTreeLogicalNode;
@@ -71,16 +72,7 @@ public class HarmTreeToCytoscapeNotationConverter extends CytoscapeNotationConve
 
     private void saveHarmTreeLogicalNode(HarmTreeLogicalNode htl, JsonObject source) {
         if(htl==null) return;
-        
-        StringBuilder sb = new StringBuilder();
-        if (htl.getLogicalRequirement().equals(HarmTreeLogicalNode.AND)) {
-            sb.append("AND\n");
-        } else if (Objects.equals(htl.getLogicalRequirement(), HarmTreeLogicalNode.OR)) {
-            sb.append("OR\n");
-        } else {
-            sb.append("").append(htl.getLogicalRequirement()).append(" out of ").append(htl.getDescendants().size() + htl.getLeafs().size());
-        }
-        saveHarmTreeNode(htl, source, sb.toString());
+        saveHarmTreeNode(htl, source, htl.getLogicalRequirement());
     }
 
     private void saveHarmTreeLeaf(HarmTreeLeaf htl, JsonObject source) {

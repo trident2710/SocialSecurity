@@ -3,20 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package inria.socialsecurity.constants;
+package inria.socialsecurity.model.profiledata;
 
 /**
- * Representation of the thret types.
  *
- * @see Documentation p.19
  * @author adychka
  */
-public enum ThreatType {
-    FE1,
-    FE2;
+public class SimpleProfileDataModel {
     
-    public String getValue() {
-        return name();
-    }
-
 }

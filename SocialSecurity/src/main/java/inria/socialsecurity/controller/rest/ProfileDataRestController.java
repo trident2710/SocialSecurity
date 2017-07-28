@@ -5,6 +5,7 @@
  */
 package inria.socialsecurity.controller.rest;
 
+import com.google.gson.JsonParser;
 import inria.socialsecurity.converter.FacebookProfileToCytoscapeNotationConverter;
 import inria.socialsecurity.exception.WrongArgumentException;
 import inria.socialsecurity.model.profiledata.ProfileDataModel;
@@ -36,10 +37,12 @@ public class ProfileDataRestController {
     
     @RequestMapping(value = "friendgraph/{id}", method = RequestMethod.GET)
     String getFriendGraphForProfileId(@PathVariable("id") Long profileId){
-        System.out.println("here!!!");
-        String res =  fptcnc.convertFrom(pdr.findOne(profileId).getFacebookAccount()).toString();
-        System.out.println("data "+res);
-        return res;
+        return fptcnc.convertFrom(pdr.findOne(profileId).getFacebookAccount()).toString();
+    }
+    
+    @RequestMapping(value = "friendgraph/{id}", method = RequestMethod.POST)
+    void getFriendGraphForProfileId(@PathVariable("id") Long profileId,@RequestBody String body){
+        fptcnc.convertTo(new JsonParser().parse(body).getAsJsonObject());
     }
     
 }

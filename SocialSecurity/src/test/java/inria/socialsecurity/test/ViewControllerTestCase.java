@@ -30,13 +30,13 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.mockito.MockitoAnnotations;
-
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.*;
 import static inria.socialsecurity.constants.param.AttributeDefinition.*;
 import static inria.socialsecurity.constants.param.HarmTree.*;
-import static org.mockito.Mockito.*;
+
 /**
  *
  * @author adychka
