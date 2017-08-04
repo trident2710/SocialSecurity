@@ -6,6 +6,7 @@
 package inria.socialsecurity.config;
 
 import com.google.gson.JsonObject;
+import inria.crawlerv2.engine.AttributeVisibilityCrawlerCallable;
 import inria.crawlerv2.engine.CrawlingCallable;
 import inria.crawlerv2.engine.CrawlingInstanceSettings;
 import inria.crawlerv2.engine.account.Account;
@@ -29,10 +30,13 @@ import inria.socialsecurity.model.profiledata.ProfileDataModel;
 import inria.socialsecurity.repository.CrawlingSettingsRepository;
 import org.neo4j.ogm.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.neo4j.repository.GraphRepositoryImpl;
 import inria.socialsecurity.converter.transformer.DatasetTransformer;
 import inria.socialsecurity.converter.transformer.FacebookDatasetToAttributeVisibilityTransformer;
-import inria.socialsecurity.model.analysis.HarmTreeEvaluator;
+import inria.socialsecurity.converter.transformer.FacebookDatasetToTargetViewAttributeVisibilityTransformer;
+import inria.socialsecurity.converter.transformer.FacebookTrueVisibilityToAttributeMatrixTransformer;
+import inria.socialsecurity.converter.transformer.HarmTreeToJsonConverter;
+import inria.socialsecurity.converter.transformer.MapToJsonConverter;
+import inria.socialsecurity.model.analysis.HarmTreeValidator;
 import inria.socialsecurity.model.analysis.ProfileDataAnalyzer;
 import inria.socialsecurity.model.analysis.ProfileDataAnalyzerImpl;
 import inria.socialsecurity.model.profiledata.CrawlingEngineFactory;
@@ -41,6 +45,10 @@ import java.net.URISyntaxException;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.springframework.core.task.TaskExecutor;
+import org.springframework.scheduling.TaskScheduler;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
 /**
  * declaration of the beans representing the model level of web application i.e.
@@ -108,9 +116,13 @@ public class MvcConfiguration {
      * @see CrawlingEngine
      * @return 
      */
-    @Bean
     public FacebookDatasetToAttributeVisibilityTransformer getVisibilityTransformer(){
         return new FacebookDatasetToAttributeVisibilityTransformer();
+    }
+    
+    @Bean(name ="target respecting visibility")
+    public FacebookDatasetToTargetViewAttributeVisibilityTransformer getTargetRespectiveVisibilityTransformer(){
+        return new FacebookDatasetToTargetViewAttributeVisibilityTransformer();
     }
     
     @Bean
@@ -134,8 +146,13 @@ public class MvcConfiguration {
     }
     
     @Bean
-    HarmTreeEvaluator getHarmTreeEvaluator(){
-        return new HarmTreeEvaluator();
+    HarmTreeValidator getHarmTreeValidator(){
+        return new HarmTreeValidator();
+    }
+    
+    @Bean
+    HarmTreeToJsonConverter getHarmTreeToJSonConverter(){
+        return new HarmTreeToJsonConverter();
     }
     
     @Bean
@@ -155,7 +172,45 @@ public class MvcConfiguration {
                 }
                 return null;
             }
+
+            @Override
+            public Callable<JsonObject> createCrawlingVisibilityCallable(CrawlingInstanceSettings settings, String target, Account account) {
+                try {
+                    return new AttributeVisibilityCrawlerCallable(account, new URI(target), settings);
+                } catch (URISyntaxException ex) {
+                    Logger.getLogger(MvcConfiguration.class.getName()).log(Level.SEVERE, "wrong target", ex);
+                }
+                return null;
+            }
         };
     }
+    
+    @Bean
+    public ThreadPoolTaskExecutor taskExecutor() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(1);
+        executor.setMaxPoolSize(1);
+        executor.setQueueCapacity(10000);
+        return executor;
+    }
+
+    @Bean
+    public ThreadPoolTaskScheduler taskScheduler() {
+        ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
+        scheduler.setPoolSize(10000);
+        return scheduler;
+    }
+    
+    @Bean
+    public FacebookTrueVisibilityToAttributeMatrixTransformer getFacebookTrueVisibilityToAttributeMatrixTransformer(){
+        return new FacebookTrueVisibilityToAttributeMatrixTransformer();
+    }
+    
+    @Bean
+    public MapToJsonConverter getMapToJsonConverter(){
+        return new MapToJsonConverter();
+    }
+
+    
     
 }

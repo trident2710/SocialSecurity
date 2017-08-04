@@ -39,4 +39,7 @@ public interface HarmTreeRepository extends GraphRepository<HarmTreeElement> {
     @Transactional
     @Query("match (n) where id(n)={id} detach delete n")
     void detachDelete(@Param("id") Long id);
+    
+    
+    
 }

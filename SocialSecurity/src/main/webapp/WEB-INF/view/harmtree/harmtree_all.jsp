@@ -22,7 +22,7 @@
   <body>
      
     <%@include file="../basic/header.jsp" %>
-
+    <script>var ctx = "${pageContext.request.contextPath}"</script>
     <div id="container">
         <div id="primitive_attr" class="panel panel-default">
             <div class="panel-heading">Harm trees</div>

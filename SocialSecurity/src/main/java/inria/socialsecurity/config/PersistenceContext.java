@@ -7,6 +7,7 @@ package inria.socialsecurity.config;
 
 import org.neo4j.ogm.session.Session;
 import org.neo4j.ogm.session.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -33,11 +34,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableNeo4jRepositories("inria.socialsecurity.repository") //the package which contains the repository interfaces for accessing data
 public class PersistenceContext extends Neo4jConfiguration {
 
-    private static final int NEO4J_PORT = 7474; // db connection port
-    private static final String SERVER = "localhost"; //db connection ip address
-
-    private static final String LOGIN = "neo4j"; //db connection login
-    private static final String PASSWORD = "gtheyjdfhfnm"; //db connection password
+    @Autowired
+    SettingsLoader settingsLoader;
+    
     private static final String ENTITY_PACKAGE = "inria.socialsecurity.entity"; //the package containing db entinty classes
 
     public PersistenceContext() {
@@ -47,12 +46,17 @@ public class PersistenceContext extends Neo4jConfiguration {
     public SessionFactory getSessionFactory() {
         return new SessionFactory(ENTITY_PACKAGE);
     }
+    
+//    @Bean
+//    public Neo4jOperations getNeo4jTemplate() throws Exception {
+//        return new Neo4jTemplate(getSession());
+//    }
 
 
     @Bean
     @Override
     public Neo4jServer neo4jServer() {
-        return new RemoteServer("http://" + SERVER + ":" + NEO4J_PORT, LOGIN, PASSWORD);
+        return new RemoteServer(settingsLoader.getNeo4jUrl()+ ":" + settingsLoader.getNeo4jPort(), settingsLoader.getNeo4jLogin(), settingsLoader.getNeo4jPassword());
     }
 
     /**

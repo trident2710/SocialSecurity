@@ -10,16 +10,17 @@ import inria.socialsecurity.constants.ThreatType;
 import inria.socialsecurity.entity.attribute.AttributeDefinition;
 import inria.socialsecurity.entity.harmtree.HarmTreeVertex;
 import inria.socialsecurity.entity.user.ProfileData;
-import inria.socialsecurity.model.analysis.HarmTreeEvaluator.HarmTreeNotValidException;
+import inria.socialsecurity.model.analysis.HarmTreeValidator.HarmTreeNotValidException;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  *
  * @author adychka
  */
 public interface ProfileDataAnalyzer {
-    List<Double> calculateLikelihoodForHarmTree(HarmTreeVertex vertex,ProfileData data) throws HarmTreeNotValidException;
+    Set<Double> calculateLikelihoodForHarmTree(HarmTreeVertex vertex,ProfileData data) throws HarmTreeNotValidException;
     
     Map.Entry<String,Double> calculateAccuracyFor(ProfileData data, RiskSource source, ThreatType type, AttributeDefinition definition);
     

@@ -17,6 +17,7 @@
         <link href="${pageContext.request.contextPath}/resources/css/attribute_add.css" rel="stylesheet">
     </head>
     <body>
+        <script>var ctx = "${pageContext.request.contextPath}"</script>
         <%@include file="../basic/header.jsp" %>
         <div class='add_attr_form panel panel-default'>
              <div class="panel panel-heading">
@@ -35,11 +36,22 @@
                      <br>
                      <label for="completed" data-toggle="tooltip" data-placement="top" >Is completed:</label>
                      <input type="text" name='completed' id="completed" class="form-control" value="${data.completed}" readonly/>
-
-                     <c:if test = "${data.completed == true}">
+                     
+                     <br>
+                     <label for="completed_time_es" data-toggle="tooltip" data-placement="top" >Estimate complete time :</label>
+                     <input type="text" name='completed_time_es' id="completed_time_es" class="form-control" value="${data.getEstimateFinishTimeDate()}" readonly/>
+                    
+                    <c:if test = "${data.completed == true}">
+                        <br>
+                        <label for="completed_time_ex" data-toggle="tooltip" data-placement="top" >Exact complete time :</label>
+                        <input type="text" name='completed_time_ex' id="completed_time_ex" class="form-control" value="${data.getRealFinishTimeDate()}" readonly/>
+                        
+                        
+                        <a id=chng_btn type="button" class="btn btn-danger" href="${pageContext.request.contextPath}/profiledata/remove/${data.id}">Delete</a>
                         <a style="margin: 10px" id=chng_btn type="button" class="btn btn-primary" href="${pageContext.request.contextPath}/profiledata/fgraph/${data.id}">View friendship graph</a>
                         <a style="margin: 10px" id=chng_btn type="button" class="btn btn-primary" href="${pageContext.request.contextPath}/profiledata/amatrix/${data.id}">View attribute matrix</a>
                         <a style="margin: 10px" id=chng_btn type="button" class="btn btn-primary" href="${pageContext.request.contextPath}/profiledata/avmatrix/${data.id}">View attribute visibility matrix</a>
+                        <a style="margin: 10px" id=chng_btn type="button" class="btn btn-primary" href="${pageContext.request.contextPath}/profiledata/analysis/${data.id}">View analysis report</a>
                      </c:if>
                  </div>
              </div>

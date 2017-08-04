@@ -28,4 +28,11 @@ public enum CrawlResultPerspective{
     public static CrawlResultPerspective getWeakerFor(CrawlResultPerspective perspective){
         return perspective.ordinal()==CrawlResultPerspective.values().length-1?perspective:CrawlResultPerspective.values()[perspective.ordinal()+1];
     }
+    
+    public static CrawlResultPerspective getForRiskSource(RiskSource s){
+        for(CrawlResultPerspective p:CrawlResultPerspective.values()){
+            if(p.getRiskSource()==s) return p;
+        }
+        return null;
+    }
 }

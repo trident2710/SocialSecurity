@@ -17,7 +17,7 @@
     
   </head>
   <body>
-     
+    <script>var ctx = "${pageContext.request.contextPath}"</script> 
     <%@include file="header.jsp" %>
     <div class="jumbotron">
         <h1>About this app</h1>

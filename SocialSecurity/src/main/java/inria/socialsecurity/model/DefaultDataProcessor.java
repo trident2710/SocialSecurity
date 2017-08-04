@@ -5,27 +5,57 @@
  */
 package inria.socialsecurity.model;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.stream.JsonReader;
 import inria.socialsecurity.constants.BasicPrimitiveAttributes;
 import inria.socialsecurity.constants.DefaultDataSourceName;
+import inria.socialsecurity.constants.LogicalRequirement;
+import inria.socialsecurity.converter.transformer.HarmTreeToJsonConverter;
 import inria.socialsecurity.entity.attribute.AttributeDefinition;
 import inria.socialsecurity.entity.attribute.ComplexAttributeDefinition;
 import inria.socialsecurity.entity.attribute.PrimitiveAttributeDefinition;
 import inria.socialsecurity.entity.attribute.Synonim;
+import inria.socialsecurity.entity.harmtree.HarmTreeLogicalNode;
+import inria.socialsecurity.entity.harmtree.HarmTreeVertex;
 import inria.socialsecurity.repository.AttributeDefinitionRepository;
+import inria.socialsecurity.repository.HarmTreeRepository;
 import inria.socialsecurity.repository.SynonimRepository;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * class filling the database with basic entities
  * @author adychka
  */
-public final class DefaultDataProcessor {
-
+public class DefaultDataProcessor {
+    
     @Autowired
     private AttributeDefinitionRepository adr;
     
     @Autowired
+    private HarmTreeRepository htr;
+    
+    @Autowired
     private SynonimRepository sr;
+    
+    @Autowired
+    HarmTreeToJsonConverter httjc;
+    
+    @Value(value = "classpath:HT.json")
+    private Resource ht;
     
     public void initAttributeDefinitions(){
         createBasicPrimitiveAttributes();
@@ -37,6 +67,13 @@ public final class DefaultDataProcessor {
             adr.detachDelete(a.getId());
         }
     }
+    
+    
+    public void deleteAllHarmTrees(){
+       htr.deleteAll();
+    }
+    
+    
      
     private void createBasicPrimitiveAttributes(){
         for(BasicPrimitiveAttributes n:BasicPrimitiveAttributes.values()){
@@ -44,6 +81,7 @@ public final class DefaultDataProcessor {
             pad.setName(n.getValue());
             pad.setDisplayName(n.getDisplayName());
             pad.setIsUnique(n.isUnique());
+            pad.setIsList(n.isList());
             pad = adr.save(pad);
             createSynonimsForAttribute(pad);
         }
@@ -71,5 +109,20 @@ public final class DefaultDataProcessor {
             pad.getSynonims().add(s);    
         }
         adr.save(pad);
+    }
+    
+    @Transactional
+    public void createDefaultHarmTrees(){
+        Gson gson = new Gson();
+        JsonArray object;
+        object = gson.fromJson(new InputStreamReader(getClass().getClassLoader().getResourceAsStream("HT.json")), JsonArray.class);
+        System.out.println(object.toString());
+        for(JsonElement e:object){
+            HarmTreeVertex vertex = httjc.convertTo(e.getAsJsonObject());
+            htr.save(vertex);
+        }
+        
+        
+        
     }
 }

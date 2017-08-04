@@ -5,7 +5,9 @@
  */
 package inria.socialsecurity.entity.user;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -37,10 +39,10 @@ public class ProfileData {
     String requestUrl;
     
     @Property
-    Long estimateTimeInMinutes;
+    Long estimateFinishTime;
     
     @Property
-    Long realTimeInMinutes;
+    Long realFinishTime;
     
     @Property
     Integer depth;
@@ -53,10 +55,14 @@ public class ProfileData {
     
     String visibilityMatrixJsonString;
     
+    String visibilityRespectTargetMatrixJsonString;
+    
     @Relationship(type = "HAS_ATTRIBUTE_MATRIX", direction = "OUTGOING")
     List<JsonStoringEntity> attributeMatrix;
+      
+    String attributeVisibilityJsonString;
     
-    String likelihoodCalculationJsonString;
+    String riskSourceForAttributesJsonString;
 
     public FacebookProfile getFacebookProfile() {
         return facebookAccount;
@@ -94,22 +100,34 @@ public class ProfileData {
         this.requestUrl = requestUrl;
     }
 
-    public Long getEstimateTimeInMinutes() {
-        return estimateTimeInMinutes;
+    public Long getEstimateFinishTime() {
+        return estimateFinishTime;
     }
 
-    public void setEstimateTimeInMinutes(Long estimateTimeInMinutes) {
-        this.estimateTimeInMinutes = estimateTimeInMinutes;
+    public void setEstimateFinishTime(Long estimateFinishTime) {
+        this.estimateFinishTime = estimateFinishTime;
     }
 
-    public Long getRealTimeInMinutes() {
-        return realTimeInMinutes;
+    public Long getRealFinishTime() {
+        return realFinishTime;
     }
 
-    public void setRealTimeInMinutes(Long realTimeInMinutes) {
-        this.realTimeInMinutes = realTimeInMinutes;
+    public void setRealFinishTime(Long realFinishTime) {
+        this.realFinishTime = realFinishTime;
+    }
+    
+    public String getEstimateFinishTimeDate() {
+        if(estimateFinishTime!=null)
+        return new SimpleDateFormat("MM.dd  HH:mm:ss ").format(new Date(estimateFinishTime));
+        return "-";
     }
 
+    public String getRealFinishTimeDate() {
+        if(realFinishTime!=null)
+        return new SimpleDateFormat("MM.dd  HH:mm:ss ").format(new Date(realFinishTime));
+        return "-";
+    }
+    
     public Integer getDepth() {
         return depth;
     }
@@ -134,6 +152,14 @@ public class ProfileData {
         this.visibilityMatrixJsonString = visibilityMatrixJsonString;
     }
 
+    public String getVisibilityRespectTargetMatrixJsonString() {
+        return visibilityRespectTargetMatrixJsonString;
+    }
+
+    public void setVisibilityRespectTargetMatrixJsonString(String visibilityRespectTargetMatrixJsonString) {
+        this.visibilityRespectTargetMatrixJsonString = visibilityRespectTargetMatrixJsonString;
+    }
+    
     public List<JsonStoringEntity> getAttributeMatrix() {
         if(attributeMatrix==null) attributeMatrix = new ArrayList<>();
         return attributeMatrix;
@@ -143,13 +169,22 @@ public class ProfileData {
         this.attributeMatrix = attributeMatrix;
     }
 
-    public String getLikelihoodCalculationJsonString() {
-        return likelihoodCalculationJsonString;
+    public String getAttributeVisibilityJsonString() {
+        return attributeVisibilityJsonString;
     }
 
-    public void setLikelihoodCalculationJsonString(String likelihoodCalculationJsonString) {
-        this.likelihoodCalculationJsonString = likelihoodCalculationJsonString;
+    public void setAttributeVisibilityJsonString(String attributeVisibilityJsonString) {
+        this.attributeVisibilityJsonString = attributeVisibilityJsonString;
     }
+
+    public String getRiskSourceForAttributesJsonString() {
+        return riskSourceForAttributesJsonString;
+    }
+
+    public void setRiskSourceForAttributesJsonString(String riskSourceForAttributesJsonString) {
+        this.riskSourceForAttributesJsonString = riskSourceForAttributesJsonString;
+    }
+    
     
     @Override
     public boolean equals(Object other) {
@@ -163,7 +198,7 @@ public class ProfileData {
     
     @Override
     public String toString() {
-        return ReflectionToStringBuilder.toString(this);
+        return ReflectionToStringBuilder.toStringExclude(this, "facebookAccount");
     }
 
 }

@@ -18,6 +18,7 @@
     </head>
     <body>
         <%@include file="../basic/header.jsp" %>
+        <script>var ctx = "${pageContext.request.contextPath}"</script>
         <div class='add_attr_form panel panel-default'>
             <div class="panel panel-heading">
                 Collect new facebook dataset 
@@ -26,30 +27,32 @@
                 <form action="${pageContext.request.contextPath}/profiledata/add" method="POST" class="input_fields_wrap" onsubmit="alert('Collecting the data started. It might take some time, up to couple of HOURS')">
                     <input id ='btn_create' type="submit" class="btn btn-success" value="Start collecting">
                     <br>
-                    <br>
-                    <label for="fburl" data-toggle="tooltip" data-placement="top">Facebook page url:</label>
-                    <input type="text" name='fburl' id="fburl" class="form-control"/>
-                    
                     <label for="name" data-toggle="tooltip" data-placement="top" title="Label which will be used to identify collected data. For example, 'Analize of John Smith'">Name:</label>
                     <input type="text" name='name' id="name" class="form-control"/>
                     <br>
+                    <input type="checkbox" name="col_ff" value="true"> Should collect friends of friends (needed for friendship graph but long)<br>
+                    
+                    <label for="fburl" data-toggle="tooltip" data-placement="top">Facebook page url:</label>
+                    <input type="text" name='fburl' id="fburl" class="form-control"/>
+                    <br>
                     <label for="t_login" data-toggle="tooltip" data-placement="top" >T profile login:</label>
-                    <input type="text" name='t_login"' id="t_login" class="form-control"/>
+                    <input type="text" name='t_login' id="t_login" class="form-control"/>
                     <br>
                     <label for="t_pass" data-toggle="tooltip" data-placement="top" >T profile password:</label>
-                    <input type="text" name='t_pass"' id="t_pass" class="form-control"/>
+                    <input type="password" name='t_pass' id="t_pass" class="form-control"/>
                     <br>
                     <label for="t_prime_login" data-toggle="tooltip" data-placement="top" >T' profile login:</label>
-                    <input type="text" name='t_prime_login"' id="t_prime_login" class="form-control"/>
+                    <input type="text" name='t_prime_login' id="t_prime_login" class="form-control"/>
                     <br>
                     <label for="t_prime_pass" data-toggle="tooltip" data-placement="top" >T' profile password:</label>
-                    <input type="text" name='t_prime_pass"' id="t_prime_pass" class="form-control"/>
+                    <input type="password" name='t_prime_pass' id="t_prime_pass" class="form-control"/>
                     <br>
                     <label for="t_sec_login" data-toggle="tooltip" data-placement="top" >T'' profile login:</label>
-                    <input type="text" name='t_sec_login"' id="t_sec_login" class="form-control"/>
+                    <input type="text" name='t_sec_login' id="t_sec_login" class="form-control"/>
                     <br>
                     <label for="t_sec_pass" data-toggle="tooltip" data-placement="top" >T'' profile password:</label>
-                    <input type="text" name='t_sec_pass"' id="t_sec_pass" class="form-control"/>
+                    <input type="password" name='t_sec_pass' id="t_sec_pass" class="form-control"/>
+                    
                 </form>
             </div>
         </div>

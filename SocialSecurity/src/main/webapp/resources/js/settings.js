@@ -8,7 +8,21 @@
 function resetDefaultAttributeDefinitions(url){
     if(confirm("This action will restore default attribute definitions and destroy existing. This will also affect harmtrees. Are you sure?")){
         sendRequest(url,'DELETE');
-        alert("default attribute definitions restored");
+        alert("default attribute definitions will be restored");
+    }
+}
+
+function resetDefaultHarmTrees(url){
+    if(confirm("This action will restore default harm trees and destroy existing. Are you sure?")){
+        sendRequest(url,'DELETE');
+        alert("default harm trees will be restored");
+    }
+}
+
+function deleteData(url){
+    if(confirm("This action will destroy EVERYTHING in database and restore default parameters. Are you sure?")){
+        sendRequest(url,'DELETE');
+        alert("delete all data will be performed");
     }
 }
 

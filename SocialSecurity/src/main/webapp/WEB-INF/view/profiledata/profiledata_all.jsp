@@ -18,6 +18,7 @@
     </head>
     <body>
         <%@include file="../basic/header.jsp" %>
+        <script>var ctx = "${pageContext.request.contextPath}"</script>
         <div id="primitive_attr" class="panel panel-default">
             <div class="panel-heading">Profile data</div>
                 <div  class="panel-body attr-container">
@@ -25,7 +26,7 @@
                         <div id="complex_box" class="panel panel-default">
                             <div class="panel-body">
                               <c:out value="${d.name}"/> 
-                              <a id=chng_btn type="button" class="btn btn-danger" href="${pageContext.request.contextPath}/profiledata/remove/${d.id}">Remove</button>
+                              
                               <a id=chng_btn type="button" class="btn btn-primary" href="${pageContext.request.contextPath}/profiledata/view/${d.id}">View</a>
                             </div>
                         </div>

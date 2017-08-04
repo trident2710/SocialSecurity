@@ -15,24 +15,26 @@ package inria.socialsecurity.constants;
  * @author adychka
  */
 public enum BasicPrimitiveAttributes {
-    FIRST_NAME(true),
-    LAST_NAME(true),
-    BIRTHDAY(false),
-    GENDER(false),
-    GENDER_INTERESTS(false),
-    POLITICAL_VIEW(false),
-    RELIGIOUS_VIEW(false),
-    LANGUAGES(false),
-    PHONES(true),
-    ADDRESS(false),
-    EMAIL_ADDRESS(true),
-    WORK_IDS(false),
-    EDUCATION_IDS(false);
+    FIRST_NAME(true,false),
+    LAST_NAME(true,false),
+    BIRTHDAY(false,false),
+    GENDER(false,false),
+    GENDER_INTERESTS(false,false),
+    POLITICAL_VIEW(false,false),
+    RELIGIOUS_VIEW(false,false),
+    LANGUAGES(false,true),
+    PHONES(true,true),
+    ADDRESS(false,false),
+    EMAIL_ADDRESS(true,false),
+    WORK_IDS(false,true),
+    EDUCATION_IDS(false,true);
 
     private final boolean unique;
+    private final boolean list;
     
-    private BasicPrimitiveAttributes(boolean isUnique) {
+    private BasicPrimitiveAttributes(boolean isUnique,boolean isList) {
         this.unique = isUnique;
+        this.list = isList;
     }
 
     public String getValue() {
@@ -45,6 +47,10 @@ public enum BasicPrimitiveAttributes {
 
     public boolean isUnique() {
         return unique;
+    }
+
+    public boolean isList() {
+        return list;
     }
     
 }

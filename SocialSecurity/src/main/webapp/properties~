@@ -1,0 +1,8 @@
+{
+    "geckodriver_path":"/users/adychka/Documents/SocialSecurity/geckodriver",
+    "phantom_path":"/users/adychka/Documents/SocialSecurity/phantomjs",
+    "neo4j_login":"neo4j",
+    "neo4j_pass":"gtheyjdfhfnm",
+    "neo4j_port":"7474",
+    "neo4j_url":"http://localhost", 
+}

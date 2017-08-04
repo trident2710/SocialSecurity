@@ -16,13 +16,15 @@ import org.apache.commons.lang.builder.ReflectionToStringBuilder;
  * helper class contains data parsed from create new facebook data post request
  * @author adychka
  */
-public final class CrawlingInfo {
+public class CrawlingInfo {
     private ProfileData profileData;
     private Account[] accounts;
+    private boolean shouldCollectFF;
 
-    public CrawlingInfo(ProfileData pd, Account[] accounts) {
+    public CrawlingInfo(ProfileData pd, Account[] accounts,boolean shouldCollectFF) {
         this.profileData = pd;
         this.accounts = accounts;
+        this.shouldCollectFF = shouldCollectFF;
     }
 
     public Account[] getAccounts() {
@@ -40,5 +42,15 @@ public final class CrawlingInfo {
     public void setProfileData(ProfileData profileData) {
         this.profileData = profileData;
     }
+
+    public boolean isShouldCollectFF() {
+        return shouldCollectFF;
+    }
+
+    public void setShouldCollectFF(boolean shouldCollectFF) {
+        this.shouldCollectFF = shouldCollectFF;
+    }
+    
+    
     
 }

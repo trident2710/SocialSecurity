@@ -21,6 +21,7 @@ public class FacebookDatasetToAttributeVisibilityTransformer extends AttributesP
     public Map<String,Map<String,String>> parsefromSourceSet(Set<Map<String,JsonObject>> sourceSet) {
         Map<String,Map<String,String>> result = new HashMap<>();
         sourceSet.forEach((attrPerspectives) -> { 
+            if(attrPerspectives.entrySet().iterator().hasNext())
             result.put(attrPerspectives.entrySet().iterator().next().getValue().get("id").getAsString(), parseFromSource(attrPerspectives));
         });
         return result;

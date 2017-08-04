@@ -18,7 +18,24 @@
         <link href="${pageContext.request.contextPath}/resources/css/profiledata.css" rel="stylesheet">
     </head>
     <body class="container-fullwidth">
+        <script>var ctx = "${pageContext.request.contextPath}"</script>
         <div style="margin:20px">
+            <c:if test = "${self != null}">
+                <h2>Attributes of target:</h2>
+                <table class="table table-bordered table-hover">
+                    <tr>
+                    <c:forEach var="attr" items="${self.entrySet()}">
+                        <th>${attr.getKey()}</th>
+                    </c:forEach>   
+                    </tr>
+
+                    <tr>
+                    <c:forEach var="attr" items="${self.entrySet()}">
+                        <td>${attr.getValue().get('value').toString()} visibility:${attr.getValue().get('visibility').getAsString()}</td>
+                    </c:forEach>  
+                    </tr>   
+                </table>
+            </c:if>
             <c:if test = "${stranger_perspective.isEmpty() == false}">
                 <h2>Attributes from stranger perspective:</h2>
                 <table class="table table-bordered table-hover">
@@ -31,7 +48,7 @@
 
                     <c:forEach var="profile" items="${stranger_perspective}">
                         <tr>
-                            <td>${profile.key}</td>
+                            <td><a href="${pageContext.request.contextPath}/profiledata/fbprofile?pdid=${pdid}&id=${profile.key}">${profile.key}</a></td>
                         <c:forEach var="attrs" items="${profile.value}">
                             <td>${attrs.value}</td>
                         </c:forEach>  
@@ -51,7 +68,7 @@
 
                     <c:forEach var="profile" items="${friend_perspective}">
                         <tr>
-                            <td>${profile.key}</td>
+                            <td><a href="${pageContext.request.contextPath}/profiledata/fbprofile?pdid=${pdid}&id=${profile.key}">${profile.key}</a></td>
                         <c:forEach var="attrs" items="${profile.value}">
                             <td>${attrs.value}</td>
                         </c:forEach>  
@@ -71,7 +88,7 @@
 
                     <c:forEach var="profile" items="${ffriend_perspective}">
                         <tr>
-                            <td>${profile.key}</td>
+                            <td><a href="${pageContext.request.contextPath}/profiledata/fbprofile?pdid=${pdid}&id=${profile.key}">${profile.key}</a></td>
                         <c:forEach var="attrs" items="${profile.value}">
                             <td>${attrs.value}</td>
                         </c:forEach>  

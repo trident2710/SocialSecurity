@@ -14,9 +14,9 @@ function deleteEntity(id) {
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
-        window.location.replace("harmtrees/all");
+        window.location.replace(ctx+"/harmtrees/all");
     }
   };
-  xhttp.open("DELETE", "/rest/harmtrees/"+id, true);
+  xhttp.open("DELETE", ctx+"/rest/harmtrees/"+id, true);
   xhttp.send();
 }

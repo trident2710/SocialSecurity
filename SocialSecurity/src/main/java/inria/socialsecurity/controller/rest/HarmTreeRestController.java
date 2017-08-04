@@ -11,10 +11,12 @@ import com.google.gson.JsonParser;
 import inria.socialsecurity.constants.LogicalRequirement;
 import inria.socialsecurity.constants.RiskSource;
 import inria.socialsecurity.constants.ThreatType;
+import inria.socialsecurity.converter.transformer.HarmTreeToJsonConverter;
 import inria.socialsecurity.entity.harmtree.HarmTreeElement;
 import inria.socialsecurity.entity.harmtree.HarmTreeVertex;
 import inria.socialsecurity.exception.ObjectNotFoundException;
 import inria.socialsecurity.exception.WrongArgumentException;
+import inria.socialsecurity.model.analysis.HarmTreeValidator;
 import inria.socialsecurity.model.harmtree.HarmTreeModel;
 import inria.socialsecurity.repository.HarmTreeRepository;
 import java.util.List;
@@ -45,6 +47,12 @@ public class HarmTreeRestController {
 
     @Autowired
     HarmTreeModel harmTreeModel; //bean - model layer for harm tree elements crud operations etc.
+    
+    @Autowired
+    HarmTreeValidator htv; 
+    
+    @Autowired
+    HarmTreeToJsonConverter httjc;
 
     /**
      * get the possible values for the risk source and threat type
@@ -199,6 +207,21 @@ public class HarmTreeRestController {
             throw new WrongArgumentException();
         }
         harmTreeModel.deleteHarmTree(idValue);
+    }
+    
+    @RequestMapping(value = "validate/{id}", method = RequestMethod.GET)
+    public String validateHarmTree(@PathVariable Long id){
+        try{
+            htv.validateHarmTree(id);
+            return "Harm tree is valid";
+        } catch(HarmTreeValidator.HarmTreeNotValidException exception){
+            return "Harm tree is not valid. "+exception.getMessage();
+        }
+    }
+    
+    @RequestMapping(value = "import/{id}", method = RequestMethod.GET)
+    public String importHarmTree(@PathVariable Long id){
+        return httjc.convertFrom((HarmTreeVertex)htr.findOne(id)).toString();
     }
 
 }

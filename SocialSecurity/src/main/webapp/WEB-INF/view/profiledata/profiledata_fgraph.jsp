@@ -19,7 +19,7 @@
     </head>
     <body onload="init(${id});">
         <%@include file="../basic/header.jsp" %>
-        
+        <script>var ctx = "${pageContext.request.contextPath}"</script>
         <div id='workspace'>
              <div id="cy">  
                 

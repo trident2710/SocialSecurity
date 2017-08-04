@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  *
  * @author adychka
  */
-public class HarmTreeEvaluator {
+public class HarmTreeValidator {
     @Autowired
     HarmTreeRepository htr;
     
@@ -57,7 +57,7 @@ public class HarmTreeEvaluator {
                     validateLogicalNodes(n);
         }   
     }
-    
+
     public static class HarmTreeNotValidException extends Exception{
         public HarmTreeNotValidException(String msg){
             super(msg);

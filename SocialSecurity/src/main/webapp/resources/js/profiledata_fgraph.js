@@ -57,7 +57,7 @@ function init(id){
 
         $cy.json($friendGraph);
         $cy.on('click', 'node', function(evt){
-            window.open("/profiledata/"+this.id(), '_blank');
+            window.open(ctx+"/profiledata/"+this.id(), '_blank');
             //window.location="/profiledata/"+this.id();
         });
         $cy.on('mouseup','node',function(evt){
@@ -72,7 +72,7 @@ function getData(path,callback){
         error: callback,
         processData: false,
         type: 'GET',
-        url: path
+        url: ctx+path
     });
 }
 
@@ -85,7 +85,7 @@ function sendUpdateProfileFriendGraphRequest(profileDataId,data){
         dataType: 'json',
         processData: false,
         type: 'POST',
-        url: '/rest/profiledata/friendgraph/'+profileDataId
+        url: ctx+'/rest/profiledata/friendgraph/'+profileDataId
     });
 }
 

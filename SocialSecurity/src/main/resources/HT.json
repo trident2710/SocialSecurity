@@ -1,0 +1,451 @@
+[{
+	"type": "HarmTreeVertex",
+	"name": "HT1",
+        "severity":0.75,
+	"description": "potential employer assesses profile for job suitability",
+	"descendants": [{
+		"type": "HarmTreeLogicalNode",
+		"logicalRequirement": "or",
+		"loDescendants": [{
+			"type": "HarmTreeLogicalNode",
+			"logicalRequirement": "k out of n",
+			"loDescendants": [{
+				"type": "HarmTreeLogicalNode",
+				"logicalRequirement": "or",
+				"loDescendants": [],
+				"leDescendants": [{
+					"type": "HarmTreeLeaf",
+					"attributeDefinition": "gender_interests",
+					"riskSource": "A4",
+					"threatType": "FE2",
+					"displayNotation": "{\"x\":1264,\"y\":611}"
+				}, {
+					"type": "HarmTreeLeaf",
+					"attributeDefinition": "gender_interests",
+					"riskSource": "A4",
+					"threatType": "FE1",
+					"displayNotation": "{\"x\":1163,\"y\":553}"
+				}],
+				"displayNotation": "{\"x\":1139,\"y\":452}"
+			}, {
+				"type": "HarmTreeLogicalNode",
+				"logicalRequirement": "or",
+				"loDescendants": [],
+				"leDescendants": [{
+					"type": "HarmTreeLeaf",
+					"attributeDefinition": "religious_view",
+					"riskSource": "A4",
+					"threatType": "FE2",
+					"displayNotation": "{\"x\":1060,\"y\":589}"
+				}, {
+					"type": "HarmTreeLeaf",
+					"attributeDefinition": "religious_view",
+					"riskSource": "A4",
+					"threatType": "FE1",
+					"displayNotation": "{\"x\":974,\"y\":537}"
+				}],
+				"displayNotation": "{\"x\":959,\"y\":442}"
+			}, {
+				"type": "HarmTreeLogicalNode",
+				"logicalRequirement": "or",
+				"loDescendants": [],
+				"leDescendants": [{
+					"type": "HarmTreeLeaf",
+					"attributeDefinition": "political_view",
+					"riskSource": "A4",
+					"threatType": "FE2",
+					"displayNotation": "{\"x\":877,\"y\":590}"
+				}, {
+					"type": "HarmTreeLeaf",
+					"attributeDefinition": "political_view",
+					"riskSource": "A4",
+					"threatType": "FE1",
+					"displayNotation": "{\"x\":800,\"y\":533}"
+				}],
+				"displayNotation": "{\"x\":803,\"y\":436}"
+			}],
+			"leDescendants": [],
+			"displayNotation": "{\"x\":737,\"y\":344}"
+		}, {
+			"type": "HarmTreeLogicalNode",
+			"logicalRequirement": "k out of n",
+			"loDescendants": [{
+				"type": "HarmTreeLogicalNode",
+				"logicalRequirement": "or",
+				"loDescendants": [],
+				"leDescendants": [{
+					"type": "HarmTreeLeaf",
+					"attributeDefinition": "gender_interests",
+					"riskSource": "A2",
+					"threatType": "FE2",
+					"displayNotation": "{\"x\":715,\"y\":597}"
+				}, {
+					"type": "HarmTreeLeaf",
+					"attributeDefinition": "gender_interests",
+					"riskSource": "A2",
+					"threatType": "FE1",
+					"displayNotation": "{\"x\":623,\"y\":548}"
+				}],
+				"displayNotation": "{\"x\":577,\"y\":428}"
+			}, {
+				"type": "HarmTreeLogicalNode",
+				"logicalRequirement": "or",
+				"loDescendants": [],
+				"leDescendants": [{
+					"type": "HarmTreeLeaf",
+					"attributeDefinition": "religious_view",
+					"riskSource": "A2",
+					"threatType": "FE2",
+					"displayNotation": "{\"x\":533,\"y\":593}"
+				}, {
+					"type": "HarmTreeLeaf",
+					"attributeDefinition": "religious_view",
+					"riskSource": "A2",
+					"threatType": "FE1",
+					"displayNotation": "{\"x\":454,\"y\":542}"
+				}],
+				"displayNotation": "{\"x\":428,\"y\":441}"
+			}, {
+				"type": "HarmTreeLogicalNode",
+				"logicalRequirement": "or",
+				"loDescendants": [],
+				"leDescendants": [{
+					"type": "HarmTreeLeaf",
+					"attributeDefinition": "political_view",
+					"riskSource": "A2",
+					"threatType": "FE2",
+					"displayNotation": "{\"x\":362,\"y\":591}"
+				}, {
+					"type": "HarmTreeLeaf",
+					"attributeDefinition": "political_view",
+					"riskSource": "A2",
+					"threatType": "FE1",
+					"displayNotation": "{\"x\":288,\"y\":534}"
+				}],
+				"displayNotation": "{\"x\":301,\"y\":444}"
+			}],
+			"leDescendants": [],
+			"displayNotation": "{\"x\":389,\"y\":348}"
+		}, {
+			"type": "HarmTreeLogicalNode",
+			"logicalRequirement": "k out of n",
+			"loDescendants": [{
+				"type": "HarmTreeLogicalNode",
+				"logicalRequirement": "or",
+				"loDescendants": [],
+				"leDescendants": [{
+					"type": "HarmTreeLeaf",
+					"attributeDefinition": "gender_interests",
+					"riskSource": "A1",
+					"threatType": "FE2",
+					"displayNotation": "{\"x\":201,\"y\":601}"
+				}, {
+					"type": "HarmTreeLeaf",
+					"attributeDefinition": "gender_interests",
+					"riskSource": "A1",
+					"threatType": "FE1",
+					"displayNotation": "{\"x\":98,\"y\":543}"
+				}],
+				"displayNotation": "{\"x\":138,\"y\":434}"
+			}, {
+				"type": "HarmTreeLogicalNode",
+				"logicalRequirement": "or",
+				"loDescendants": [],
+				"leDescendants": [{
+					"type": "HarmTreeLeaf",
+					"attributeDefinition": "religious_view",
+					"riskSource": "A1",
+					"threatType": "FE2",
+					"displayNotation": "{\"x\":16,\"y\":589}"
+				}, {
+					"type": "HarmTreeLeaf",
+					"attributeDefinition": "religious_view",
+					"riskSource": "A1",
+					"threatType": "FE1",
+					"displayNotation": "{\"x\":-90,\"y\":532}"
+				}],
+				"displayNotation": "{\"x\":2,\"y\":435}"
+			}, {
+				"type": "HarmTreeLogicalNode",
+				"logicalRequirement": "or",
+				"loDescendants": [],
+				"leDescendants": [{
+					"type": "HarmTreeLeaf",
+					"attributeDefinition": "political_view",
+					"riskSource": "A1",
+					"threatType": "FE2",
+					"displayNotation": "{\"x\":-191,\"y\":592}"
+				}, {
+					"type": "HarmTreeLeaf",
+					"attributeDefinition": "political_view",
+					"riskSource": "A1",
+					"threatType": "FE1",
+					"displayNotation": "{\"x\":-285,\"y\":537}"
+				}],
+				"displayNotation": "{\"x\":-164,\"y\":432}"
+			}],
+			"leDescendants": [],
+			"displayNotation": "{\"x\":44,\"y\":352}"
+		}],
+		"leDescendants": [],
+		"displayNotation": "{\"x\":389,\"y\":245}"
+	}],
+	"displayNotation": "{\"x\":384,\"y\":147}"
+},
+{
+	"type": "HarmTreeVertex",
+	"name": "HT2",
+	"description": "social isolation due to personal beliefs or life choises",
+        "severity":0.75,
+	"descendants": [{
+		"type": "HarmTreeLogicalNode",
+		"logicalRequirement": "k out of n",
+		"loDescendants": [],
+		"leDescendants": [{
+			"type": "HarmTreeLeaf",
+			"attributeDefinition": "gender_interests",
+			"riskSource": "A1",
+			"threatType": "FE1",
+			"displayNotation": "{\"x\":496,\"y\":401}"
+		}, {
+			"type": "HarmTreeLeaf",
+			"attributeDefinition": "religious_view",
+			"riskSource": "A1",
+			"threatType": "FE2",
+			"displayNotation": "{\"x\":394,\"y\":448}"
+		}, {
+			"type": "HarmTreeLeaf",
+			"attributeDefinition": "political_view",
+			"riskSource": "A1",
+			"threatType": "FE2",
+			"displayNotation": "{\"x\":299,\"y\":393}"
+		}],
+		"displayNotation": "{\"x\":395,\"y\":314}"
+	}],
+	"displayNotation": "{\"x\":395,\"y\":220}"
+},{
+	"type": "HarmTreeVertex",
+	"name": "HT3",
+	"description": "identity theft/fraud",
+        "severity":0.1,
+	"descendants": [{
+		"type": "HarmTreeLogicalNode",
+		"logicalRequirement": "and",
+		"loDescendants": [],
+		"leDescendants": [{
+			"type": "HarmTreeLeaf",
+			"attributeDefinition": "phones",
+			"riskSource": "A4",
+			"threatType": "FE2",
+			"displayNotation": "{\"x\":512,\"y\":497}"
+		}, {
+			"type": "HarmTreeLeaf",
+			"attributeDefinition": "address",
+			"riskSource": "A4",
+			"threatType": "FE2",
+			"displayNotation": "{\"x\":394,\"y\":550}"
+		}, {
+			"type": "HarmTreeLeaf",
+			"attributeDefinition": "birthday",
+			"riskSource": "A4",
+			"threatType": "FE2",
+			"displayNotation": "{\"x\":266,\"y\":501}"
+		}],
+		"displayNotation": "{\"x\":395,\"y\":380}"
+	}],
+	"displayNotation": "{\"x\":395,\"y\":271}"
+},{
+	"type": "HarmTreeVertex",
+	"name": "HT4",
+	"description": "stalkers asses user profile",
+        "severity":0.75,
+	"descendants": [{
+		"type": "HarmTreeLogicalNode",
+		"logicalRequirement": "or",
+		"loDescendants": [{
+			"type": "HarmTreeLogicalNode",
+			"logicalRequirement": "and",
+			"loDescendants": [{
+				"type": "HarmTreeLogicalNode",
+				"logicalRequirement": "or",
+				"loDescendants": [{
+					"type": "HarmTreeLogicalNode",
+					"logicalRequirement": "or",
+					"loDescendants": [],
+					"leDescendants": [{
+						"type": "HarmTreeLeaf",
+						"attributeDefinition": "address",
+						"riskSource": "A2",
+						"threatType": "FE2",
+						"displayNotation": "{\"x\":341.34534282497,\"y\":869.7757761958383}"
+					}, {
+						"type": "HarmTreeLeaf",
+						"attributeDefinition": "work_ids",
+						"riskSource": "A2",
+						"threatType": "FE2",
+						"displayNotation": "{\"x\":236.34534282496998,\"y\":807.7757761958383}"
+					}],
+					"displayNotation": "{\"x\":272.34534282497,\"y\":686.7757761958383}"
+				}, {
+					"type": "HarmTreeLogicalNode",
+					"logicalRequirement": "or",
+					"loDescendants": [],
+					"leDescendants": [{
+						"type": "HarmTreeLeaf",
+						"attributeDefinition": "address",
+						"riskSource": "A2",
+						"threatType": "FE1",
+						"displayNotation": "{\"x\":138.34534282497,\"y\":875.7757761958383}"
+					}, {
+						"type": "HarmTreeLeaf",
+						"attributeDefinition": "work_ids",
+						"riskSource": "A2",
+						"threatType": "FE1",
+						"displayNotation": "{\"x\":35.345342824970004,\"y\":810.7757761958383}"
+					}],
+					"displayNotation": "{\"x\":56.345342824970004,\"y\":694.7757761958383}"
+				}],
+				"leDescendants": [],
+				"displayNotation": "{\"x\":169.34534282497,\"y\":574.7757761958383}"
+			}, {
+				"type": "HarmTreeLogicalNode",
+				"logicalRequirement": "k out of n",
+				"loDescendants": [{
+					"type": "HarmTreeLogicalNode",
+					"logicalRequirement": "or",
+					"loDescendants": [],
+					"leDescendants": [{
+						"type": "HarmTreeLeaf",
+						"attributeDefinition": "gender",
+						"riskSource": "A2",
+						"threatType": "FE1",
+						"displayNotation": "{\"x\":-67.65465717503,\"y\":872.7757761958383}"
+					}, {
+						"type": "HarmTreeLeaf",
+						"attributeDefinition": "gender",
+						"riskSource": "A2",
+						"threatType": "FE2",
+						"displayNotation": "{\"x\":-162.65465717503,\"y\":814.7757761958383}"
+					}],
+					"displayNotation": "{\"x\":-105.65465717503,\"y\":690.7757761958383}"
+				}, {
+					"type": "HarmTreeLogicalNode",
+					"logicalRequirement": "or",
+					"loDescendants": [],
+					"leDescendants": [{
+						"type": "HarmTreeLeaf",
+						"attributeDefinition": "birthday",
+						"riskSource": "A2",
+						"threatType": "FE2",
+						"displayNotation": "{\"x\":-264.65465717503,\"y\":872.7757761958383}"
+					}, {
+						"type": "HarmTreeLeaf",
+						"attributeDefinition": "birthday",
+						"riskSource": "A2",
+						"threatType": "FE1",
+						"displayNotation": "{\"x\":-366.6546571750299,\"y\":819.7757761958383}"
+					}],
+					"displayNotation": "{\"x\":-336.65465717503,\"y\":690.7757761958383}"
+				}],
+				"leDescendants": [],
+				"displayNotation": "{\"x\":-195.65465717503,\"y\":575.7757761958383}"
+			}],
+			"leDescendants": [],
+			"displayNotation": "{\"x\":16.345342824970004,\"y\":467.7757761958383}"
+		}, {
+			"type": "HarmTreeLogicalNode",
+			"logicalRequirement": "and",
+			"loDescendants": [{
+				"type": "HarmTreeLogicalNode",
+				"logicalRequirement": "or",
+				"loDescendants": [{
+					"type": "HarmTreeLogicalNode",
+					"logicalRequirement": "or",
+					"loDescendants": [],
+					"leDescendants": [{
+						"type": "HarmTreeLeaf",
+						"attributeDefinition": "address",
+						"riskSource": "A4",
+						"threatType": "FE2",
+						"displayNotation": "{\"x\":1093,\"y\":866}"
+					}, {
+						"type": "HarmTreeLeaf",
+						"attributeDefinition": "work_ids",
+						"riskSource": "A4",
+						"threatType": "FE2",
+						"displayNotation": "{\"x\":979,\"y\":796}"
+					}],
+					"displayNotation": "{\"x\":1055,\"y\":671}"
+				}, {
+					"type": "HarmTreeLogicalNode",
+					"logicalRequirement": "or",
+					"loDescendants": [],
+					"leDescendants": [{
+						"type": "HarmTreeLeaf",
+						"attributeDefinition": "address",
+						"riskSource": "A4",
+						"threatType": "FE1",
+						"displayNotation": "{\"x\":886,\"y\":867}"
+					}, {
+						"type": "HarmTreeLeaf",
+						"attributeDefinition": "work_ids",
+						"riskSource": "A4",
+						"threatType": "FE1",
+						"displayNotation": "{\"x\":780,\"y\":800}"
+					}],
+					"displayNotation": "{\"x\":811,\"y\":683}"
+				}],
+				"leDescendants": [],
+				"displayNotation": "{\"x\":915,\"y\":575}"
+			}, {
+				"type": "HarmTreeLogicalNode",
+				"logicalRequirement": "k out of n",
+				"loDescendants": [{
+					"type": "HarmTreeLogicalNode",
+					"logicalRequirement": "or",
+					"loDescendants": [],
+					"leDescendants": [{
+						"type": "HarmTreeLeaf",
+						"attributeDefinition": "gender",
+						"riskSource": "A4",
+						"threatType": "FE2",
+						"displayNotation": "{\"x\":709,\"y\":870}"
+					}, {
+						"type": "HarmTreeLeaf",
+						"attributeDefinition": "gender",
+						"riskSource": "A4",
+						"threatType": "FE2",
+						"displayNotation": "{\"x\":612,\"y\":801}"
+					}],
+					"displayNotation": "{\"x\":599,\"y\":687}"
+				}, {
+					"type": "HarmTreeLogicalNode",
+					"logicalRequirement": "or",
+					"loDescendants": [],
+					"leDescendants": [{
+						"type": "HarmTreeLeaf",
+						"attributeDefinition": "birthday",
+						"riskSource": "A4",
+						"threatType": "FE2",
+						"displayNotation": "{\"x\":534,\"y\":869}"
+					}, {
+						"type": "HarmTreeLeaf",
+						"attributeDefinition": "birthday",
+						"riskSource": "A4",
+						"threatType": "FE1",
+						"displayNotation": "{\"x\":428,\"y\":804}"
+					}],
+					"displayNotation": "{\"x\":408,\"y\":689}"
+				}],
+				"leDescendants": [],
+				"displayNotation": "{\"x\":495,\"y\":586}"
+			}],
+			"leDescendants": [],
+			"displayNotation": "{\"x\":721,\"y\":454}"
+		}],
+		"leDescendants": [],
+		"displayNotation": "{\"x\":379,\"y\":371}"
+	}],
+	"displayNotation": "{\"x\":378,\"y\":275}"
+}
+]

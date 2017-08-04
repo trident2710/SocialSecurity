@@ -17,6 +17,7 @@
         <link href="${pageContext.request.contextPath}/resources/css/attribute_add.css" rel="stylesheet">
     </head>
     <body>
+        <script>var ctx = "${pageContext.request.contextPath}"</script>
         <%@include file="../basic/header.jsp" %>
         <table style="margin:10px" class="table table-bordered table-hover">
             <tr>
@@ -35,7 +36,7 @@
             </c:if>
             <c:if test = "${f_attrs.isEmpty() == false}">
                 <tr>
-                    <td>Stranger</td>
+                    <td>Friend</td>
                 <c:forEach var="attrs" items="${f_attrs}">
                     <td>${attrs.value}</td>
                 </c:forEach>  
@@ -43,7 +44,7 @@
             </c:if>
             <c:if test = "${ff_attrs.isEmpty() == false}">
                 <tr>
-                    <td>Stranger</td>
+                    <td>Friend of friend</td>
                 <c:forEach var="attrs" items="${ff_attrs}">
                     <td>${attrs.value}</td>
                 </c:forEach>  

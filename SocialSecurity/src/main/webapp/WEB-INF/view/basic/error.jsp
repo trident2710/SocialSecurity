@@ -16,6 +16,7 @@
         <link href="${pageContext.request.contextPath}/resources/css/error.css" rel="stylesheet">
   </head>
     <body>
+        <script>var ctx = "${pageContext.request.contextPath}"</script>
         <div class="container">
             <div class="row">
                 <div class="col-md-12">

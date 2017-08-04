@@ -18,9 +18,9 @@
     <link href="${pageContext.request.contextPath}/resources/css/list_all.css" rel="stylesheet">
   </head>
   <body>
-    <script>var ctx = "${pageContext.request.contextPath}"</script> 
+     
     <%@include file="../basic/header.jsp" %>
-
+    <script>var ctx = "${pageContext.request.contextPath}"</script>
     <div id="container">
         <div id="complex_attr" class="panel panel-default">
             <div class="panel-heading">Primitive attributes</div>
@@ -29,9 +29,12 @@
                     <div id="primitive_box" class="panel panel-default">
                         <div class="panel-body">
                             <c:out value="${attr.displayName}"/> 
+                            <button id=chng_btn type="button" class="btn btn-danger" onclick="deleteEntity(${attr.id})">Remove</button>
+                            <a id=chng_btn type="button" class="btn btn-primary" href="${pageContext.request.contextPath}/attributes/update/${attr.id}">View/Update</a>
                         </div>
                     </div>
                 </c:forEach>  
+                <a type="button" class="btn btn-success" href="${pageContext.request.contextPath}/attributes/add?type=primitive">Add new</a>
             </div>
         </div> 
         <div id="primitive_attr" class="panel panel-default">

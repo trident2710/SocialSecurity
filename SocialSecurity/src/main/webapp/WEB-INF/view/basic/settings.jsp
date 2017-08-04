@@ -19,24 +19,16 @@
     </head>
     <body >
         <%@include file="header.jsp" %>
+        <script>var ctx = "${pageContext.request.contextPath}"</script>
         <div class="s_panel" >
             <nav class="col-sm-3 s_menu" id="myScrollspy">
                 <ul class="nav nav-pills nav-stacked">
-                    <li class="active"><a href="#sec_attr">Primitive attributes</a></li>
                     <li><a href="#sec_crawl">Crawling settings</a></li>
-                    <li><a href="#sec_crawl_acc">Crawling accounts</a></li>
-                    <li><a href="#sec_crawl_adv">Advanced</a></li>
+                    <li><a href="#sec_adv">Advanced</a></li>
                     
                 </ul>
             </nav>
             <div  class="s_content"  data-spy="scroll" data-target="#myScrollspy">
-                
-                <div id="sec_attr" class='s_section panel panel-default'>
-                    <div class="panel panel-heading">Primitive attributes</div>
-                    <div class="panel panel-body">
-                        
-                    </div> 
-                </div>
                 
                 <div id="sec_crawl" class='s_section panel panel-default'>
                     <div class="panel panel-heading">Crawling settings </div>
@@ -75,30 +67,17 @@
                     </div>
                 </div>
                             
-                <div id="sec_crawl_acc" class='s_section panel panel-default'>
-                    <div class="panel panel-heading">Facebook login accounts</div>
-                    <div class="panel panel-body">
-                        <c:forEach var="a" items="${accounts}">
-                            <div class="panel panel-default">
-                                <div id=hover_box class="panel-body">
-                                    <c:out value="${a.login}"/> 
-                                    <a id=chng_btn type="button" class="btn btn-danger" href="${pageContext.request.contextPath}/snaccount/delete/${a.id}">Remove</button>
-                                    <a id=chng_btn type="button" class="btn btn-primary" href="${pageContext.request.contextPath}/snaccount/page_update/${a.id}">View/Update</a>
-                                </div>
-                            </div>
-                        </c:forEach>   
-                    </div>
-                    <a type="button" class="btn btn-success" href="${pageContext.request.contextPath}/snaccount/page_add">Add new</a>
-                </div> 
-                
-                <div id="sec_crawl_adv" class='s_section panel panel-default'>
+                <div id="sec_adv" class='s_section panel panel-default'>
                     <div class="panel panel-heading">Advanced settings</div>
                     <div class="panel panel-body">
                         <button class="btn btn-danger" id="reset_def" onclick="resetDefaultAttributeDefinitions('${pageContext.request.contextPath}/settings/restore/attributes');">Restore default attribute definitions</button>
                         <br>
-                        <button class="btn btn-danger" id="reset_def">Delete all data</button>
-                    </div>
-                    
+                        <button class="btn btn-danger" id="reset_fl" onclick="deleteData('${pageContext.request.contextPath}/settings/restore/reset');">Delete all data</button>
+                        <br>
+                        <button class="btn btn-danger" id="reset_ht" onclick="resetDefaultHarmTrees('${pageContext.request.contextPath}/settings/restore/harmtrees');">Reset harmtrees</button>
+                        <br>
+                        <a style="margin: 10px" type="button" class="btn btn-danger" href="${pageContext.request.contextPath}/settings/attributes">Go to primitive attributes redactor (not recommended)</a>
+                    </div> 
                 </div> 
             </div>        
         </div>

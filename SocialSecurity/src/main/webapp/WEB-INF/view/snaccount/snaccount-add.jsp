@@ -19,7 +19,7 @@
     </head>
    <body>
         <%@include file="../basic/header.jsp" %>
-
+        <script>var ctx = "${pageContext.request.contextPath}"</script>
         <div class='add_attr_form panel panel-default'>
             <div class="panel panel-heading">
                 Create new facebook login account

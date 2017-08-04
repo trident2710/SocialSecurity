@@ -11,7 +11,7 @@
         <link href="${pageContext.request.contextPath}/resources/css/navbar-top-fixed.css" rel="stylesheet">
     </head>
     <body>
-       
+    <script>var ctx = "${pageContext.request.contextPath}"</script>   
      <nav class="navbar navbar-expand-md navbar-inverse fixed-top bg-inverse">
       <a class="navbar-brand" href="${pageContext.request.contextPath}/">Social Security App</a>
         <ul class="nav navbar-nav">

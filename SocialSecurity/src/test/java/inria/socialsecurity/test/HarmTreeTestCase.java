@@ -13,7 +13,7 @@ import inria.socialsecurity.entity.harmtree.HarmTreeLeaf;
 import inria.socialsecurity.entity.harmtree.HarmTreeLogicalNode;
 import inria.socialsecurity.entity.harmtree.HarmTreeNode;
 import inria.socialsecurity.entity.harmtree.HarmTreeVertex;
-import inria.socialsecurity.model.analysis.HarmTreeEvaluator;
+import inria.socialsecurity.model.analysis.HarmTreeValidator;
 import inria.socialsecurity.model.analysis.ProfileDataAnalyzerImpl;
 import inria.socialsecurity.repository.AttributeDefinitionRepository;
 import inria.socialsecurity.repository.HarmTreeRepository;
@@ -46,7 +46,7 @@ public class HarmTreeTestCase {
     @Autowired
     AttributeDefinitionRepository adr;
     @Autowired
-    HarmTreeEvaluator hte;
+    HarmTreeValidator hte;
     
     @Test
     public void basicCrudHarmLogicalNode(){
@@ -174,7 +174,7 @@ public class HarmTreeTestCase {
         try {
             hte.validateHarmTree(vertex.getId());
             Assert.fail();
-        } catch (HarmTreeEvaluator.HarmTreeNotValidException e) {
+        } catch (HarmTreeValidator.HarmTreeNotValidException e) {
             Assert.assertEquals("vertex has number of descendants not equals 1", e.getMessage());
         }
         htr.detachDelete(vertex.getId());
@@ -183,7 +183,7 @@ public class HarmTreeTestCase {
         try {
             hte.validateHarmTree(vertex.getId());
             Assert.fail();
-        } catch (HarmTreeEvaluator.HarmTreeNotValidException e) {
+        } catch (HarmTreeValidator.HarmTreeNotValidException e) {
             Assert.assertEquals("some logical node does not have leafs", e.getMessage());
         }
         htr.detachDelete(vertex.getId());
@@ -192,7 +192,7 @@ public class HarmTreeTestCase {
         try {
             hte.validateHarmTree(vertex.getId());
             Assert.assertTrue(true);
-        } catch (HarmTreeEvaluator.HarmTreeNotValidException e) {
+        } catch (HarmTreeValidator.HarmTreeNotValidException e) {
            Assert.fail();
         }
         htr.detachDelete(vertex.getId());
@@ -200,14 +200,14 @@ public class HarmTreeTestCase {
         try {
             hte.validateHarmTree(-12345l);
             Assert.fail();
-        } catch (HarmTreeEvaluator.HarmTreeNotValidException e) {
+        } catch (HarmTreeValidator.HarmTreeNotValidException e) {
             Assert.assertEquals("there is no such harm tree vertex", e.getMessage());
         }
         
     }
     
     private class TestableAnalyser extends ProfileDataAnalyzerImpl{
-        public TestableAnalyser(HarmTreeEvaluator evaluator){
+        public TestableAnalyser(HarmTreeValidator evaluator){
             this.hte = evaluator;    
         }
         
@@ -266,9 +266,9 @@ public class HarmTreeTestCase {
     private List<List<Double>> generateRandomList(int maxItems){
         List<List<Double>> res = new ArrayList<>();
         Random n = new Random();
-        for(int i=0;i<n.nextInt(maxItems);i++){
+        for(int i=0;i<1+n.nextInt(maxItems-1);i++){
             List<Double> r = new ArrayList<>();
-            for(int j=0;j<n.nextInt(maxItems);j++){
+            for(int j=0;j<1+n.nextInt(maxItems-1);j++){
                 r.add(n.nextDouble()%1);
             }
             res.add(r);

@@ -18,11 +18,15 @@
     </head>
     <body>
         <%@include file="header.jsp" %>
+        <script>var ctx = "${pageContext.request.contextPath}"</script>
         <div class="container">
             <div class="jumbotron">
                 <h1>Social Security</h1>
                 <a id=btn_nav class="btn btn-lg btn-primary" href="${pageContext.request.contextPath}/attributes/all" role="button">Go to attributes</a>
+                <br>
                 <a id=btn_nav class="btn btn-lg btn-primary" href="${pageContext.request.contextPath}/harmtrees/all" role="button">Go to harm trees</a>
+                <br>
+                <a id=btn_nav class="btn btn-lg btn-primary" href="${pageContext.request.contextPath}/profiledata/all" role="button">Go to data analysis</a>
             </div>
         </div>
         <%@include file="footer.jsp" %>

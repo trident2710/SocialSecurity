@@ -138,7 +138,7 @@ function getData(path,callback){
         error: callback,
         processData: false,
         type: 'GET',
-        url: path
+        url: ctx+path
     });
 }
 function deleteData(path,callback){
@@ -148,7 +148,7 @@ function deleteData(path,callback){
         error: callback,
         processData: false,
         type: 'DELETE',
-        url: path
+        url: ctx+path
     });
 }
 
@@ -161,7 +161,7 @@ function sendData(path,data,type,callback){
         data:JSON.stringify(data),
         processData: false,
         type: type,
-        url: path
+        url: ctx+path
     });
 }
 
@@ -176,7 +176,7 @@ function sendUpdateHarmTreeRequest(id){
         },
         processData: false,
         type: 'POST',
-        url: '/rest/harmtrees/cytoscape/'+id
+        url: ctx+'/rest/harmtrees/cytoscape/'+id
     });
 }
 
@@ -388,7 +388,6 @@ class HarmTreeHeadInput{
     }
     
     render(){
-        console.log(this.defaultData['likelihood']);
         let container = document.createElement('div');
         container.setAttribute('id','harm_tree_head_info');
         
@@ -400,21 +399,23 @@ class HarmTreeHeadInput{
         }
             
         
-        let description = document.createElement('input');
+        let description = document.createElement('textarea');
         description.setAttribute('id','harm_tree_description');
         description.setAttribute('class','form-control'); 
         if(this.defaultData!==null){
             description.setAttribute('value',this.defaultData['description']);
+            description.innerHTML=this.defaultData['description'];
         }
         
-        let likelihood = document.createElement('input');
-        likelihood.setAttribute('id','harm_tree_likelihood');
-        likelihood.setAttribute('class','form-control'); 
-        likelihood.setAttribute('type','number');
-        likelihood.setAttribute('min','0');
-        likelihood.setAttribute('max','1');
+        
+        let severity = document.createElement('input');
+        severity.setAttribute('id','harm_tree_likelihood');
+        severity.setAttribute('class','form-control'); 
+        severity.setAttribute('type','number');
+        severity.setAttribute('min','0');
+        severity.setAttribute('max','1');
         if(this.defaultData!==null){
-            likelihood.setAttribute('value',this.defaultData['likelihood']);
+            severity.setAttribute('value',this.defaultData['severity']);
         }
         
         let update = document.createElement('button');
@@ -425,17 +426,39 @@ class HarmTreeHeadInput{
             let res = {};
             res['name'] = name.value;
             res['description'] = description.value;
-            res['likelihood'] = likelihood.value;
+            res['severity'] = severity.value;
             this.onChange(res);
+        });
+        
+        let validate = document.createElement('button');
+        validate.innerHTML = 'Validate';
+        validate.setAttribute('id','b_validate');
+        validate.setAttribute('class','btn btn-primary');
+        validate.addEventListener('click',()=>{
+             getData('/rest/harmtrees/validate/'+$harmTreeId,(message)=>{
+                 alert(message);
+             });
+        });
+        
+        let jsonRepr = document.createElement('button');
+        jsonRepr.innerHTML = 'to JSON';
+        jsonRepr.setAttribute('id','b_json_repr');
+        jsonRepr.setAttribute('class','btn btn-primary');
+        jsonRepr.addEventListener('click',()=>{
+            var win = window.open(ctx+'/rest/harmtrees/import/'+$harmTreeId, '_blank');
+            win.focus();
         });
         
         insertText(container,"Tree name:");
         container.appendChild(name);
         insertText(container,"Tree description:");
         container.appendChild(description);
-        insertText(container,"Likelihood:");
-        container.appendChild(likelihood);
+        insertText(container,"Severity:");
+        container.appendChild(severity);
         container.appendChild(update);
+        container.appendChild(validate);
+        container.appendChild(document.createElement('br'));
+        container.appendChild(jsonRepr);
         
         return container;
     }

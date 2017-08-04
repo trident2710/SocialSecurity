@@ -7,10 +7,12 @@ package inria.socialsecurity.controller.view;
 
 import inria.socialsecurity.entity.snaccount.FacebookLoginAccount;
 import inria.socialsecurity.repository.FacebookLoginAccountRepository;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import javax.validation.Valid;
-import org.neo4j.helpers.collection.IteratorUtil;
+import static jdk.nashorn.internal.objects.NativeRegExp.source;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.neo4j.template.Neo4jOperations;
 import org.springframework.stereotype.Controller;
@@ -56,7 +58,8 @@ public class FacebookLoginAccountViewController {
     @RequestMapping(value = "page_update/{id}", method = RequestMethod.GET)
     public String getFacebookLoginAccountUpdateForm(@PathVariable("id") Long id,Model model) {
         FacebookLoginAccount a = flar.findOne(id);
-        Collection<FacebookLoginAccount> col = IteratorUtil.asCollection(flar.findAll());
+        List<FacebookLoginAccount> col = new ArrayList<>();
+        flar.findAll().iterator().forEachRemaining(col::add);
         col.remove(a);
         model.addAttribute("account",a);
         model.addAttribute("accounts",col);

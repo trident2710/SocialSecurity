@@ -6,8 +6,11 @@
 package inria.socialsecurity.controller.view;
 
 import inria.crawlerv2.driver.WebDriverOption;
+import static inria.socialsecurity.constants.param.AttributeDefinition.COMPLEX_ATTRIBUTES;
+import static inria.socialsecurity.constants.param.AttributeDefinition.PRIMITIVE_ATTRIBUTES;
 import inria.socialsecurity.entity.settings.CrawlingSettings;
 import inria.socialsecurity.model.DefaultDataProcessor;
+import inria.socialsecurity.model.attributedefinition.AttributeDefinitionModel;
 import inria.socialsecurity.repository.AttributeDefinitionRepository;
 import inria.socialsecurity.repository.CrawlingSettingsRepository;
 import inria.socialsecurity.repository.FacebookLoginAccountRepository;
@@ -37,6 +40,9 @@ public class SettingsViewController {
     
     @Autowired
     DefaultDataProcessor ddp;
+    
+    @Autowired
+    AttributeDefinitionModel adm;
     
     /**
      * get the page with settings
@@ -73,5 +79,18 @@ public class SettingsViewController {
     public void restoreDefaultAttributeDefinitions(){
        ddp.deleteAllAttributeDefinitions();
        ddp.initAttributeDefinitions();
+    }
+    
+    @RequestMapping(value = {"restore/harmtrees"},method = RequestMethod.DELETE)
+    public void restoreDefaultHarmTrees(){
+        ddp.deleteAllHarmTrees();
+        ddp.createDefaultHarmTrees();
+    }
+    
+    @RequestMapping(value = {"/attributes"},method = RequestMethod.GET)
+    public String updatePrimitiveAttributes(Model model){
+        model.addAttribute(PRIMITIVE_ATTRIBUTES, adm.getPrimitiveAttributeDefinitions()); //add the primitive attributes to view
+        model.addAttribute(COMPLEX_ATTRIBUTES, adm.getComlexAttributeDefinitions()); //add the complex attributes to view
+        return "attribute/attribute_all_advanced";
     }
 }

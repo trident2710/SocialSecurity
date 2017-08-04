@@ -19,19 +19,20 @@
     </head>
     <body onload="init(${id});">
         <%@include file="../basic/header.jsp" %>
-        
+        <script>var ctx = "${pageContext.request.contextPath}"</script>
         <div id='workspace'>
              <div id="cy">  
                 
             </div>
             <div id="menu" class='bg-inverse text-white'>
                 <h3 class='title'> Actions:</h3>
-                <p id='hint' class="text-info">Click the node to show the actions allowed for this element</p>
+                <p style="width: 300px"id='hint' class="text-info">Click the node to show the actions allowed for this element</p>
             </div> 
         </div>
 
         <%@include file="../basic/footer.jsp" %>
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        <script>var ctx = "${pageContext.request.contextPath}"</script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <script src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
         <script src="${pageContext.request.contextPath}/resources/js/cytoscape.min.js"></script>

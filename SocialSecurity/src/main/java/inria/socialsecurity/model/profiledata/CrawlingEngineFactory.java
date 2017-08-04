@@ -18,4 +18,5 @@ import java.util.concurrent.Callable;
  */
 public interface CrawlingEngineFactory {
     Callable<JsonObject> createCrawlingCallable(CrawlingInstanceSettings settings,String target, Account account);
+    Callable<JsonObject> createCrawlingVisibilityCallable(CrawlingInstanceSettings settings,String target, Account account);
 }

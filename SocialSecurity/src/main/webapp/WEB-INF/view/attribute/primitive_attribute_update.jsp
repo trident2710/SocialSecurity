@@ -18,7 +18,7 @@
     </head>
    <body>
         <%@include file="../basic/header.jsp" %>
-
+        <script>var ctx = "${pageContext.request.contextPath}"</script>
         <div class='add_attr_form panel panel-default'>
             <div class="panel panel-heading">
                 Update primitive attribute
@@ -31,12 +31,6 @@
                     <br>
                     <label for="name">Name:</label>
                     <input type="text" name='name' id="name" class="form-control" value="${attribute.displayName}"></input>
-                    <label for="data_type">Data Type:</label>
-                    <select id="data_type" name="data_type" class="form-control">
-                        <c:forEach var="t" items="${data_types}">
-                            <option value="${t.name}" ${t.name == attribute.dataType?'selected="selected"':''}>${t.name}</option>
-                        </c:forEach> 
-                    </select>
                     <br>
                      <c:forEach var="ds" items="${default_data_sources}">
                          <label for="${ds.name}" data-toggle="tooltip" data-placement="top" title="Synonim is the name of the property in the file which contains the data from this source">

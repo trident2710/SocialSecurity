@@ -19,7 +19,24 @@
         <link href="${pageContext.request.contextPath}/resources/css/profiledata.css" rel="stylesheet">
     </head>
     <body class="container-fullwidth">
+        <script>var ctx = "${pageContext.request.contextPath}"</script>
         <div style="margin:20px">
+            <c:if test = "${self != null}">
+                <h2>Attributes visibility of target:</h2>
+                <table class="table table-bordered table-hover">
+                    <tr>
+                    <c:forEach var="attr" items="${self.entrySet()}">
+                        <th>${attr.getKey()}</th>
+                    </c:forEach>   
+                    </tr>
+
+                    <tr>
+                    <c:forEach var="attr" items="${self.entrySet()}">
+                        <td>${attr.getValue().getAsString()}</td>
+                    </c:forEach>  
+                    </tr>   
+                </table>
+            </c:if>
             <c:if test = "${avmatrix.isEmpty() == false}">
                 <h2>Attributes visibility matrix:</h2>
                 <table class="table table-bordered table-hover">
@@ -32,7 +49,7 @@
 
                     <c:forEach var="item" items="${avmatrix}">
                         <tr>
-                            <td>${item.key}</td>
+                            <td><a href="${pageContext.request.contextPath}/profiledata/fbprofile?pdid=${pdid}&id=${item.key}">${item.key}</a></td>
                         <c:forEach var="attrs" items="${item.value}">
                             <td>${attrs.value}</td>
                         </c:forEach>  

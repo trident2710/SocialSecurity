@@ -13,10 +13,11 @@ function deleteEntity(id) {
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
-        window.location.replace("attributes/all");
+        window.location.replace(ctx+"/attributes/all");
     }
   };
-  xhttp.open("DELETE", "/rest/attributes/"+id, true);
+  console.log(ctx+"/rest/attributes/"+id);
+  xhttp.open("DELETE", ctx+"/rest/attributes/"+id, true);
   xhttp.send();
 }
 

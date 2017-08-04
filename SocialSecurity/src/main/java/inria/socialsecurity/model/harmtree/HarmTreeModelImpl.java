@@ -18,7 +18,6 @@ import inria.socialsecurity.repository.AttributeDefinitionRepository;
 import inria.socialsecurity.repository.HarmTreeRepository;
 import java.util.List;
 import org.neo4j.ogm.session.Session;
-import org.neo4j.shell.util.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -71,7 +70,7 @@ public class HarmTreeModelImpl implements HarmTreeModel {
             HarmTreeVertex v = (HarmTreeVertex) element;
             v.setName(properties.getAsJsonObject().get("data").getAsJsonObject().get("name").getAsString());
             v.setDescription(properties.getAsJsonObject().get("data").getAsJsonObject().get("description").getAsString());
-            v.setSeverity(properties.getAsJsonObject().get("data").getAsJsonObject().get("likelihood").getAsDouble());
+            v.setSeverity(properties.getAsJsonObject().get("data").getAsJsonObject().get("severity").getAsDouble());
             htr.save(v);
         }
         if (element instanceof HarmTreeLeaf) {
