@@ -6,8 +6,6 @@
 package inria.socialsecurity.entity.settings;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import inria.crawlerv2.driver.WebDriverOption;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -18,7 +16,7 @@ import org.neo4j.ogm.annotation.Property;
 
 /**
  * entity for storing the settings needed for FBCrawler
- * @see inria.crawlerv2.engine.CrawlingEngineSettings
+ * @see CrawlingInstanceSettings
  * @author adychka
  */
 @NodeEntity

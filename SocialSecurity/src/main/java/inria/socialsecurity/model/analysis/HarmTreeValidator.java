@@ -13,10 +13,12 @@ import inria.socialsecurity.repository.HarmTreeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- *
+ * validates harmtree whether it has the valid structure. 
+ * Valid structure is when the vertex has one logic child and each logic child has whether logic descendant or set of leafs 
  * @author adychka
  */
 public class HarmTreeValidator {
+    
     @Autowired
     HarmTreeRepository htr;
     
@@ -58,6 +60,9 @@ public class HarmTreeValidator {
         }   
     }
 
+    /**
+     * thrown if the harm tree does not have the valid structure
+     */
     public static class HarmTreeNotValidException extends Exception{
         public HarmTreeNotValidException(String msg){
             super(msg);

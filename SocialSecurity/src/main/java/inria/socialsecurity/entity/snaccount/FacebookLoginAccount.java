@@ -5,9 +5,6 @@
  */
 package inria.socialsecurity.entity.snaccount;
 
-import java.util.ArrayList;
-import java.util.List;
-import javax.validation.Valid;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
@@ -22,7 +19,7 @@ import org.neo4j.ogm.annotation.Relationship;
  * entity for saving login account details for facebook in DB
  * @see inria.crawlerv2.engine.account.Account
  */
-
+@Deprecated
 @NodeEntity
 public class FacebookLoginAccount{
     

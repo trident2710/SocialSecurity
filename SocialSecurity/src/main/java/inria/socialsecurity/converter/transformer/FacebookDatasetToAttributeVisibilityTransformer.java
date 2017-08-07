@@ -12,11 +12,16 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- *
+ * calculates attribute visibility by comparing the attribute value received form 3 perspectives: friend, friend of friend, stranger
  * @author adychka
  */
 public class FacebookDatasetToAttributeVisibilityTransformer extends AttributesParser implements DatasetTransformer<Map<String,JsonObject>>{
     
+    /**
+     * parses the attribute visibility to map i.e. id->{attribute->value} where id is the id of facebook profile
+     * @param sourceSet
+     * @return 
+     */
     @Override
     public Map<String,Map<String,String>> parsefromSourceSet(Set<Map<String,JsonObject>> sourceSet) {
         Map<String,Map<String,String>> result = new HashMap<>();
@@ -27,6 +32,11 @@ public class FacebookDatasetToAttributeVisibilityTransformer extends AttributesP
         return result;
     }
     
+    /**
+     * parses the attribute visibility to map i.e. attribute->value where id is the id of facebook profile
+     * @param source
+     * @return 
+     */
     @Override
     public Map<String, String> parseFromSource(Map<String,JsonObject> source) {
         Map<String,String> res = new HashMap<>();
@@ -37,8 +47,7 @@ public class FacebookDatasetToAttributeVisibilityTransformer extends AttributesP
                 if(source.containsKey(perspective.name())){
                     if(!getValueForAttribute(source.get(perspective.name()),a).equals("-"))
                         builder.append(" ").append(perspective.getRiskSource().name());
-                }
-                
+                }    
             }
             String s = builder.toString();
             if(s.isEmpty()) s="-";

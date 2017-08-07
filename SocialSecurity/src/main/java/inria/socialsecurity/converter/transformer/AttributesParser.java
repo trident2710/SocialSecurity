@@ -14,15 +14,13 @@ import inria.socialsecurity.entity.attribute.PrimitiveAttributeDefinition;
 import inria.socialsecurity.entity.attribute.Synonim;
 import inria.socialsecurity.repository.AttributeDefinitionRepository;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import static java.util.logging.Level.INFO;
 import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- *
+ * class for parsing the attributes from the crawling result i.e. json object containing the collected attributes 
+ * @see CrawlingCallable
  * @author adychka
  */
 public class AttributesParser {
@@ -52,6 +50,12 @@ public class AttributesParser {
         }
     }  
     
+    /**
+     * get the value for attribute definition if exists in json object
+     * @param object
+     * @param ad
+     * @return 
+     */
     public String getValueForAttribute(JsonObject object,AttributeDefinition ad){
         return ad instanceof PrimitiveAttributeDefinition?
             getValueForPrimitiveAttribute(object, (PrimitiveAttributeDefinition)ad):

@@ -6,14 +6,10 @@
 package inria.socialsecurity.repository;
 
 import inria.socialsecurity.entity.settings.CrawlingSettings;
-import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.data.neo4j.repository.GraphRepository;
 
 /**
  *
  * @author adychka
  */
-public interface CrawlingSettingsRepository  extends GraphRepository<CrawlingSettings> {
-    
-}
+public interface CrawlingSettingsRepository  extends GraphRepository<CrawlingSettings> {}

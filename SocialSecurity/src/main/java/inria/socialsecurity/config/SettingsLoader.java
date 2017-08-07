@@ -8,13 +8,11 @@ package inria.socialsecurity.config;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import org.neo4j.shell.util.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.io.ResourceLoader;
@@ -27,13 +25,13 @@ import org.springframework.stereotype.Component;
 @Component
 @Scope("singleton")
 public class SettingsLoader {
-  /**
-   * where geckodriver is located
-   */
+    /**
+     * where geckodriver is located
+     */
     private String geckoPath = "geckodriver";
-  /**
-   * where phantomjs is located
-   */
+    /**
+     * where phantomjs is located
+     */
     private String phantomPath = "phantomjs";
     
     private int neo4jPort = 7474; // db connection port
@@ -42,15 +40,20 @@ public class SettingsLoader {
     private String neo4jLogin = "neo4j"; //db connection login
     private String neo4jPassword = "neo4j"; //db connection password
     
-  /**
-   * system property for providing the path to geckodriver
-   */
+    /**
+     * system property for providing the path to geckodriver
+     */
     public static final String GECKODRIVER_PROPERTY = "webdriver.gecko.driver";
   
-  /**
-   * system property for providing the path to phantomjs
-   */
+    /**
+     * system property for providing the path to phantomjs
+     */
     public static final String PHANTOMJS_PROPERTY = "phantomjs.binary.path";
+    
+    /**
+     * propeties file name
+     */
+    private static final String filename = "properties";
     
     @Autowired
     private ResourceLoader resourceLoader;
@@ -66,11 +69,9 @@ public class SettingsLoader {
         }
     }
     
-    private void loadProperties() throws IOException{
-        
-    File file = new File("resources.properties");
-    System.out.println(file.getAbsolutePath());
-    
+    private void loadProperties() throws IOException{   
+        File file = new File("resources.properties");
+        System.out.println(file.getAbsolutePath());
         JsonObject obj = new JsonParser().parse(new InputStreamReader(resourceLoader.getResource("properties").getInputStream())).getAsJsonObject();
         geckoPath= obj.get("geckodriver_path").getAsString();
         phantomPath= obj.get("phantom_path").getAsString();
@@ -78,7 +79,6 @@ public class SettingsLoader {
         neo4jUrl = obj.get("neo4j_url").getAsString();
         neo4jLogin = obj.get("neo4j_login").getAsString();
         neo4jPassword= obj.get("neo4j_pass").getAsString();
-        System.out.println("load properties");
     }
 
     public String getGeckoPath() {
@@ -104,6 +104,5 @@ public class SettingsLoader {
     public String getNeo4jPassword() {
         return neo4jPassword;
     }
-    
-    
+   
 }

@@ -6,15 +6,10 @@
 package inria.socialsecurity.model.profiledata;
 
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import inria.crawlerv2.engine.AttributeVisibilityCrawlerCallable;
-import inria.crawlerv2.engine.CrawlingCallable;
-import inria.crawlerv2.engine.CrawlingRunable;
 import inria.crawlerv2.engine.CrawlingInstanceSettings;
 import inria.crawlerv2.engine.account.Account;
 import inria.crawlerv2.provider.AttributeName;
@@ -26,10 +21,8 @@ import inria.socialsecurity.converter.transformer.FacebookDatasetToTargetViewAtt
 import inria.socialsecurity.converter.transformer.FacebookTrueVisibilityToAttributeMatrixTransformer;
 import inria.socialsecurity.converter.transformer.MapToJsonConverter;
 import inria.socialsecurity.entity.analysis.AnalysisReportItem;
-import inria.socialsecurity.entity.attribute.AttributeDefinition;
 import inria.socialsecurity.entity.harmtree.HarmTreeVertex;
 import inria.socialsecurity.entity.settings.CrawlingSettings;
-import inria.socialsecurity.entity.snaccount.FacebookLoginAccount;
 import inria.socialsecurity.entity.user.FacebookProfile;
 import inria.socialsecurity.entity.user.JsonStoringEntity;
 import inria.socialsecurity.entity.user.ProfileData;
@@ -42,14 +35,8 @@ import inria.socialsecurity.repository.FacebookProfileRepository;
 import inria.socialsecurity.repository.HarmTreeRepository;
 import inria.socialsecurity.repository.JsonStoringEntityRepository;
 import inria.socialsecurity.repository.ProfileDataRepository;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -57,26 +44,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import org.neo4j.ogm.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.neo4j.template.Neo4jOperations;
-import org.springframework.data.neo4j.template.Neo4jTemplate;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -98,9 +76,6 @@ public class ProfileDataModelImpl implements ProfileDataModel{
     
     @Autowired
     FacebookProfileRepository fpr;
-    
-    @Autowired
-    AccountManagerImpl am;
     
     @Autowired
     FacebookLoginAccountRepository flar;
@@ -142,11 +117,10 @@ public class ProfileDataModelImpl implements ProfileDataModel{
     @Autowired
     Neo4jOperations template;
     
-
-    
     private static final Logger LOG = Logger.getLogger(ProfileDataModel.class.getName());
     
     
+    @Override
     public void setCrawlingEngineFactory(CrawlingEngineFactory cef){
         this.cef = cef;
     }

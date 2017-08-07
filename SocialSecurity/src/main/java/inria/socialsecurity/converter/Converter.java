@@ -6,7 +6,9 @@
 package inria.socialsecurity.converter;
 
 /**
- *
+ * defines cutom converter form/to specified data types
+ * S - source
+ * D -destination
  * @author adychka
  */
 public interface Converter<S,D> {

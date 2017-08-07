@@ -12,18 +12,16 @@ import inria.socialsecurity.entity.attribute.AttributeDefinition;
 import inria.socialsecurity.entity.attribute.ComplexAttributeDefinition;
 import inria.socialsecurity.entity.attribute.PrimitiveAttributeDefinition;
 import inria.socialsecurity.repository.AttributeDefinitionRepository;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.mockito.internal.util.collections.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- *
+ * for processing the target true visibility ( attribute value + real visibility setting) collected by 
+ * @see AttributeVisibilityCrawlingCallable
  * @author adychka
  */
 public class FacebookTrueVisibilityToAttributeMatrixTransformer implements DatasetTransformer<JsonObject>{

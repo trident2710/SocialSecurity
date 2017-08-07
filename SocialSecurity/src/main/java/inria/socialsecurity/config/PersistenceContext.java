@@ -11,15 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.data.neo4j.config.Neo4jConfiguration;
 import org.springframework.data.neo4j.repository.config.EnableNeo4jRepositories;
 import org.springframework.data.neo4j.server.Neo4jServer;
 import org.springframework.data.neo4j.server.RemoteServer;
-import org.springframework.data.neo4j.template.Neo4jOperations;
-import org.springframework.data.neo4j.template.Neo4jTemplate;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
@@ -34,25 +31,19 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableNeo4jRepositories("inria.socialsecurity.repository") //the package which contains the repository interfaces for accessing data
 public class PersistenceContext extends Neo4jConfiguration {
 
+    //reads the neo4j connection properties form file
     @Autowired
     SettingsLoader settingsLoader;
     
     private static final String ENTITY_PACKAGE = "inria.socialsecurity.entity"; //the package containing db entinty classes
 
-    public PersistenceContext() {
-    }
+    public PersistenceContext() {}
 
     @Override
     public SessionFactory getSessionFactory() {
         return new SessionFactory(ENTITY_PACKAGE);
     }
     
-//    @Bean
-//    public Neo4jOperations getNeo4jTemplate() throws Exception {
-//        return new Neo4jTemplate(getSession());
-//    }
-
-
     @Bean
     @Override
     public Neo4jServer neo4jServer() {
@@ -70,8 +61,4 @@ public class PersistenceContext extends Neo4jConfiguration {
     public Session getSession() throws Exception {
         return super.getSession();
     }
-    
-
-    
-
 }

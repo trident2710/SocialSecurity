@@ -75,18 +75,29 @@ public class SettingsViewController {
         return "redirect:/settings#sec_crawl";
     }
     
+    /**
+     * delete all attribute definitions and creates defaults
+     */
     @RequestMapping(value = {"restore/attributes"},method = RequestMethod.DELETE)
     public void restoreDefaultAttributeDefinitions(){
        ddp.deleteAllAttributeDefinitions();
        ddp.initAttributeDefinitions();
     }
     
+    /**
+     * deletes all harmtrees and creates defaults
+     */
     @RequestMapping(value = {"restore/harmtrees"},method = RequestMethod.DELETE)
     public void restoreDefaultHarmTrees(){
         ddp.deleteAllHarmTrees();
         ddp.createDefaultHarmTrees();
     }
     
+    /**
+     * shows the dage allowing modification of primitive attributes
+     * @param model
+     * @return 
+     */
     @RequestMapping(value = {"/attributes"},method = RequestMethod.GET)
     public String updatePrimitiveAttributes(Model model){
         model.addAttribute(PRIMITIVE_ATTRIBUTES, adm.getPrimitiveAttributeDefinitions()); //add the primitive attributes to view

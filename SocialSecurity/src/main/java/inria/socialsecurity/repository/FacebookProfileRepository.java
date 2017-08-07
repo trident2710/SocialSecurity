@@ -6,7 +6,6 @@
 package inria.socialsecurity.repository;
 
 import inria.socialsecurity.entity.user.FacebookProfile;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.springframework.data.neo4j.annotation.Query;

@@ -5,14 +5,16 @@
  */
 package inria.socialsecurity.entity.analysis;
 
-import java.util.List;
 import java.util.Set;
 
 /**
- *
+ * pojo representing the result of analysis for the specified harmtree. See documentation 
+ * @see HarmTreeEement
+ * 
  * @author adychka
  */
 public class AnalysisReportItem {
+    
     private boolean isValid;
     private String errMsg;
     private String harmTreeName;
@@ -84,8 +86,5 @@ public class AnalysisReportItem {
 
     public void setErrMsg(String errMsg) {
         this.errMsg = errMsg;
-    }
-    
-    
-    
+    }  
 }

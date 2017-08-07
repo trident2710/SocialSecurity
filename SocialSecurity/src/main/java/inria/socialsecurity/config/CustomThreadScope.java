@@ -12,7 +12,9 @@ import org.springframework.beans.factory.config.Scope;
 import org.springframework.core.NamedThreadLocal;
 
 /**
- *
+ * cusom scope to instantiate the ogm.Session instance for thread
+ * @see ProfileDataModel
+ * @see CrawlingCallable
  * @author adychka
  */
 public class CustomThreadScope implements Scope {
@@ -21,7 +23,7 @@ public class CustomThreadScope implements Scope {
         new NamedThreadLocal<Map<String, Object>>(CustomThreadScope.class.getName()) {
             @Override
             protected Map<String, Object> initialValue() {
-                return new HashMap<String, Object>();
+                return new HashMap<>();
             }
         };
 

@@ -6,7 +6,6 @@
 package inria.socialsecurity.constants;
 
 import inria.crawlerv2.driver.AttributeVisibility;
-import inria.crawlerv2.provider.AttributeName;
 
 /**
  * Represents the risk source.

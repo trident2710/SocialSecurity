@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  *
  * @author adychka
  */
+@Deprecated
 public class AccountManagerImpl implements AccountManager{
     @Autowired
     FacebookLoginAccountRepository snar;

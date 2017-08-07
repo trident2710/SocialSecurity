@@ -8,13 +8,11 @@ package inria.socialsecurity.converter;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import inria.socialsecurity.constants.LogicalRequirement;
 import inria.socialsecurity.entity.harmtree.HarmTreeElement;
 import inria.socialsecurity.entity.harmtree.HarmTreeLeaf;
 import inria.socialsecurity.entity.harmtree.HarmTreeLogicalNode;
 import inria.socialsecurity.entity.harmtree.HarmTreeVertex;
 import inria.socialsecurity.repository.HarmTreeRepository;
-import java.util.Objects;
 import org.neo4j.ogm.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 

@@ -6,11 +6,7 @@
 package inria.socialsecurity.model.profiledata;
 
 import inria.crawlerv2.engine.account.Account;
-import inria.socialsecurity.entity.snaccount.FacebookLoginAccount;
 import inria.socialsecurity.entity.user.ProfileData;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 
 /**
  * helper class contains data parsed from create new facebook data post request
@@ -18,7 +14,7 @@ import org.apache.commons.lang.builder.ReflectionToStringBuilder;
  */
 public class CrawlingInfo {
     private ProfileData profileData;
-    private Account[] accounts;
+    private Account[] accounts; //T, T' and T'' accounts (see socumentatiion)
     private boolean shouldCollectFF;
 
     public CrawlingInfo(ProfileData pd, Account[] accounts,boolean shouldCollectFF) {

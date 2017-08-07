@@ -97,8 +97,7 @@ public class AttributeDefinitionViewController {
                 return "attribute/primitive_attribute_add";
             default:
                 throw new WrongArgumentException();
-        }
-        
+        }   
     }
     
     /**
@@ -121,7 +120,5 @@ public class AttributeDefinitionViewController {
         } else
             adm.createAttributeDefinitionFromHttpRequest(request);
         return "redirect:attributes/all";
-    }
-
-   
+    }  
 }

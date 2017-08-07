@@ -15,14 +15,11 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 
 import static inria.socialsecurity.constants.param.AttributeDefinition.*;
 import inria.socialsecurity.entity.attribute.PrimitiveAttributeDefinition;
 import inria.socialsecurity.entity.attribute.Synonim;
 import inria.socialsecurity.repository.SynonimRepository;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
 /**
  *

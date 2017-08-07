@@ -25,13 +25,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
- *
+ * calculates attribute visibility by comparing the attribute value received form 3 perspectives: friend, friend of friend, stranger
+ * AND with respect to the target profile i.e. respecting mutuality of friendship between target and examined profile
  * @author adychka
  */
 public class FacebookDatasetToTargetViewAttributeVisibilityTransformer extends FacebookDatasetToAttributeVisibilityTransformer{
@@ -39,8 +37,7 @@ public class FacebookDatasetToTargetViewAttributeVisibilityTransformer extends F
     private List<String> targetFriendIds;
     
     public void setTargetFriendIds( List<String> targetFriendIds){
-        this.targetFriendIds =targetFriendIds;
-        
+        this.targetFriendIds =targetFriendIds;    
     }
     
     @Override
@@ -104,6 +101,16 @@ public class FacebookDatasetToTargetViewAttributeVisibilityTransformer extends F
         return res;
     }
 
+    /**
+     * crecks the mutuality of friendship
+     * @param friendIds - examined profile friend ids
+     * @return 
+     *  2 if the profile does not have friends
+     *  1 if the profile has only mutual friends 
+     *  0 if profile has both mutual and not mutual friends
+     *  -1 if profile has only non mutual friends
+     * 
+     */
     private int checkMutualFriendship(JsonArray friendIds){
         if(friendIds.size()==0) return 2;
         boolean containsDifferent = false;

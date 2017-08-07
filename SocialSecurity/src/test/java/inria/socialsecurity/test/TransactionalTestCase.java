@@ -7,7 +7,6 @@ package inria.socialsecurity.test;
 
 import inria.socialsecurity.entity.user.FacebookProfile;
 import inria.socialsecurity.entity.user.ProfileData;
-import inria.socialsecurity.model.profiledata.AccountManagerImpl;
 import inria.socialsecurity.repository.CrawlingSettingsRepository;
 import inria.socialsecurity.repository.FacebookLoginAccountRepository;
 import inria.socialsecurity.repository.FacebookProfileRepository;

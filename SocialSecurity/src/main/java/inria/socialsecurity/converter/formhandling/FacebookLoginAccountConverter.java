@@ -17,11 +17,13 @@ import org.springframework.stereotype.Component;
  * @author adychka
  */
 @Component
+@Deprecated
 public class FacebookLoginAccountConverter implements Converter<String,FacebookLoginAccount>{
     @Autowired
     FacebookLoginAccountRepository flar;
 
     @Override
+    @Deprecated
     public FacebookLoginAccount convert(String sid) {
         Long id = Long.parseLong(sid);
         if(id==-1)return null;

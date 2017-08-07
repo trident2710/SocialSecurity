@@ -5,7 +5,6 @@
  */
 package inria.socialsecurity.test;
 
-import inria.socialsecurity.constants.DataType;
 import inria.socialsecurity.constants.DefaultDataSourceName;
 import inria.socialsecurity.constants.BasicPrimitiveAttributes;
 import inria.socialsecurity.entity.attribute.AttributeDefinition;

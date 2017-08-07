@@ -12,11 +12,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- *
+ * for adding the custom scope called 'thread'
+ * @see CustomThreadScope
  * @author adychka
  */
 @Configuration
 public class ScopeConfig {
+    
     @Bean
     public CustomScopeConfigurer customScopeConfigurer() {
         CustomScopeConfigurer configurer = new CustomScopeConfigurer();

@@ -18,7 +18,8 @@ import inria.socialsecurity.repository.HarmTreeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- *
+ * converts harm tree from/to json representatin
+ * used to store default harmtrees in properties to be able to restore them if needed
  * @author adychka
  */
 public class HarmTreeToJsonConverter implements Converter<HarmTreeVertex, JsonObject>{

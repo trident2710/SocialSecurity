@@ -8,16 +8,11 @@ package inria.socialsecurity.controller.view;
 import inria.socialsecurity.entity.snaccount.FacebookLoginAccount;
 import inria.socialsecurity.repository.FacebookLoginAccountRepository;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import javax.validation.Valid;
-import static jdk.nashorn.internal.objects.NativeRegExp.source;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.neo4j.template.Neo4jOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.data.neo4j.template.Neo4jTemplate;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
  */
 @Controller
 @RequestMapping("/snaccount/**")
+@Deprecated
 public class FacebookLoginAccountViewController {
     
     @Autowired
@@ -42,6 +38,7 @@ public class FacebookLoginAccountViewController {
      * @param model
      * @return jsp view
      */
+    @Deprecated
     @RequestMapping(value = "page_add", method = RequestMethod.GET)
     public String getFacebookLoginAccountAddForm(@ModelAttribute("account") FacebookLoginAccount account,Model model) {
         account = new FacebookLoginAccount();
@@ -55,6 +52,7 @@ public class FacebookLoginAccountViewController {
      * @param model
      * @return jsp view
      */
+    @Deprecated
     @RequestMapping(value = "page_update/{id}", method = RequestMethod.GET)
     public String getFacebookLoginAccountUpdateForm(@PathVariable("id") Long id,Model model) {
         FacebookLoginAccount a = flar.findOne(id);
@@ -73,12 +71,14 @@ public class FacebookLoginAccountViewController {
      * @param model
      * @return jsp view
      */
+    @Deprecated
     @RequestMapping(value = "add", method = RequestMethod.POST)
     public String createFacebookLoginAccount(@ModelAttribute("account") @Valid FacebookLoginAccount account, BindingResult result, Model model) {
         flar.save(account);
         return "redirect:/settings#sec_crawl_acc";
     }
     
+    @Deprecated
     @RequestMapping(value = "update", method = RequestMethod.POST)
     public String updateFacebookLoginAccount(@ModelAttribute("account") @Valid FacebookLoginAccount account, BindingResult result, Model model) {
         FacebookLoginAccount a = flar.findOne(account.getId());
@@ -90,6 +90,7 @@ public class FacebookLoginAccountViewController {
     }
     
     
+    @Deprecated
     @RequestMapping(value = "delete/{id}",method = RequestMethod.GET)
     public String deleteFacebookLoginAccount(@PathVariable Long id){
         flar.delete(id);

@@ -14,7 +14,6 @@ import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Property;
 import org.neo4j.ogm.annotation.Relationship;
-import org.neo4j.ogm.annotation.Transient;
 
 /**
  * represents the logic node of the harm tree i.e. logical requirement, how many

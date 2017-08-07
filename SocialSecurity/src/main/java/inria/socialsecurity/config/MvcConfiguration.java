@@ -10,13 +10,10 @@ import inria.crawlerv2.engine.AttributeVisibilityCrawlerCallable;
 import inria.crawlerv2.engine.CrawlingCallable;
 import inria.crawlerv2.engine.CrawlingInstanceSettings;
 import inria.crawlerv2.engine.account.Account;
-import inria.crawlerv2.engine.account.AccountManager;
-import inria.socialsecurity.constants.CrawlDepth;
 import inria.socialsecurity.converter.FacebookProfileToCytoscapeNotationConverter;
 import inria.socialsecurity.converter.transformer.AttributeMatrixToJsonConverter;
 import inria.socialsecurity.converter.transformer.AttributesParser;
 import inria.socialsecurity.converter.transformer.FacebookDatasetToAttributeMatrixTransformer;
-import inria.socialsecurity.entity.settings.CrawlingSettings;
 import inria.socialsecurity.model.DefaultDataProcessor;
 import inria.socialsecurity.model.attributedefinition.AttributeDefinitionModel;
 import inria.socialsecurity.model.attributedefinition.AttributeDefinitionModelImpl;
@@ -27,10 +24,6 @@ import inria.socialsecurity.model.profiledata.ProfileDataModelImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import inria.socialsecurity.model.profiledata.ProfileDataModel;
-import inria.socialsecurity.repository.CrawlingSettingsRepository;
-import org.neo4j.ogm.session.Session;
-import org.springframework.beans.factory.annotation.Autowired;
-import inria.socialsecurity.converter.transformer.DatasetTransformer;
 import inria.socialsecurity.converter.transformer.FacebookDatasetToAttributeVisibilityTransformer;
 import inria.socialsecurity.converter.transformer.FacebookDatasetToTargetViewAttributeVisibilityTransformer;
 import inria.socialsecurity.converter.transformer.FacebookTrueVisibilityToAttributeMatrixTransformer;
@@ -45,8 +38,6 @@ import java.net.URISyntaxException;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.springframework.core.task.TaskExecutor;
-import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
@@ -120,6 +111,11 @@ public class MvcConfiguration {
         return new FacebookDatasetToAttributeVisibilityTransformer();
     }
     
+    /**
+     * for creating the visiblility matrix from the target point of view
+     * see documentation for additional info
+     * @return 
+     */
     @Bean(name ="target respecting visibility")
     public FacebookDatasetToTargetViewAttributeVisibilityTransformer getTargetRespectiveVisibilityTransformer(){
         return new FacebookDatasetToTargetViewAttributeVisibilityTransformer();
@@ -130,36 +126,67 @@ public class MvcConfiguration {
         return new DefaultDataProcessor();
     }
     
+    /**
+     * for conveting the facebook friendship graph to cytoscape graph notaion
+     * @return 
+     */
     @Bean
     public FacebookProfileToCytoscapeNotationConverter getFacebookProfileToCytoscapeNotationConverter(){
         return new FacebookProfileToCytoscapeNotationConverter();
     }
     
+    /**
+     * for storing the attribute matrix in form of json
+     * @return 
+     */
     @Bean
     public AttributeMatrixToJsonConverter getAttributeMatrixToJsonConverter(){
         return new AttributeMatrixToJsonConverter();
     }
     
+    /**
+     * for parsing the attributes from inpud data file
+     * @see AttributeDefinition
+     * @see CrawlingCallable
+     * @return 
+     */
     @Bean(name ="basic parser")
     AttributesParser getAttributesParser(){
         return new AttributesParser();
     }
     
+    /**
+     * to validate harm tree. Check if it has valid structure
+     * @return 
+     */
     @Bean
     HarmTreeValidator getHarmTreeValidator(){
         return new HarmTreeValidator();
     }
     
+    /**
+     * to get the json representaion of the harmtree.
+     * @see DefaultDataProcessor
+     * @return 
+     */
     @Bean
-    HarmTreeToJsonConverter getHarmTreeToJSonConverter(){
+    HarmTreeToJsonConverter getHarmTreeToJsonConverter(){
         return new HarmTreeToJsonConverter();
     }
     
+    /**
+     * to make the harm analysis. see documentation
+     * @return 
+     */
     @Bean
     ProfileDataAnalyzer getProfileDataAnalyzer(){
         return new ProfileDataAnalyzerImpl();
     }
     
+    /**
+     * to create the crawling instance.
+     * @return 
+     */
     @Bean
     CrawlingEngineFactory getCrawlingEngineFactory(){
         return new CrawlingEngineFactory() {
@@ -168,7 +195,7 @@ public class MvcConfiguration {
                 try {
                     return new CrawlingCallable(settings, new URI(target), account);
                 } catch (URISyntaxException ex) {
-                    Logger.getLogger(MvcConfiguration.class.getName()).log(Level.SEVERE, "wrong target", ex);
+                    Logger.getLogger(CrawlingEngineFactory.class.getName()).log(Level.SEVERE, "unable to create crawling callable", ex);
                 }
                 return null;
             }
@@ -178,13 +205,17 @@ public class MvcConfiguration {
                 try {
                     return new AttributeVisibilityCrawlerCallable(account, new URI(target), settings);
                 } catch (URISyntaxException ex) {
-                    Logger.getLogger(MvcConfiguration.class.getName()).log(Level.SEVERE, "wrong target", ex);
+                    Logger.getLogger(CrawlingEngineFactory.class.getName()).log(Level.SEVERE, "unable to create crawling callable", ex);
                 }
                 return null;
             }
         };
     }
     
+    /**
+     * to create async task executor
+     * @return 
+     */
     @Bean
     public ThreadPoolTaskExecutor taskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
@@ -201,11 +232,19 @@ public class MvcConfiguration {
         return scheduler;
     }
     
+    /**
+     * to transform target true visibility to matrix of attributes
+     * @return 
+     */
     @Bean
     public FacebookTrueVisibilityToAttributeMatrixTransformer getFacebookTrueVisibilityToAttributeMatrixTransformer(){
         return new FacebookTrueVisibilityToAttributeMatrixTransformer();
     }
     
+    /**
+     * to get util.Map from/to json
+     * @return 
+     */
     @Bean
     public MapToJsonConverter getMapToJsonConverter(){
         return new MapToJsonConverter();

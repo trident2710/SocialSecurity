@@ -18,7 +18,7 @@ import com.google.gson.JsonParser;
 public abstract class CytoscapeNotationConverter<T> implements Converter<T,JsonElement>{
  
     /**
-     * create empty object in form accepted by the cytoscape.js
+     * creates empty object in form accepted by the cytoscape.js
      *
      * @return
      */

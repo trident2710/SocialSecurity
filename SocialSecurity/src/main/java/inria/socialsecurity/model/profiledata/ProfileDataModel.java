@@ -39,12 +39,40 @@ public interface ProfileDataModel {
      */
     void crawlFacebookData(CrawlingInfo ci);
     
+    /**
+     * get the matrix of attribute values for spectified perspective
+     * @param perspective
+     * @param profileDataId
+     * @return 
+     */
     Map<String,Map<String, String>> getAttributeMatrixForPerspective(CrawlResultPerspective perspective,Long profileDataId);
     
+    /**
+     * get the matrix of attribute visibilities for spectified perspective
+     * @param profileDataId
+     * @return 
+     */
     Map<String,Map<String, String>> getAttributeVisibilityMatrix(Long profileDataId);
     
+    /**
+     * get the matrix of attribute values for spectified perspective and specified profile
+     * @param facebookProfileId
+     * @param perspective
+     * @return 
+     */
     Map<String,String> getAttributesForFacebookProfileFromPerspective(Long facebookProfileId,CrawlResultPerspective perspective);
     
+    /**
+     * performs the analysis of collected data 
+     * @param profileData
+     * @return 
+     */
     List<AnalysisReportItem> generateAnalysisReport(ProfileData profileData);
+    
+    /**
+     * puts crawling engine factory (for testability)
+     * @param cef 
+     */
+    void setCrawlingEngineFactory(CrawlingEngineFactory cef);
     
 }

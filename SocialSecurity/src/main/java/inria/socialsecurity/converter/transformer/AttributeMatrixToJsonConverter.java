@@ -12,7 +12,7 @@ import java.util.Map;
 
 
 /**
- *
+ * transforms between util.Map and JsonObject
  * @author adychka
  */
 public class AttributeMatrixToJsonConverter implements Converter<Map<String,Map<String,String>>,JsonObject>{

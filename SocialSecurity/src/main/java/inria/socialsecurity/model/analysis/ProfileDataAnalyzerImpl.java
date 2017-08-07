@@ -27,7 +27,6 @@ import inria.socialsecurity.entity.user.FacebookProfile;
 import inria.socialsecurity.entity.user.JsonStoringEntity;
 import inria.socialsecurity.entity.user.ProfileData;
 import inria.socialsecurity.model.analysis.HarmTreeValidator.HarmTreeNotValidException;
-import inria.socialsecurity.model.profiledata.ProfileDataModel;
 import inria.socialsecurity.repository.AttributeDefinitionRepository;
 import inria.socialsecurity.repository.FacebookProfileRepository;
 import inria.socialsecurity.repository.HarmTreeRepository;
@@ -43,7 +42,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,8 +72,6 @@ public class ProfileDataAnalyzerImpl extends AttributesParser implements Profile
     
     @Autowired
     protected AttributeDefinitionRepository adr;
-    
-    protected static final Logger LOG = Logger.getLogger(ProfileDataAnalyzerImpl.class.getName());
     
     private Map<Long,Map<String,List<JsonObject>>> attributesCash = new HashMap<>();
 

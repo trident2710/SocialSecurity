@@ -13,6 +13,7 @@ import org.springframework.data.neo4j.repository.GraphRepository;
  *
  * @author adychka
  */
+@Deprecated
 public interface FacebookLoginAccountRepository extends GraphRepository<FacebookLoginAccount>{
     FacebookLoginAccount findByLoginAndPassword(String login, String password);
     List<FacebookLoginAccount> findByIsClosed(Boolean isClosed);

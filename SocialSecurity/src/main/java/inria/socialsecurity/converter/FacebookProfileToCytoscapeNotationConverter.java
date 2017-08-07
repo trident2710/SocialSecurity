@@ -5,7 +5,6 @@
  */
 package inria.socialsecurity.converter;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -24,7 +23,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 /**
- *
+ * converts the frienship graph to the notation understandable by cytoscape
+ * @see cytoscape.js
  * @author adychka
  */
 public class FacebookProfileToCytoscapeNotationConverter extends CytoscapeNotationConverter<FacebookProfile>{
@@ -49,7 +49,6 @@ public class FacebookProfileToCytoscapeNotationConverter extends CytoscapeNotati
     public JsonElement convertFrom(FacebookProfile object) {
         factory = new DisplayNotationFactory(100,400,400,20);
         JsonObject res = createDefaultJsonObject();
-        
         createFriendshipGraph(res, fpr.getFriendshipTreeForFacebookProfile(object.getId()),object.getId());
         return res;
     }
@@ -60,8 +59,7 @@ public class FacebookProfileToCytoscapeNotationConverter extends CytoscapeNotati
             for(Integer id:fpr.getFriendIdsForFacebookProfile(profile.getId())){
                 saveFriendship(profile.getId(), Integer.toUnsignedLong(id), source);
             }
-        }
-        
+        }    
     }
     
     private String getAttributeFromFacebookProfile(AttributeDefinition ad,Long fbProfileId){
@@ -73,8 +71,7 @@ public class FacebookProfileToCytoscapeNotationConverter extends CytoscapeNotati
                 String res = ap.getValueForAttribute(object, ad);
                 if(!res.equals("-"))
                     return res;
-            }
-            
+            }   
         }
         return null;
     }
@@ -117,6 +114,10 @@ public class FacebookProfileToCytoscapeNotationConverter extends CytoscapeNotati
         return null;
     }
     
+    /**
+     * helper class producing the next default position to fill the initial representation 
+     * in form of circle by circle
+     */
     private class DisplayNotationFactory{
         double angle;
         int level;
@@ -132,6 +133,10 @@ public class FacebookProfileToCytoscapeNotationConverter extends CytoscapeNotati
             this.moveDeg = moveDeg;
         }
         
+        /**
+         * produces the next default position
+         * @return 
+         */
         public JsonObject next(){
             if(angle==0&&level==0){
                 level = 1;

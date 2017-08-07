@@ -5,14 +5,11 @@
  */
 package inria.socialsecurity.controller.view;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import inria.socialsecurity.constants.CrawlDepth;
 import inria.socialsecurity.constants.CrawlResultPerspective;
-import inria.socialsecurity.converter.FacebookProfileToCytoscapeNotationConverter;
 import inria.socialsecurity.entity.analysis.AnalysisReportItem;
-import inria.socialsecurity.entity.attribute.AttributeDefinition;
 import inria.socialsecurity.entity.user.ProfileData;
 import inria.socialsecurity.exception.WrongArgumentException;
 import inria.socialsecurity.model.attributedefinition.AttributeDefinitionModel;
@@ -24,14 +21,11 @@ import inria.socialsecurity.repository.ProfileDataRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -64,13 +58,22 @@ public class ProfileDataViewController {
     AttributeDefinitionRepository adr;
     
 
-  
+    /**
+     * list all collected profile data
+     * @param model
+     * @return 
+     */
     @RequestMapping(value = "all", method = RequestMethod.GET)
     public String getAllProfileDataPage(Model model){
         model.addAttribute("profile_data",pdm.getAllProfileData());
         return "profiledata/profiledata_all";
     }
     
+    /**
+     * get page for inserting params for start clawling new data
+     * @param model
+     * @return 
+     */
     @RequestMapping(value = "add", method = RequestMethod.GET)
     public String getAddProfileDataPage(Model model){
         model.addAttribute("accounts",flar.findByIsClosed(Boolean.FALSE));
@@ -78,12 +81,24 @@ public class ProfileDataViewController {
         return "profiledata/profiledata_add";
     }
     
+    /**
+     * view the profile data with specified id
+     * @param id - profile data id
+     * @param model
+     * @return 
+     */
     @RequestMapping(value = "view/{id}", method = RequestMethod.GET)
     public String getViewProfileDataPage(@PathVariable("id") Long id,Model model){
         model.addAttribute("data",pdr.findOne(id));
         return "profiledata/profiledata_view";
     }
     
+    /**
+     * get the attribute vales matrix for specified profile data
+     * @param id - profile data id
+     * @param model
+     * @return 
+     */
     @RequestMapping(value = "amatrix/{id}", method = RequestMethod.GET)
     public String getAttributeMatrixProfileDataPage(@PathVariable("id") Long id,Model model){ 
         ProfileData d = pdr.findOne(id);
@@ -99,6 +114,12 @@ public class ProfileDataViewController {
         return "profiledata/profiledata_amatrix";
     }
     
+    /**
+     * get attribute visibility matrix (i.e. which risk source can view this attribute)
+     * @param id - profile data id
+     * @param model
+     * @return 
+     */
     @RequestMapping(value = "avmatrix/{id}", method = RequestMethod.GET)
     public String getAttributeVisibilityMatrixProfileDataPage(@PathVariable("id") Long id,Model model){
         ProfileData d = pdr.findOne(id);
@@ -111,11 +132,23 @@ public class ProfileDataViewController {
         return "profiledata/profiledata_avmatrix";
     }
     
+    /**
+     * get the page for displaying the friendship graph
+     * @param id
+     * @param model
+     * @return 
+     */
     @RequestMapping(value = "fgraph/{id}", method = RequestMethod.GET)
     public String getFriendGraphForProfileDataPage(@PathVariable("id") Long id,Model model){
         return "profiledata/profiledata_fgraph";
     }
     
+    /**
+     * get the page displaying the results of analysis report
+     * @param id - profile data id
+     * @param model
+     * @return 
+     */
     @RequestMapping(value = "analysis/{id}", method = RequestMethod.GET)
     public String getAnalysisReportProfileDataPage(@PathVariable("id") Long id,Model model){
         List<AnalysisReportItem> items = pdm.generateAnalysisReport(pdr.findOne(id));
@@ -138,6 +171,11 @@ public class ProfileDataViewController {
         return "redirect:profiledata/all";
     }
     
+    /**
+     * delete the specified profile data and all dependent elements i.e. facebook profiles 
+     * @param id - profile data id
+     * @return 
+     */
     @RequestMapping(value = "remove/{id}", method = RequestMethod.GET)
     String removeProfileData(@PathVariable("id") long id){
         pdr.detachDelete(id);
@@ -145,7 +183,12 @@ public class ProfileDataViewController {
         return "redirect:profiledata/all";
     }
     
-    
+    /**
+     * show the page displaying the atributes for specified facebook profile
+     * @param id - facebook profile id
+     * @param model
+     * @return 
+     */
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public String getFacebookProfilePage(@PathVariable("id") Long id,Model model){
         Map<String,String> s_attrs = pdm.getAttributesForFacebookProfileFromPerspective(id, CrawlResultPerspective.STRANGER);
@@ -166,13 +209,13 @@ public class ProfileDataViewController {
         }
         return "profiledata/profiledata_info";
     }
+    
+    /**
+     * obtains the inner id for the facebook url and redirects to getFacebookProfilePage()
+     */
     @RequestMapping(value = "/fbprofile", method = RequestMethod.GET)
     public String getFacebookProfilePage(@RequestParam("id")String sid,@RequestParam("pdid") Long pdid,Model model){
-        System.out.println("here");
-        System.out.println(sid);
-        System.out.println(pdid);
         Long id = fpr.findByFbUrlInFriendshipTreeForFacebookProfile(pdid,"https://facebook.com/profile.php?id="+sid).getId();
-        System.out.println(id);
         return "redirect:profiledata/"+id;
     }
     

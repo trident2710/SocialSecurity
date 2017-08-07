@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
+ * converts json object from/to map of name/value
  * @author adychka
  */
 public class MapToJsonConverter implements Converter<Map<String,String>,JsonObject>{

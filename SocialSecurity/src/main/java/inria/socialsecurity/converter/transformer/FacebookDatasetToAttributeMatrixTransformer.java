@@ -11,11 +11,19 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- *
+ * parses the attributes from the json object
+ * @see AttributeDefinition
+ * @see CrawlingCallable
+ * @see JsonStoringEntity
  * @author adychka
  */
 public class FacebookDatasetToAttributeMatrixTransformer extends AttributesParser implements DatasetTransformer<JsonObject>{
    
+    /**
+     * parses the attributes to map i.e. id->{attribute->value} where id is the id of facebook profile
+     * @param sourceSet
+     * @return 
+     */
     @Override
     public Map<String,Map<String,String>> parsefromSourceSet(Set<JsonObject> sourceSet) {
         Map<String,Map<String,String>> result = new HashMap<>();
@@ -26,6 +34,11 @@ public class FacebookDatasetToAttributeMatrixTransformer extends AttributesParse
         return result;
     }
     
+    /**
+     *  parses the attributes to map i.e. attribute->value 
+     * @param source
+     * @return 
+     */
     @Override
     public Map<String, String> parseFromSource(JsonObject source) {
         return parseAttributesFromJson(source);

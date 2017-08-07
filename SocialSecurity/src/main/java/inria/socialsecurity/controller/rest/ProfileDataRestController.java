@@ -7,10 +7,8 @@ package inria.socialsecurity.controller.rest;
 
 import com.google.gson.JsonParser;
 import inria.socialsecurity.converter.FacebookProfileToCytoscapeNotationConverter;
-import inria.socialsecurity.exception.WrongArgumentException;
 import inria.socialsecurity.model.profiledata.ProfileDataModel;
 import inria.socialsecurity.repository.ProfileDataRepository;
-import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,13 +33,23 @@ public class ProfileDataRestController {
     @Autowired
     ProfileDataRepository pdr;
     
+    /**
+     * get the friendship graph for the profile data with specified id
+     * @param profileId - profile data id
+     * @return 
+     */
     @RequestMapping(value = "friendgraph/{id}", method = RequestMethod.GET)
     String getFriendGraphForProfileId(@PathVariable("id") Long profileId){
         return fptcnc.convertFrom(pdr.findOne(profileId).getFacebookAccount()).toString();
     }
     
+    /**
+     * update friendship graph for the profile data with specified id
+     * @param profileId- profile data id
+     * @param body- cytscape notation json string
+     */
     @RequestMapping(value = "friendgraph/{id}", method = RequestMethod.POST)
-    void getFriendGraphForProfileId(@PathVariable("id") Long profileId,@RequestBody String body){
+    void updateFriendGraphForProfileId(@PathVariable("id") Long profileId,@RequestBody String body){
         fptcnc.convertTo(new JsonParser().parse(body).getAsJsonObject());
     }
     
