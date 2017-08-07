@@ -6,3 +6,5 @@
 /CrawlerV2/target/
 geckodriver
 phantomjs
+phantomjsdriver.log
+
