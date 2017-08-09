@@ -105,7 +105,6 @@ public class CrawlingProfileDataDBPersistenceTest {
 
         for (Map.Entry<String, JsonObject> o : crawlAccountsF.entrySet()) {
             when(cef.createCrawlingCallable(any(), Matchers.contains(o.getKey()), any())).thenReturn(() -> {
-                System.out.println("here f");
                 return o.getValue();
             });
         }
@@ -113,7 +112,7 @@ public class CrawlingProfileDataDBPersistenceTest {
 
     @Test
     public void testCrawl() {
-        ((ProfileDataModelImpl) crawler).setCrawlingEngineFactory(cef);
+        crawler.setCrawlingEngineFactory(cef);
         crawler.crawlFacebookData(info);
         Assert.assertNotNull(pdr.findByName("mocktest"));
         pdr.delete(pdr.findByName("mocktest"));

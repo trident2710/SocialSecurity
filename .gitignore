@@ -7,4 +7,6 @@
 geckodriver
 phantomjs
 phantomjsdriver.log
-
+nb-configuration.xml
+nbactions.xml
+*~

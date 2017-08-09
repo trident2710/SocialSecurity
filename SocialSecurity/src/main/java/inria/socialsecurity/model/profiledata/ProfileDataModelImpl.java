@@ -35,6 +35,7 @@ import inria.socialsecurity.repository.FacebookProfileRepository;
 import inria.socialsecurity.repository.HarmTreeRepository;
 import inria.socialsecurity.repository.JsonStoringEntityRepository;
 import inria.socialsecurity.repository.ProfileDataRepository;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -46,8 +47,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import org.neo4j.ogm.session.Session;
@@ -119,7 +122,6 @@ public class ProfileDataModelImpl implements ProfileDataModel{
     
     private static final Logger LOG = Logger.getLogger(ProfileDataModel.class.getName());
     
-    
     @Override
     public void setCrawlingEngineFactory(CrawlingEngineFactory cef){
         this.cef = cef;
@@ -134,7 +136,6 @@ public class ProfileDataModelImpl implements ProfileDataModel{
     
     @Override
     public CrawlingInfo createProfileDataFromHttpRequest(HttpServletRequest request) throws WrongArgumentException {
-        System.out.println(request.getParameterMap());
         if(request==null)
             throw new WrongArgumentException();
         
@@ -188,7 +189,6 @@ public class ProfileDataModelImpl implements ProfileDataModel{
     @Async
     @Override
     public void crawlFacebookData(CrawlingInfo ci){
-        System.out.println("colff "+ci.isShouldCollectFF() );
         ProfileData parent = pdr.save(ci.getProfileData());
         Map<CrawlResultPerspective,List<JsonObject>> friends = new HashMap<>();
         JsonObject targetData = null;
@@ -239,7 +239,7 @@ public class ProfileDataModelImpl implements ProfileDataModel{
                             LOG.log(Level.INFO,"unable to collect true visibility");
                         }
                     } catch (Exception e) {
-                        LOG.log(Level.SEVERE, "unable to collect true visibility");
+                        LOG.log(Level.SEVERE, "unable to collect true visibility",e);
                     }
                     try {
                         
@@ -250,8 +250,7 @@ public class ProfileDataModelImpl implements ProfileDataModel{
                         parent = pdr.save(parent);
                         LOG.log(Level.INFO,"done");
                     } catch (Exception e) {
-                        e.printStackTrace();
-                        LOG.log(Level.SEVERE, "unable to put data to db");
+                        LOG.log(Level.SEVERE, "unable to put data to db",e);
                     }
                 }    
             } else{
@@ -426,17 +425,11 @@ public class ProfileDataModelImpl implements ProfileDataModel{
     
     private long getEstimatedCrawlingTimeInMillis(CrawlingInstanceSettings settings,int depth){
         double totalAccs = settings.getMaxFriendsToCollect();
-        System.out.println(totalAccs);
         int perspectives = 3;
         int friendsDiscover = settings.getMaxFriendsToDiscover();
-        System.out.println(friendsDiscover);
         double crawlTime = settings.getShortWaitMillis()*settings.getAttributes().length;
         double crawlTimeWithFriends = settings.getShortWaitMillis()*settings.getAttributes().length+friendsDiscover*550;
-        System.out.println(crawlTime);
         long res = System.currentTimeMillis()+(long) (totalAccs*(crawlTimeWithFriends+(perspectives-1)*crawlTime));
-        System.out.println((crawlTime*totalAccs*perspectives)/60000);
-        System.out.println(new SimpleDateFormat("MM.dd  HH:mm:ss ").format(new Date(res)));
-        System.out.println(new SimpleDateFormat("MM.dd  HH:mm:ss ").format(new Date(System.currentTimeMillis())));
         return res;
     }
 
