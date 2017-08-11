@@ -69,11 +69,17 @@ public class HarmTreeRestController {
         JsonArray logicalRequirements = new JsonArray();
 
         for (RiskSource r : RiskSource.values()) {
-            riskSources.add(r.getValue());
+            JsonObject o = new JsonObject();
+            o.addProperty("val", r.getValue());
+            o.addProperty("explain", r.getExplain());
+            riskSources.add(o);
         }
         
         for (ThreatType r : ThreatType.values()) {
-            threatTypes.add(r.getValue());
+            JsonObject o = new JsonObject();
+            o.addProperty("val", r.getValue());
+            o.addProperty("explain", r.getExplain());
+            threatTypes.add(o);
         }
         
         for (LogicalRequirement l : LogicalRequirement.values()) {

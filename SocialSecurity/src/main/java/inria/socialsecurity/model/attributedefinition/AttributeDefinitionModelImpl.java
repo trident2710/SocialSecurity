@@ -132,7 +132,6 @@ public class AttributeDefinitionModelImpl implements AttributeDefinitionModel{
         if(request.getParameter(NAME)==null)
             throw new WrongArgumentException();
         
-        System.out.println(request.getParameter(DATA_TYPE));
         if(request.getParameter(DATA_TYPE)==null)
             throw new WrongArgumentException();
         

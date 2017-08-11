@@ -23,6 +23,7 @@ public class AnalysisReportItem {
     private Set<Double> score;
     private Double worstCase;
     private Double bestCase;
+    private String[] report;
 
     public String getHarmTreeName() {
         return harmTreeName;
@@ -87,4 +88,12 @@ public class AnalysisReportItem {
     public void setErrMsg(String errMsg) {
         this.errMsg = errMsg;
     }  
+
+    public String[] getReport() {
+        return report;
+    }
+
+    public void setReport(String[] report) {
+        this.report = report;
+    }
 }

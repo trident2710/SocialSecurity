@@ -14,10 +14,21 @@ import inria.crawlerv2.driver.AttributeVisibility;
  * @author adychka
  */
 public enum RiskSource {
-    A1, //user friends 
-    A2, //friends of friends
-    A4; // strangers
+    A1("user friends"), //user friends 
+    A2("user friends of friends"), //friends of friends
+    A4("strangers"); // strangers
 
+    
+    private String explain;
+    
+    private RiskSource(String explain){
+        this.explain = explain;
+    }
+    
+    public String getExplain(){
+        return explain;
+    }
+    
     public String getValue() {
         return name();
     }

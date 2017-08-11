@@ -13,6 +13,7 @@ import inria.socialsecurity.entity.user.ProfileData;
 import inria.socialsecurity.model.analysis.HarmTreeValidator.HarmTreeNotValidException;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Callable;
 
 /**
  * defines the actions needed to perform the analysis of collected data based on the harmtrees 
@@ -27,7 +28,7 @@ public interface ProfileDataAnalyzer {
      * @return
      * @throws inria.socialsecurity.model.analysis.HarmTreeValidator.HarmTreeNotValidException 
      */
-    Set<Double> calculateLikelihoodForHarmTree(HarmTreeVertex vertex,ProfileData data) throws HarmTreeNotValidException;
+    Map.Entry<String,Set<Double>> calculateLikelihoodForHarmTree(HarmTreeVertex vertex,ProfileData data) throws HarmTreeNotValidException;
     
     /**
      * calculates the attribute value accuracy by defining the biggest value group

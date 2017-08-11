@@ -95,9 +95,6 @@ public class CrawlingProfileDataDBPersistenceTest {
         data = new ProfileData();
         data.setName("mocktest");
         data.setRequestUrl(h.get("id").getAsString());
-        System.out.println(data.getRequestUrl());
-        System.out.println(crawlAccountsF.containsKey(data.getRequestUrl()));
-        System.out.println(crawlAccountsF);
         data = pdr.save(data);
         when(info.getAccounts()).thenReturn(accounts);
         when(info.getProfileData()).thenReturn(data);

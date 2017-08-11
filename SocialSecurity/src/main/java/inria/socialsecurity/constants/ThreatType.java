@@ -12,11 +12,21 @@ package inria.socialsecurity.constants;
  * @author adychka
  */
 public enum ThreatType {
-    FE1,
-    FE2;
+    FE1("get this attribute directly"),
+    FE2("try to infer from friends");
+    
+    String explain;
+    
+    private ThreatType(String explain){
+        this.explain = explain;
+    }
     
     public String getValue() {
         return name();
+    }
+    
+    public String getExplain(){
+        return explain;
     }
 
 }

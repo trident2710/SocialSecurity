@@ -63,8 +63,6 @@ public class HarmTreeModelImpl implements HarmTreeModel {
 
     @Override
     public void updateHarmTreeElement(Long id, JsonElement properties) {
-        System.out.println("update node");
-        System.out.println(properties.toString());
         HarmTreeElement element = htr.findOne(id);
         if (element instanceof HarmTreeVertex) {
             HarmTreeVertex v = (HarmTreeVertex) element;
@@ -91,8 +89,6 @@ public class HarmTreeModelImpl implements HarmTreeModel {
 
     @Override
     public void createHarmTreeDescendant(Long parentId, JsonElement properties) {
-        System.out.println("create node");
-        System.out.println(properties.toString());
         HarmTreeElement parent = htr.findOne(parentId);
         
         switch (properties.getAsJsonObject().get("type").getAsInt()) {
@@ -121,11 +117,9 @@ public class HarmTreeModelImpl implements HarmTreeModel {
     public void deleteHarmTreeElement(Long id) {
         HarmTreeElement element = htr.findOne(id);
         if (element instanceof HarmTreeLogicalNode) {
-            System.out.println("delete logic");
             deleteWithDescendants((HarmTreeLogicalNode) element);
         }
         if (element instanceof HarmTreeLeaf) {
-            System.out.println("delete leaf");
             htr.detachDelete(element.getId());
         }
     }

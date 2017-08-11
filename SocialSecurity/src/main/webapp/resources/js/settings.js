@@ -12,6 +12,13 @@ function resetDefaultAttributeDefinitions(url){
     }
 }
 
+function repairDefaultAttributeDefinitions(url){
+    if(confirm("This action will repair default attribute definitions (check the presence and correctness of synonims).")){
+        sendRequest(url,'GET');
+        alert("default attribute definitions will be repaired");
+    }
+}
+
 function resetDefaultHarmTrees(url){
     if(confirm("This action will restore default harm trees and destroy existing. Are you sure?")){
         sendRequest(url,'DELETE');

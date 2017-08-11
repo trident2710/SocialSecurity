@@ -47,7 +47,6 @@
                         </c:if>
                     </c:forEach>   
                 </tbody>
-
             </table>
             
             <c:if test = "${hasWrong == true}">
@@ -68,9 +67,21 @@
                     </c:forEach>      
                 </table>
             </c:if>
+                
+            <h2>Calculation details</h2>
+            <textarea style="width: 100%; height: 500px;" id="report" value=""></textarea>
+            <c:forEach var="a" items="${analysis_data}">
+                <c:if test = "${a.isValid == true}">
+                    <c:forEach var="s" items="${a.report}">
+                        <script>document.getElementById('report').value+='\n'+'${s}';</script>
+                    </c:forEach>  
+                </c:if>
+            </c:forEach>   
+            
             
         </div>
-
+        
+        
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <!-- Include all compiled plugins (below), or include individual files as needed -->

@@ -48,7 +48,7 @@ public class FacebookDatasetToTargetViewAttributeVisibilityTransformer extends F
             StringBuilder builder = new StringBuilder();
             for(CrawlResultPerspective perspective:CrawlResultPerspective.values()){
                 if(source.containsKey(perspective.name())){
-                    if(!getValueForAttribute(source.get(perspective.name()),a).equals("-")){
+                    if(!getValueForAttribute(source.get(perspective.name()),a).equals("-")&&!getValueForAttribute(source.get(perspective.name()),a).contains("Ask for")){
                         int mutuality = 0;
                         if(source.get(CrawlResultPerspective.FRIEND.name()).has("friend_ids")){
                             mutuality = checkMutualFriendship(source.get(CrawlResultPerspective.FRIEND.name()).get("friend_ids").getAsJsonArray());

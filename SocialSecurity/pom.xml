@@ -128,11 +128,6 @@
             <artifactId>cglib</artifactId>
             <version>3.1</version>
         </dependency>
-        <dependency>
-            <groupId>com.devbury</groupId>
-            <artifactId>spring-boot-starter-threadscope</artifactId>
-            <version>1.1.0</version>
-        </dependency>
     </dependencies>
 
     <build>

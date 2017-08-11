@@ -71,7 +71,6 @@ public class SettingsLoader {
     
     private void loadProperties() throws IOException{   
         File file = new File("resources.properties");
-        System.out.println(file.getAbsolutePath());
         JsonObject obj = new JsonParser().parse(new InputStreamReader(resourceLoader.getResource("properties").getInputStream())).getAsJsonObject();
         geckoPath= obj.get("geckodriver_path").getAsString();
         phantomPath= obj.get("phantom_path").getAsString();

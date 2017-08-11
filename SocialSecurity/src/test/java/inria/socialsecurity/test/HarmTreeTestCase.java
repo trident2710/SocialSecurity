@@ -240,7 +240,6 @@ public class HarmTreeTestCase {
         TestableAnalyser analyser = new TestableAnalyser(hte);
         for(int i=0;i<150;i++){
             List<List<Double>> input = generateRandomList(20);
-            System.out.println("input "+Arrays.toString(input.toArray()));
             List<Double> output = analyser.testableCombineForLogicRequirement(input, LogicalRequirement.AND);
             System.out.println("and "+Arrays.toString(output.toArray()));
             output = analyser.testableCombineForLogicRequirement(input, LogicalRequirement.OR);

@@ -21,11 +21,9 @@ public class MapToJsonConverter implements Converter<Map<String,String>,JsonObje
 
     @Override
     public JsonObject convertFrom(Map<String, String> source) {
-        System.out.println(Arrays.toString(source.entrySet().toArray()));
         JsonObject object = new JsonObject();
         JsonParser parser = new JsonParser();
         source.entrySet().forEach(entry->{
-            System.out.println(entry.getValue());
             JsonPrimitive p = new JsonPrimitive(entry.getValue());
             object.add(entry.getKey(), p);
         });

@@ -437,13 +437,13 @@ public class ProfileDataModelImpl implements ProfileDataModel{
     public Map<String,Map<String, String>> getAttributeMatrixForPerspective(CrawlResultPerspective perspective,Long profileDataId) {
         ProfileData data = pdr.findOne(profileDataId);
         JsonParser parser = new JsonParser();
-        if(!data.getAttributeMatrix().isEmpty()){
-            for(JsonStoringEntity entity:data.getAttributeMatrix()){
-                if(entity.getPerspective().equals(perspective.name())){
-                    return amtjc.convertTo(parser.parse(entity.getJsonString()).getAsJsonObject());
-                }
-            }    
-        }
+//        if(!data.getAttributeMatrix().isEmpty()){
+//            for(JsonStoringEntity entity:data.getAttributeMatrix()){
+//                if(entity.getPerspective().equals(perspective.name())){
+//                    return amtjc.convertTo(parser.parse(entity.getJsonString()).getAsJsonObject());
+//                }
+//            }    
+//        }
         
         FacebookProfile target = data.getFacebookProfile(); 
         List<FacebookProfile> friends = fpr.getFriendshipTreeForFacebookProfile(target.getId());
@@ -473,9 +473,9 @@ public class ProfileDataModelImpl implements ProfileDataModel{
         ProfileData data = pdr.findOne(profileDataId);
         FacebookProfile target = data.getFacebookProfile();
         JsonParser parser = new JsonParser();
-        if(data.getVisibilityRespectTargetMatrixJsonString()!=null){
-            return amtjc.convertTo(parser.parse(data.getVisibilityRespectTargetMatrixJsonString()).getAsJsonObject());
-        }
+//        if(data.getVisibilityRespectTargetMatrixJsonString()!=null){
+//            return amtjc.convertTo(parser.parse(data.getVisibilityRespectTargetMatrixJsonString()).getAsJsonObject());
+//        }
         List<FacebookProfile> friends = fpr.getFriendshipTreeForFacebookProfile(target.getId());
         
         Set<Map<String,JsonObject>> objects = new HashSet<>();
@@ -487,10 +487,7 @@ public class ProfileDataModelImpl implements ProfileDataModel{
             }
             objects.add(attrsForPersp);
         });
-        
-//        Map<String,Map<String,String>> res= fdtavt.parsefromSourceSet(objects);
-//        data.setVisibilityMatrixJsonString(amtjc.convertFrom(res).toString());
-        
+          
         fdttvavt.setTargetFriendIds(fpr.getUrlsInFriendshipTreeForFacebookProfile(profileDataId));
         Map<String,Map<String,String>> res2= fdttvavt.parsefromSourceSet(objects);
         data.setVisibilityRespectTargetMatrixJsonString(amtjc.convertFrom(res2).toString());
@@ -531,14 +528,15 @@ public class ProfileDataModelImpl implements ProfileDataModel{
                 item.setIsValid(true);
                 item.setHarmTreeName(vertex.getName());
                 item.setSeverity(vertex.getSeverity());
-                Set<Double> res = pda.calculateLikelihoodForHarmTree(vertex, data);
-                item.setLikelihood(res);
-                Set<Double> score = res.stream().map(x->vertex.getSeverity()*x).collect(Collectors.toSet());
+                Map.Entry<String,Set<Double>> res = pda.calculateLikelihoodForHarmTree(vertex, data);
+                item.setLikelihood(res.getValue());
+                Set<Double> score = res.getValue().stream().map(x->vertex.getSeverity()*x).collect(Collectors.toSet());
                 item.setScore(score);
                 List<Double> l = new ArrayList(score);
                 Collections.sort(l);
                 item.setBestCase(l.get(0));
                 item.setWorstCase(l.get(l.size()-1));
+                item.setReport(res.getKey().split("\n"));
             } catch (HarmTreeValidator.HarmTreeNotValidException ex) {
                 item.setIsValid(false);
                 item.setErrMsg(ex.getMessage());

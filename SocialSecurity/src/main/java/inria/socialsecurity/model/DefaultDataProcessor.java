@@ -102,10 +102,36 @@ public class DefaultDataProcessor {
         Gson gson = new Gson();
         JsonArray object;
         object = gson.fromJson(new InputStreamReader(getClass().getClassLoader().getResourceAsStream("HT.json")), JsonArray.class);
-        System.out.println(object.toString());
         for(JsonElement e:object){
             HarmTreeVertex vertex = httjc.convertTo(e.getAsJsonObject());
             htr.save(vertex);
         }   
+    }
+    
+    public void repairAttributeDefinitions(){
+        System.err.println("h2");
+        for(AttributeDefinition d:adr.findPrimitiveAttributes()){
+            System.out.println(d.getName());
+            PrimitiveAttributeDefinition pd = (PrimitiveAttributeDefinition)adr.findOne(d.getId());
+            if(pd.getSynonims()==null||pd.getSynonims().size()!=2){
+                System.out.println("h3");
+                System.out.println(pd.getSynonims().size());
+                for(DefaultDataSourceName dn:DefaultDataSourceName.values()){
+                    System.out.println(dn);
+                    if(pd.getSynonimByDataSourceName(dn)==null){
+                        System.out.println("h4");
+                        if(BasicPrimitiveAttributes.valueOf(pd.getName().toUpperCase())!=null){
+                            System.out.println("h5");
+                            Synonim s = new Synonim();
+                            s.setDataSourceName(dn.getName());
+                            s.setAttributeName(pd.getName());
+                            pd.getSynonims().add(s);
+                            adr.save(pd);
+                        }
+                    }
+                }
+                
+            }
+        }
     }
 }

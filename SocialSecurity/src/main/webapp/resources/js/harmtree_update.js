@@ -325,7 +325,7 @@ class LeafNodeInput {
         containerThreatType.setAttribute('class','form-control');
         containerThreatType.innerHTML = this.options['threatType'].reduce((result, elem) => {
           result += 
-            `<option value="${elem}">${elem}</option>`;
+            `<option value="${elem['val']}">${elem['val']+' '+elem['explain']}</option>`;
           return result;
         }, '');
         
@@ -337,7 +337,7 @@ class LeafNodeInput {
         containerRiskSource.setAttribute('class','form-control');
         containerRiskSource.innerHTML = this.options['riskSource'].reduce((result, elem) => {
           result += 
-            `<option value="${elem}">${elem}</option>`;
+            `<option value="${elem['val']}">${elem['val']+' '+elem['explain']}</option>`;
           return result;
         }, '');
         

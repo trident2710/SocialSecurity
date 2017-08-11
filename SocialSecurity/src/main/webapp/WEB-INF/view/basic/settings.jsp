@@ -72,6 +72,8 @@
                     <div class="panel panel-body">
                         <button class="btn btn-danger" id="reset_def" onclick="resetDefaultAttributeDefinitions('${pageContext.request.contextPath}/settings/restore/attributes');">Restore default attribute definitions</button>
                         <br>
+                        <button class="btn btn-danger" id="val_def" onclick="repairDefaultAttributeDefinitions('${pageContext.request.contextPath}/settings/repair/attributes');">Repair attribute definitions</button>
+                        <br>
                         <button class="btn btn-danger" id="reset_fl" onclick="deleteData('${pageContext.request.contextPath}/settings/restore/reset');">Delete all data</button>
                         <br>
                         <button class="btn btn-danger" id="reset_ht" onclick="resetDefaultHarmTrees('${pageContext.request.contextPath}/settings/restore/harmtrees');">Reset harmtrees</button>

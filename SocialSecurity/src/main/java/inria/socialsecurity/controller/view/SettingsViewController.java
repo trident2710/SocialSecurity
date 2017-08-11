@@ -85,6 +85,15 @@ public class SettingsViewController {
     }
     
     /**
+     * delete all attribute definitions and creates defaults
+     */
+    @RequestMapping(value = {"repair/attributes"},method = RequestMethod.GET)
+    public void repairDefaultAttributeDefinitions(){
+        System.out.println("h1");
+       ddp.repairAttributeDefinitions();
+    }
+    
+    /**
      * deletes all harmtrees and creates defaults
      */
     @RequestMapping(value = {"restore/harmtrees"},method = RequestMethod.DELETE)

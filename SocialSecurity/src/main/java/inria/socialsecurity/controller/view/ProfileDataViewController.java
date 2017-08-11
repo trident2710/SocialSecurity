@@ -46,9 +46,6 @@ public class ProfileDataViewController {
     AttributeDefinitionModel adm;
     
     @Autowired
-    FacebookLoginAccountRepository flar;
-    
-    @Autowired
     ProfileDataRepository pdr;
     
     @Autowired
@@ -76,7 +73,6 @@ public class ProfileDataViewController {
      */
     @RequestMapping(value = "add", method = RequestMethod.GET)
     public String getAddProfileDataPage(Model model){
-        model.addAttribute("accounts",flar.findByIsClosed(Boolean.FALSE));
         model.addAttribute("depth_values",CrawlDepth.values());
         return "profiledata/profiledata_add";
     }
@@ -212,6 +208,10 @@ public class ProfileDataViewController {
     
     /**
      * obtains the inner id for the facebook url and redirects to getFacebookProfilePage()
+     * @param pdid
+     * @param sid
+     * @param model
+     * @return 
      */
     @RequestMapping(value = "/fbprofile", method = RequestMethod.GET)
     public String getFacebookProfilePage(@RequestParam("id")String sid,@RequestParam("pdid") Long pdid,Model model){
