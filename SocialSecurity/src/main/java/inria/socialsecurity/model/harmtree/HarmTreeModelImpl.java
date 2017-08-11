@@ -40,11 +40,13 @@ public class HarmTreeModelImpl implements HarmTreeModel {
 
     @Override
     public void updateHarmTreeNotationFromCytoscape(Long id, JsonElement displayNotation) {
+        session.clear();
         updateHarmTreeNodePositions(displayNotation);
     }
 
     @Override
     public JsonElement getCytoscapeDisplayNotationForHarmTree(Long id) {
+        session.clear();
         return converter.convertFrom((HarmTreeVertex) htr.findOne(id));
     }
 
@@ -63,6 +65,7 @@ public class HarmTreeModelImpl implements HarmTreeModel {
 
     @Override
     public void updateHarmTreeElement(Long id, JsonElement properties) {
+        session.clear();
         HarmTreeElement element = htr.findOne(id);
         if (element instanceof HarmTreeVertex) {
             HarmTreeVertex v = (HarmTreeVertex) element;
@@ -89,6 +92,7 @@ public class HarmTreeModelImpl implements HarmTreeModel {
 
     @Override
     public void createHarmTreeDescendant(Long parentId, JsonElement properties) {
+        session.clear();
         HarmTreeElement parent = htr.findOne(parentId);
         
         switch (properties.getAsJsonObject().get("type").getAsInt()) {
@@ -115,6 +119,7 @@ public class HarmTreeModelImpl implements HarmTreeModel {
 
     @Override
     public void deleteHarmTreeElement(Long id) {
+        session.clear();
         HarmTreeElement element = htr.findOne(id);
         if (element instanceof HarmTreeLogicalNode) {
             deleteWithDescendants((HarmTreeLogicalNode) element);
@@ -126,6 +131,7 @@ public class HarmTreeModelImpl implements HarmTreeModel {
 
     @Override
     public void deleteHarmTree(Long id) {
+        session.clear();
         HarmTreeVertex htln;
         htln = (HarmTreeVertex) htr.findOne(id);
         if(!htln.getDescendants().isEmpty())

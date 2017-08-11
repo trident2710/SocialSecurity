@@ -525,24 +525,31 @@ public class ProfileDataModelImpl implements ProfileDataModel{
             JsonObject object = new JsonObject();
             AnalysisReportItem item = new AnalysisReportItem();
             try {
-                item.setIsValid(true);
-                item.setHarmTreeName(vertex.getName());
-                item.setSeverity(vertex.getSeverity());
-                Map.Entry<String,Set<Double>> res = pda.calculateLikelihoodForHarmTree(vertex, data);
-                item.setLikelihood(res.getValue());
-                Set<Double> score = res.getValue().stream().map(x->vertex.getSeverity()*x).collect(Collectors.toSet());
-                item.setScore(score);
-                List<Double> l = new ArrayList(score);
-                Collections.sort(l);
-                item.setBestCase(l.get(0));
-                item.setWorstCase(l.get(l.size()-1));
-                item.setReport(res.getKey().split("\n"));
-            } catch (HarmTreeValidator.HarmTreeNotValidException ex) {
+                try {
+                    item.setIsValid(true);
+                    item.setHarmTreeName(vertex.getName());
+                    item.setSeverity(vertex.getSeverity());
+                    Map.Entry<String,Set<Double>> res = pda.calculateLikelihoodForHarmTree(vertex, data);
+                    item.setLikelihood(res.getValue());
+                    Set<Double> score = res.getValue().stream().map(x->(double)Math.round(vertex.getSeverity()*x * 100000d) / 100000d).collect(Collectors.toSet());
+                    item.setScore(score);
+                    List<Double> l = new ArrayList(score);
+                    Collections.sort(l);
+                    item.setBestCase(l.get(0));
+                    item.setWorstCase(l.get(l.size()-1));
+                    item.setReport(res.getKey().split("\n"));
+                } catch (HarmTreeValidator.HarmTreeNotValidException ex) {
+                    item.setIsValid(false);
+                    item.setErrMsg(ex.getMessage());
+                    LOG.log(Level.INFO, "harm tree is not valid");
+                }    
+            } catch (Exception e) {
                 item.setIsValid(false);
-                item.setErrMsg(ex.getMessage());
-                LOG.log(Level.INFO, "harm tree is not valid");
+                item.setErrMsg("unknown error occured while calculating for this harmtree");
+                LOG.log(Level.INFO, "unknown error occured");
             }
             results.add(item);
+            
         }
         return results;
     }

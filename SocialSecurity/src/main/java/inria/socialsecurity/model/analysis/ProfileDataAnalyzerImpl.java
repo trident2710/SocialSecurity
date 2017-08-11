@@ -80,7 +80,7 @@ public class ProfileDataAnalyzerImpl extends AttributesParser implements Profile
 
     @Override
     public Map.Entry<String,Set<Double>> calculateLikelihoodForHarmTree(HarmTreeVertex vertex,ProfileData data) throws HarmTreeNotValidException{
-        LOG.log(Level.INFO,"start calculating likelihood for harmtree");
+        LOG.log(Level.INFO,"start calculating likelihood for harmtree {0}",vertex.getName());
         report = new StringBuilder();
         report.append("start calculating likelihood for harmtree with id=").append(vertex.getId()).append("and name= ").append(vertex.getName());
         try {
@@ -89,8 +89,12 @@ public class ProfileDataAnalyzerImpl extends AttributesParser implements Profile
             report.append("\n").append("harmtree is valid");
             report.append("\n").append("start calculationg");
             List<Double> l = calculateLikelihoodRecursively(vertex,data);
+            List<Double> nl = new ArrayList();
+            l.forEach((d) -> {
+                nl.add((double)Math.round(d * 10000d) / 10000d);
+            });
             report.append("\n---");
-            return new AbstractMap.SimpleEntry<>(report.toString(),new HashSet<>(l)); 
+            return new AbstractMap.SimpleEntry<>(report.toString(),new HashSet<>(nl)); 
         } catch (HarmTreeNotValidException e) {
             LOG.log(Level.INFO,"harmtree is not valid exceptionnally");
             report.append("\n").append("harmtree is not valid");

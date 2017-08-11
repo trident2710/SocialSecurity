@@ -28,12 +28,9 @@ public class HarmTreeToCytoscapeNotationConverter extends CytoscapeNotationConve
 
     @Autowired
     HarmTreeRepository htr;
-    @Autowired
-    Session session; //neo4j session
 
     @Override
     public JsonElement convertFrom(HarmTreeVertex object) {
-        session.clear();
         JsonObject res = createDefaultJsonObject();
 
         saveHarmTreeNode(object, res, object.getName());
@@ -51,8 +48,6 @@ public class HarmTreeToCytoscapeNotationConverter extends CytoscapeNotationConve
     }
 
     private void formHarmTreeNotationObject(JsonObject object, HarmTreeLogicalNode hte) {
-        if(hte==null) return;
-        
         saveHarmTreeLogicalNode(hte, object);
         hte.getLeafs().forEach((leaf) -> {
             leaf = (HarmTreeLeaf) htr.findOne(leaf.getId());
@@ -69,13 +64,10 @@ public class HarmTreeToCytoscapeNotationConverter extends CytoscapeNotationConve
     }
 
     private void saveHarmTreeLogicalNode(HarmTreeLogicalNode htl, JsonObject source) {
-        if(htl==null) return;
         saveHarmTreeNode(htl, source, htl.getLogicalRequirement());
     }
 
     private void saveHarmTreeLeaf(HarmTreeLeaf htl, JsonObject source) {
-        if(htl==null) return;
-        
         StringBuilder sb = new StringBuilder();
         sb.append("Risk source: ").append(htl.getRiskSource()).append("\n");
         sb.append("Threat type: ").append(htl.getThreatType()).append("\n");
@@ -84,8 +76,6 @@ public class HarmTreeToCytoscapeNotationConverter extends CytoscapeNotationConve
     }
 
     private void saveHarmTreeNode(HarmTreeElement htl, JsonObject source, String label) {
-        if(htl==null) return;
-        
         JsonObject object = new JsonObject();
         object.addProperty("group", "nodes");
         object.addProperty("classes", htl.getClass().getSimpleName() + " " + HarmTreeElement.class.getSimpleName());
